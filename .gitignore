@@ -130,3 +130,11 @@ hs_err_pid*
 replay_pid*
 
 target/
+
+AM41.iml
+.idea/compiler.xml
+.idea/encodings.xml
+.idea/jarRepositories.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
