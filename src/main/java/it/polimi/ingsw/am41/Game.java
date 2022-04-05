@@ -20,6 +20,12 @@ public class Game {
     public void setGame(int numberOfPlayers){
         Island islandToAdd;
         Cloud cloudToAdd;
+        int countRed = 0;
+        int countGreen = 0;
+        int countBlue = 0;
+        int countYellow = 0;
+        int countPink = 0;
+        int random = 0;
         for(int i = 0; i < 12; i++){
             islandToAdd = new Island();
             islandToAdd.island();
@@ -27,6 +33,10 @@ public class Game {
         }
         for(int i = 0; i < 4; i++){
             cloudToAdd = new Cloud();
+        }
+        for(int i = 0; i < 120; i++){
+            random = (int)Math.random()*(4+1);
+            //if()...TODO
         }
     }
 
