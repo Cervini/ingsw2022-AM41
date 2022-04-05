@@ -1,10 +1,14 @@
 package it.polimi.ingsw.am41;
 
 public class Professor {
-    public Color color;
 
-    public void setColor(Color color){
-        this.color = color;
-        return;
+    private Colour colour;
+
+    public void setColour() {
+        this.colour = colour;
+    }
+
+    public Colour getColour() {
+        return colour;
     }
 }

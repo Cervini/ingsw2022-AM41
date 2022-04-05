@@ -1,10 +1,14 @@
 package it.polimi.ingsw.am41;
 
 public class Student {
-    public Color color;
+    private Colour colour;
 
-    public void setColor(Color color){
-        this.color = color;
-        return;
+    public void setColour() {
+        this.colour = colour;
     }
+
+    public Colour getColour() {
+        return colour;
+    }
+
 }
