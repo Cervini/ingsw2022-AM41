@@ -1,6 +1,6 @@
 package it.polimi.ingsw.am41;
 
-public class Assistant {
+public class Assistant implements Comparable<Assistant>{
     private final int value; //determines card's value used for turn order
     private final int movement_points; //determines movements Mother Nature may perform with the use of this card
     private final Player player;
@@ -18,5 +18,25 @@ public class Assistant {
 
     public int getMovement_points() {
         return movement_points;
+    }
+
+    public Player getPlayer(){
+        return player;
+    }
+
+    /**
+     * Override to set as determinant field 'value'
+     * @ensures if(this.getValue() > that.getValue())
+     *              return 1;
+     *          else
+     *              return 0;
+     */
+    @Override
+    public int compareTo(Assistant a) {
+        if(a.getValue() > this.value)
+            return 0;
+        else {
+            return 1;
+        }
     }
 }

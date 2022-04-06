@@ -7,15 +7,15 @@ import java.util.List;
 public class Island implements Tile {
 
     private Island island;
-    private int size_island=1;
+    private int island_size =1;
     private boolean is_mother_nature;
     private boolean is_deny_card;
     private List <Student> students = new ArrayList<>();
-    private Tower_Colour tower = null;
+    private TowerColour tower = null;
     private List<Long> player_influence = new ArrayList<Long>();
     private Colour influence_colour;
 
-    public void setTower(Tower_Colour tower) {
+    public void setTower(TowerColour tower) {
         this.tower = tower;
     }
 
@@ -34,12 +34,12 @@ public class Island implements Tile {
     }
 
     @Override
-    public void PutStudent(Student Student) {
+    public void putStudent(Student Student) {
         students.add(Student);
     }
 
     @Override
-    public void RemoveStudent(Student Student) {
+    public void removeStudent(Student Student) {
         throw new UnsupportedOperationException();
 
     }
@@ -60,7 +60,7 @@ public class Island implements Tile {
         long pink = students.stream().filter( s -> s.getColour() == Colour.PINK ).count();
         long green = students.stream().filter( s -> s.getColour() == Colour.GREEN ).count();
 
-        for (Professor p: player.owned_professors){
+        for (Professor p: player.getOwned_professor()){
 
             switch(p.getColour()){
                 case BLUE:
@@ -76,29 +76,24 @@ public class Island implements Tile {
             }
         }
 
-        if (player.getTower_colour() == tower){
+        if (player.getTeam() == tower){
             player_influence++;
         }
 
-
-        player.setInfluence_player(player_influence);
-        return player.getInfluence_player();
-
-
+        player.setCurrent_influence(player_influence);
+        return player_influence;
     }
 
     public Player canConquer(Player player1, Player player2, Player player3, Player player4) {
 
         ArrayList<Player> players_influence = new ArrayList<Player>(Arrays.asList(player1, player2, player3, player4));
         int max_influence =0;
-        Player chosen_player = new Player();
+        Player chosen_player = null;
 
         for(Player p: players_influence){
-
-            if (p.getInfluence_player()>max_influence) {
-                max_influence = p.getInfluence_player();
+            if (p.getCurrent_influence()>max_influence) {
+                max_influence = p.getCurrent_influence();
                 chosen_player= p;
-
             }
         }
 
@@ -106,7 +101,7 @@ public class Island implements Tile {
 
         for(Player p: players_influence){ //influence tied
             while(count<2){
-                if (p.getInfluence_player()==max_influence){
+                if (p.getCurrent_influence()==max_influence){
                     count++;
                 }
             }
@@ -117,7 +112,73 @@ public class Island implements Tile {
         }
 
         return chosen_player;
-
     }
 
+    public Island getIsland() {
+        return island;
+    }
+
+    public void setIsland(Island island) {
+        this.island = island;
+    }
+
+    public int getIsland_size() {
+        return island_size;
+    }
+
+    public void setIsland_size(int island_size) {
+        this.island_size = island_size;
+    }
+
+    public boolean getIs_mother_nature() {
+        return is_mother_nature;
+    }
+
+    public void setIs_mother_nature(boolean is_mother_nature) {
+        this.is_mother_nature = is_mother_nature;
+    }
+
+    public boolean getIs_deny_card() {
+        return is_deny_card;
+    }
+
+    public void setIs_deny_card(boolean is_deny_card) {
+        this.is_deny_card = is_deny_card;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public TowerColour getTower() {
+        return tower;
+    }
+
+    public List<Long> getPlayer_influence() {
+        return player_influence;
+    }
+
+    public void setPlayer_influence(List<Long> player_influence) {
+        this.player_influence = player_influence;
+    }
+
+    public Colour getInfluence_colour() {
+        return influence_colour;
+    }
+
+    public void setInfluence_colour(Colour influence_colour) {
+        this.influence_colour = influence_colour;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

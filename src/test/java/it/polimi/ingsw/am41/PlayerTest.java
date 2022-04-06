@@ -6,7 +6,7 @@ class PlayerTest {
 
     @Test
     void testConstructor(){
-        Player player = new Player(TowerColor.black);
+        Player player = new Player(TowerColour.BLACK);
         for (Assistant assistant : player.getAssistants()){
             System.out.println("\ninitiative: " + assistant.getValue() +
                     "\nmoves: " + assistant.getMovement_points());

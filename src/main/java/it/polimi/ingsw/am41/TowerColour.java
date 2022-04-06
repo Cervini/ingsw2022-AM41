@@ -1,5 +1,5 @@
 package it.polimi.ingsw.am41;
 
-public enum Tower_Colour {
+public enum TowerColour {
     BLACK, GREY, WHITE
 }

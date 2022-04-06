@@ -13,11 +13,11 @@ class SchoolBoardTest {
     void testConstructor(){
         SchoolBoard s = new SchoolBoard();
         ArrayList<DiningRoom> m = new ArrayList<DiningRoom>();
-        m.add(new DiningRoom(Color.red));
-        m.add(new DiningRoom(Color.green));
-        m.add(new DiningRoom(Color.blue));
-        m.add(new DiningRoom(Color.yellow));
-        m.add(new DiningRoom(Color.pink));
+        m.add(new DiningRoom(Colour.RED));
+        m.add(new DiningRoom(Colour.GREEN));
+        m.add(new DiningRoom(Colour.BLUE));
+        m.add(new DiningRoom(Colour.YELLOW));
+        m.add(new DiningRoom(Colour.PINK));
 
         assertEquals(s.getDining_rooms(), m);
     }
@@ -25,7 +25,7 @@ class SchoolBoardTest {
     @Test
     void putStudentTest(){
         SchoolBoard s = new SchoolBoard();
-        Student student = new Student(Color.yellow);
+        Student student = new Student(Colour.YELLOW);
         try {
             s.putStudent(student);
         } catch (Exception e) {
@@ -37,7 +37,7 @@ class SchoolBoardTest {
     @Test
     void fullEntranceTest(){
         SchoolBoard s = new SchoolBoard();
-        Student student = new Student(Color.yellow);
+        Student student = new Student(Colour.YELLOW);
         int x=0;
         for(int i=0; i<10; i++){
             try {

@@ -11,7 +11,7 @@ public class Cloud implements Tile {
 
     private int count=0;
 
-    public Cloud cloud() {
+    public Cloud Cloud() {
         if(count<4){
             cloud = new Cloud();
             count++;
@@ -20,18 +20,38 @@ public class Cloud implements Tile {
         else{
             return null;
         }
-
-
     }
 
     @Override
-    public void PutStudent(Student student) {
+    public void putStudent(Student student) {
         students.add(student);
     }
 
-    @Override
-    public void RemoveStudent(Student Student) {
+    public void removeStudent(Student Student) {
         students.remove(Student);
+    }
 
+    public Cloud getCloud() {
+        return cloud;
+    }
+
+    public void setCloud(Cloud cloud) {
+        this.cloud = cloud;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

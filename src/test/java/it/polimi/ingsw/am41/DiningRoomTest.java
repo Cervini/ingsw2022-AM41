@@ -10,8 +10,8 @@ public class DiningRoomTest {
 
     @Test
     void addRightStudentTest(){
-        Student pinkStudent = new Student(Color.pink);
-        DiningRoom room = new DiningRoom(Color.pink);
+        Student pinkStudent = new Student(Colour.PINK);
+        DiningRoom room = new DiningRoom(Colour.PINK);
         assertEquals(room.getStudents(),0);
         try{
             room.putStudent(pinkStudent);
@@ -23,8 +23,8 @@ public class DiningRoomTest {
 
     @Test
     void addWrongStudentTest(){
-        Student redStudent = new Student(Color.red);
-        DiningRoom room = new DiningRoom(Color.green);
+        Student redStudent = new Student(Colour.RED);
+        DiningRoom room = new DiningRoom(Colour.GREEN);
         assertEquals(room.getStudents(),0);
         try{
             room.putStudent(redStudent);
@@ -36,50 +36,50 @@ public class DiningRoomTest {
 
     @Test
     void removeStudentTest() {
-        Student pinkStudent = new Student(Color.pink);
-        DiningRoom room = new DiningRoom(Color.pink);
+        Student pinkStudent = new Student(Colour.PINK);
+        DiningRoom room = new DiningRoom(Colour.PINK);
         try {
             room.putStudent(pinkStudent);
         } catch (Exception e) {
             e.printStackTrace();
         }
         Student removed = room.removeStudent();
-        assertEquals(removed.getColor(), pinkStudent.getColor());
+        assertEquals(removed.getColour(), pinkStudent.getColour());
     }
 
     @Test
     void hashRightTest(){
-        DiningRoom room1 = new DiningRoom(Color.blue);
-        DiningRoom room2 = new DiningRoom(Color.blue);
+        DiningRoom room1 = new DiningRoom(Colour.BLUE);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE);
         assertEquals(room1.hashCode(),room2.hashCode());
     }
 
     @Test
     void hashWrongTest(){
-        DiningRoom room1 = new DiningRoom(Color.blue);
-        DiningRoom room2 = new DiningRoom(Color.pink);
+        DiningRoom room1 = new DiningRoom(Colour.BLUE);
+        DiningRoom room2 = new DiningRoom(Colour.PINK);
         assertNotEquals(room1.hashCode(),room2.hashCode());
     }
 
     @Test
     void notEqualsTest(){
-        DiningRoom room1 = new DiningRoom(Color.blue);
-        DiningRoom room2 = new DiningRoom(Color.pink);
+        DiningRoom room1 = new DiningRoom(Colour.BLUE);
+        DiningRoom room2 = new DiningRoom(Colour.PINK);
         assertEquals(room1.equals(room2), false);
     }
 
     @Test
     void equalsTest(){
-        DiningRoom room1 = new DiningRoom(Color.blue);
-        DiningRoom room2 = new DiningRoom(Color.blue);
+        DiningRoom room1 = new DiningRoom(Colour.BLUE);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE);
         assertEquals(room1.equals(room2), true);
     }
 
     @Test
     void numberEqualsTest(){
-        DiningRoom room1 = new DiningRoom(Color.blue);
-        DiningRoom room2 = new DiningRoom(Color.blue);
-        Student s1 = new Student(Color.blue);
+        DiningRoom room1 = new DiningRoom(Colour.BLUE);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE);
+        Student s1 = new Student(Colour.BLUE);
         try {
             room1.putStudent(s1);
             room2.putStudent(s1);
@@ -91,9 +91,9 @@ public class DiningRoomTest {
 
     @Test
     void numberNotEqualsTest(){
-        DiningRoom room1 = new DiningRoom(Color.blue);
-        DiningRoom room2 = new DiningRoom(Color.blue);
-        Student s1 = new Student(Color.blue);
+        DiningRoom room1 = new DiningRoom(Colour.BLUE);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE);
+        Student s1 = new Student(Colour.BLUE);
         try {
             room1.putStudent(s1);
         } catch (Exception e) {

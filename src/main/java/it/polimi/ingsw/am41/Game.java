@@ -1,21 +1,18 @@
 package it.polimi.ingsw.am41;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Game {
-    List<Player> players = new ArrayList<Player>();
-    String status = new String();
-    public static final int initialCoinNumber = 20;
-    public int availableCoins = initialCoinNumber;
-    List<Student> bag = new ArrayList<Student>();
-    List<Professor> professors = new ArrayList<Professor>();
-    List<Island> archipelago = new ArrayList<Island>();
-    Queue<Player> turnOrder = new LinkedList<Player>();
-    List<Cloud> clouds = new ArrayList<Cloud>();
-    Array<SimpleCharacter> characters = new ArrayList<SimpleCharacter>();
+    private List<Player> players = new ArrayList<Player>();
+    private String status = new String();
+    private static final int initialCoinNumber = 20;
+    private int availableCoins = initialCoinNumber;
+    private List<Student> bag = new ArrayList<Student>();
+    private List<Professor> professors = new ArrayList<Professor>();
+    private List<Island> archipelago = new ArrayList<Island>();
+    private Queue<Player> turnOrder = new LinkedList<Player>();
+    private List<Cloud> clouds = new ArrayList<Cloud>();
+    private ArrayList<SimpleCharacter> characters = new ArrayList<SimpleCharacter>();
 
     public void setGame(int numberOfPlayers){
         Island islandToAdd;
@@ -41,24 +38,29 @@ public class Game {
     }
 
 
-    //In order to decide the order in which the players will play during the second phase of the turn, this method checks the assistants choosen by each player and then orders them from the one who played the assistant with the smallest value, which should go first, to the one who played the assistant with the greatest value, which should go last
+    //In order to decide the order in which the players will play during the second phase of the turn, this method checks the assistants chosen by each player and then orders them from the one who played the assistant with the smallest value, which should go first, to the one who played the assistant with the greatest value, which should go last
     private List<Player> startTurn(){
         List<Player> playerOrder = new ArrayList<Player>();
         List<Assistant> assistants = new ArrayList<Assistant>();
+        //set up assistants list
         for(Player selectPlayer : players){
-            selectPlayer.faceUpAssistant.player = selectPlayer;
-            assistants.add(selectPlayer.faceUpAssistant);
-            selectPlayer.faceUpAssistant = null;
+            //get the played assistant by each player
+            assistants.add(selectPlayer.getFace_up_assistant());
         }
-        assistants.sort(assistants.value);
-        playerOrder.add(assistants.player);
+        //order the assistants list (comparator defined in Assistant class uses Value attribute to compare)
+        Collections.sort(assistants);
+        //set up playerOrder list
+        for(Assistant a: assistants){
+            //get the owner of each assistant played
+            playerOrder.add(a.getPlayer());
+        }
         return playerOrder;
     }
 
 
     //The boolean attribute "turn" of the player in the first position of the queue is set to true
-    public void checkTurn(Player turnOrder){
-        turnOrder.remove().turn = true;
+    public void checkTurn(){
+        turnOrder.peek().setTurn(true);
         return;
     }
 
@@ -74,7 +76,7 @@ public class Game {
         }
         else if(check){
             for(Player playerToCheck : players){
-                if(playerToCheck.assistants.size() !=0){
+                if(playerToCheck.getAssistants().size() !=0){
                     check = false;
                 }
             }
@@ -82,7 +84,7 @@ public class Game {
         }
         else{
             for(Player playerToCheck : players){
-                if(playerToCheck.SchoolBoard.towers == 0){
+                if(playerToCheck.getSchool().getTowers() == 0){
                     System.out.println(playerToCheck + "wins!");
                 }
             }
@@ -99,8 +101,8 @@ public class Game {
         for(Player playerToCheck : players){
             tmp = 0;
             for(Island islandToCheck : archipelago){
-                if(playerToCheck.equals(islandToCheck.tower)){
-                    tmp = tmp + islandToCheck.islandSize;
+                if(playerToCheck.equals(islandToCheck.getTower())){
+                    tmp = tmp + islandToCheck.getIsland_size();
                 }
             }
             if(towers < tmp){
@@ -119,7 +121,7 @@ public class Game {
                 if(winner == null){
                     winner = playerToCheck;
                 }else{
-                    if(playerToCheck.ownedProfessors.lenght > winner.ownedProfessors.lenght){
+                    if(playerToCheck.getOwned_professor().size() > winner.getOwned_professor().size()){
                         winner = playerToCheck;
                     }
                 }
@@ -132,10 +134,10 @@ public class Game {
 
     //This function has to be executed when two islands that are next to each other are conquered by the same player, this means that they have to merge into a single island
     public Island merge(Island island1, Island island2){
-        island1.islandSize = island1.islandSize + island2.islandSize;
-        island1.isMotherNature = island1.isMotherNature || island2.isMotherNature;
-        island1.isDenyCard = island1.isDenyCard || island2.isDenyCard;
-        island1.students.addAll(island2.students);
+        island1.setIsland_size(island1.getIsland_size() + island2.getIsland_size());
+        island1.setIs_mother_nature(island1.getIs_mother_nature() || island2.getIs_mother_nature());
+        island1.setIs_deny_card(island1.getIs_deny_card() || island2.getIs_deny_card());
+        island1.getStudents().addAll(island2.getStudents());
         return island1;
     }
 
@@ -144,15 +146,15 @@ public class Game {
     public void moveMotherNature(int movement){
         Island fromIsland = findMotherNature();
         Island toIsland = setMotherNature(movement, fromIsland);
-        fromIsland.isMotherNature = false;
-        toIsland.isMotherNature = true;
+        fromIsland.setIs_mother_nature(false);
+        toIsland.setIs_mother_nature(false);
         return;
     }
 
     //Sub-function of moveMotherNature that finds and returns the island on which the attribute isMotherNature is true, this represents the island where mother nature is in the game
     private Island findMotherNature(){
         for(Island islandToCheck : archipelago){
-            if(islandToCheck.isMotherNature){
+            if(islandToCheck.getIs_mother_nature()){
                 return islandToCheck;
             }
         }
@@ -160,7 +162,7 @@ public class Game {
     }
 
     //Sub-function of moveMotherNature that counts the decides on which island the attribute isMotherNature to true, depending on the value of "movement"
-    private Island setMotherNature(int movement, Island formIsland){
+    private Island setMotherNature(int movement, Island fromIsland){
         boolean startCount = false;
         int count = 0;
         int iterations = 0;
@@ -185,7 +187,7 @@ public class Game {
     }
 
 
-    public void moveProfessor(Color color){
+    public void moveProfessor(Colour colour){
         int maxStudent = 0;
         int tmp = 0;
         Player maxPlayer = null;
@@ -193,38 +195,35 @@ public class Game {
         int ownProfessorNumber = 0;
         Professor professorToMove = null;
         for(Player playerToCheck : players){
-            tmp = studentsInDinningRoom(color, playerToCheck);
+            tmp = studentsInDiningRoom(colour, playerToCheck);
             if(tmp>maxStudent){
                 maxStudent = tmp;
                 maxPlayer = playerToCheck;
             }
-            if(ownsProfessor(color, playerToCheck)){
+            if(ownsProfessor(colour, playerToCheck)){
                 ownProfessorNumber = tmp;
                 ownProfessorPlayer = playerToCheck;
             }
         }
         if(ownProfessorNumber < maxStudent){
-            professorToMove = returnProfessor(color, ownProfessorPlayer);
-            ownProfessorPlayer.ownedProfessors.remove(professorToMove);
-            maxPlayer.ownedProfessors.add(professorToMove);
+            professorToMove = returnProfessor(colour, ownProfessorPlayer);
+            ownProfessorPlayer.getOwned_professor().remove(professorToMove);
+            maxPlayer.getOwned_professor().add(professorToMove);
         }
-        return;
     }
 
     //This function returns how many students are in a Dining Room of a given color and player
-    private int studentsInDinningRoom(Color color, Player playerToCheck){
-        for(int i = 0; i < playerToCheck.school.diningRoom.lenght; i++){
-            if(playerToCheck.school.diningRoom[i].color = color){
-                return playerToCheck.school.diningRoom[i].students;
-            }
-        }
-        return -1;
+    private int studentsInDiningRoom(Colour colour, Player playerToCheck){
+        Optional<DiningRoom> right_dining = playerToCheck.getSchool().getDining_rooms().stream()
+                .filter(n -> n.getColour()==colour).findAny();
+
+        return right_dining.get().getStudents();
     }
 
     //This function returns if a player has the professor of a specified color
-    private boolean ownsProfessor(Color color, Player playerToCheck) {
-        for(Professor professorToCheck : playerToCheck.ownedProfessors) {
-            if (professorToCheck.color == color) {
+    private boolean ownsProfessor(Colour colour, Player playerToCheck) {
+        for(Professor professorToCheck : playerToCheck.getOwned_professor()) {
+            if (professorToCheck.getColour() == colour) {
                 return true;
             }
         }
@@ -232,9 +231,9 @@ public class Game {
     }
 
     //This function returns the professor of a specified color from a specified player
-    private Professor returnProfessor(Color color, Player playerToCheck) {
-        for(Professor professorToCheck : playerToCheck.ownedProfessors) {
-            if (professorToCheck.color == color) {
+    private Professor returnProfessor(Colour colour, Player playerToCheck) {
+        for(Professor professorToCheck : playerToCheck.getOwned_professor()) {
+            if (professorToCheck.getColour() == colour) {
                 return professorToCheck;
             }
         }
@@ -242,23 +241,31 @@ public class Game {
     }
 
 
-    //When a player chooses a cloud it takes all the students on top of it and moves them to it's SchoolBoard entrance, this function returns all the students from a cloud and deletes it after so that no other player can choose it again..
-    public List<Student> chooseCloud(Cloud cloud){
-        cloud.clear();
-        return cloud.students;
+    //When a player chooses a cloud it takes all the students on top of it and moves them to it's SchoolBoard entrance, this function returns all the students from a cloud and deletes it after so that no other player can choose it again.
+    public void chooseCloud(Cloud cloud, Player player){
+        for(Student s: cloud.getStudents()){
+            try {
+                player.getSchool().putStudent(s);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        cloud.getStudents().clear();
     }
 
 
     public void moveStudent(Tile fromTile, Tile toTile, Student student){
         fromTile.removeStudent(student);
-        toTile.addStudent(student);
-        return;
+        try {
+            toTile.putStudent(student);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
-    public void playCharacter(SimpleCharacter character, Player player){
-        character.effect(player);
-        return;
+    public void playCharacter(SimpleCharacter character){
+        character.effect();
     }
 
 
@@ -281,7 +288,7 @@ public class Game {
     //This function returns the island on which Mother Nature is positioned
     private Island motherNaturePosition(){
         for(Island islandToCheck : archipelago){
-            if(islandToCheck.isMotherNature){
+            if(islandToCheck.getIs_mother_nature()){
                 return islandToCheck;
             }
         }
@@ -291,15 +298,15 @@ public class Game {
     //This function returns the influence given an island and a player
     private int checkInfluenceByPlayer(Island islandToCheck, Player playerToCheck){
         int influence = 0;
-        for(Professor currentProfessor : playerToCheck.ownedProfessors){
-            for(Student currentStudent : islandToCheck.students){
-                if(currentProfessor.color == currentStudent.color){
+        for(Professor currentProfessor : playerToCheck.getOwned_professor()){
+            for(Student currentStudent : islandToCheck.getStudents()){
+                if(currentProfessor.getColour() == currentStudent.getColour()){
                     influence = influence + 1;
                 }
             }
         }
-        if(playerToCheck.equals(islandToCheck.tower)){
-            influence = influence + islandToCheck.islandSize;
+        if(playerToCheck.equals(islandToCheck.getTower())){
+            influence = influence + islandToCheck.getIsland_size();
         }
         return influence;
     }

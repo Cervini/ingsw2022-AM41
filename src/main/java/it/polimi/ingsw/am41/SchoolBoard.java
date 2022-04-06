@@ -12,21 +12,22 @@ public class SchoolBoard implements Tile{
         this.entrance = new ArrayList<Student>(9);
         this.dining_rooms = new ArrayList<DiningRoom>(5);
         /* initialize a dining_room for every color */
-        for(Color color : Color.values()){
-            dining_rooms.add(new DiningRoom(color));
+        for(Colour colour : Colour.values()){
+            dining_rooms.add(new DiningRoom(colour));
         }
         this.towers = 8;
     }
 
-    /* alternative constructor sets up School_board with chosen number of towers
-    *  @requires towers >= 0
-    * */
+    /**
+     *  alternative constructor sets up School_board with chosen number of towers
+     *  @requires towers >= 0
+     */
     public SchoolBoard(int towers) {
         this.entrance = new ArrayList<Student>(9);
         this.dining_rooms = new ArrayList<DiningRoom>(5);
         /* initialize a dining_room for every color */
-        for(Color color : Color.values()){
-            dining_rooms.add(new DiningRoom(color));
+        for(Colour colour : Colour.values()){
+            dining_rooms.add(new DiningRoom(colour));
         }
         this.towers = towers;
     }

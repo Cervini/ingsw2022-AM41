@@ -2,19 +2,19 @@ package it.polimi.ingsw.am41;
 
 import java.util.Objects;
 
-public class DiningRoom implements Tile{
-    private final Color color; // color of the students stored in the Dining_room
+public class DiningRoom{
+    private final Colour colour; // color of the students stored in the Dining_room
     private int students; // number of students currently in the Dining_room
     private int given_coins; // number of coins already given to the player by this Dining_room
 
-    public DiningRoom(Color color) {
-        this.color = color;
+    public DiningRoom(Colour colour) {
+        this.colour = colour;
         this.students = 0;
         this.given_coins = 0;
     }
 
-    public Color getColor() {
-        return color;
+    public Colour getColour() {
+        return colour;
     }
 
     public int getStudents() {
@@ -36,12 +36,12 @@ public class DiningRoom implements Tile{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DiningRoom that)) return false;
-        return getStudents() == that.getStudents() && getColor() == that.getColor();
+        return getStudents() == that.getStudents() && getColour() == that.getColour();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getColor());
+        return Objects.hash(getColour());
     }
 
     /**
@@ -49,7 +49,7 @@ public class DiningRoom implements Tile{
      * @requires (student != null) && (student.getColor() == this.color)
      */
     public void putStudent(Student student) throws Exception {
-        if(student.getColor() == this.color)
+        if(student.getColour() == this.colour)
             this.students++;
         else {
             throw new Exception("Student must be put in the dining room of its color"); //TODO define better exception
@@ -62,7 +62,7 @@ public class DiningRoom implements Tile{
      */
      public Student removeStudent(){
         this.students--;
-        Student student = new Student(this.color);
+        Student student = new Student(this.colour);
         return student;
     }
 }
