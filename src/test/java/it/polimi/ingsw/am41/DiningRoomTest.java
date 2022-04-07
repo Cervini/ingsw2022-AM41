@@ -2,8 +2,6 @@ package it.polimi.ingsw.am41;
 
 import org.junit.jupiter.api.Test;
 
-import javax.swing.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DiningRoomTest {
@@ -43,8 +41,12 @@ public class DiningRoomTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Student removed = room.removeStudent();
-        assertEquals(removed.getColour(), pinkStudent.getColour());
+        try {
+            room.removeStudent(pinkStudent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(room.getStudents(), 0);
     }
 
     @Test

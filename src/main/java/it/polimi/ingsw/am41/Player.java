@@ -17,7 +17,6 @@ public class Player{
     private ArrayList<Professor> owned_professor; // list of all the currently owned professors
     private int coins; // number of owned coins
     private SchoolBoard school; // School_board associated with the player
-    private int current_influence; // used in Island class to determine if the island can be conquered
 
     // default constructor, creates the player and gives them 8 towers
     public Player(TowerColour team) {
@@ -120,13 +119,4 @@ public class Player{
     public void setSchool(SchoolBoard school) {
         this.school = school;
     }
-
-    public int getCurrent_influence() {
-        return current_influence;
-    }
-
-    public void setCurrent_influence(int current_influence) {
-        this.current_influence = current_influence;
-    }
-
 }

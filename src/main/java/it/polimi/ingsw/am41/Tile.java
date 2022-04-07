@@ -4,5 +4,5 @@ public interface Tile {
 
     void putStudent(Student student) throws Exception;
 
-    void removeStudent(Student Student);
+    void removeStudent(Student student);
 }

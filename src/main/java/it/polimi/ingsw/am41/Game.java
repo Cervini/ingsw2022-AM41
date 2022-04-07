@@ -25,7 +25,7 @@ public class Game {
         int random = 0;
         for(int i = 0; i < 12; i++){
             islandToAdd = new Island();
-            islandToAdd.island();
+            // TODO islandToAdd.island();
             archipelago.add(islandToAdd);
         }
         for(int i = 0; i < 4; i++){
@@ -65,7 +65,7 @@ public class Game {
     }
 
 
-    //This class is called every time an event there is an opportunity for the game to end, if the game is supposed to end also checks who is the winner
+    //This class is called every time an event there is an opportunity for the game to end, if the game is supposed to end also checks who's the winner
     public void endGame(){
         boolean check = true;
         if(archipelago.size() <= 3){
@@ -255,7 +255,11 @@ public class Game {
 
 
     public void moveStudent(Tile fromTile, Tile toTile, Student student){
-        fromTile.removeStudent(student);
+        try {
+            fromTile.removeStudent(student);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             toTile.putStudent(student);
         } catch (Exception e) {

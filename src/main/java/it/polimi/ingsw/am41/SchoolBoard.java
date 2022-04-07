@@ -53,6 +53,7 @@ public class SchoolBoard implements Tile{
      * @signals (Exception e) (entrance.size()>=9)
      */
 
+    @Override
     public void putStudent(Student student) throws Exception {
         if(entrance.size()<9)
             entrance.add(student);
@@ -61,7 +62,8 @@ public class SchoolBoard implements Tile{
         }
     }
 
-    public void removeStudent(Student student){
+    @Override
+    public void removeStudent(Student student) {
         entrance.remove(student);
     }
 }

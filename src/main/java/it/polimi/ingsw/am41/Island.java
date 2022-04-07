@@ -1,36 +1,22 @@
 package it.polimi.ingsw.am41;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Island implements Tile {
 
-    private Island island;
-    private int island_size =1;
-    private boolean is_mother_nature;
-    private boolean is_deny_card;
-    private List <Student> students = new ArrayList<>();
-    private TowerColour tower = null;
-    private List<Long> player_influence = new ArrayList<Long>();
-    private Colour influence_colour;
+    private int island_size; // how many base Island form the island
+    private boolean is_mother_nature; // true if Mother Nature is currently on the island
+    private boolean is_deny_card; // true if a No Entry Card is present on the island
+    private List <Student> students; // list of all the students on the island
+    private TowerColour tower = null; // color of the team that controls the island, null if it's no one's
 
-    public void setTower(TowerColour tower) {
-        this.tower = tower;
-    }
-
-    int count=0;
-
-    public Island island() { //instantiates only 12 islands
-        if(count<12){
-            island = new Island();
-            count++;
-            return island;
-        }
-        else {
-            return null;
-        }
-
+    // constructor creates an empty island of size 1
+    public Island(){
+        this.island_size = 1;
+        this.is_mother_nature = false;
+        this.is_deny_card = false;
+        this.students = new ArrayList<>();
     }
 
     @Override
@@ -39,29 +25,28 @@ public class Island implements Tile {
     }
 
     @Override
-    public void removeStudent(Student Student) {
+    public void removeStudent(Student student) {
         throw new UnsupportedOperationException();
 
     }
 
-
-
+    /**
+     * @param player player whose influence is calculated
+     * @return influence player has on the island
+     */
     private int influence(Player player) {
 
-        if ( is_mother_nature==false ){
-            return 0;
-        }
-
+        // set starting influence at 0
         int player_influence=0;
 
-        long blue = students.stream().filter( s -> s.getColour() == Colour.BLUE ).count();
-        long red = students.stream().filter( s -> s.getColour() == Colour.RED ).count();
-        long yellow = students.stream().filter( s -> s.getColour() == Colour.YELLOW ).count();
-        long pink = students.stream().filter( s -> s.getColour() == Colour.PINK ).count();
-        long green = students.stream().filter( s -> s.getColour() == Colour.GREEN ).count();
+        int blue = (int) students.stream().filter(s -> s.getColour() == Colour.BLUE ).count();
+        int red = (int) students.stream().filter(s -> s.getColour() == Colour.RED ).count();
+        int yellow = (int) students.stream().filter(s -> s.getColour() == Colour.YELLOW ).count();
+        int pink = (int) students.stream().filter(s -> s.getColour() == Colour.PINK ).count();
+        int green = (int) students.stream().filter(s -> s.getColour() == Colour.GREEN ).count();
 
+        // add influence gained from owned professors
         for (Professor p: player.getOwned_professor()){
-
             switch(p.getColour()){
                 case BLUE:
                     player_influence+=blue;
@@ -76,50 +61,44 @@ public class Island implements Tile {
             }
         }
 
-        if (player.getTeam() == tower){
-            player_influence++;
-        }
+        // add influence gained by the presence of towers
+        if (player.getTeam() == tower)
+            player_influence += this.island_size;
 
-        player.setCurrent_influence(player_influence);
         return player_influence;
     }
 
-    public Player canConquer(Player player1, Player player2, Player player3, Player player4) {
+    /**
+     * @param player player whose capability of conquering the island is misured
+     * @param players list of all the players
+     * @return true if the player has the most influence on the island
+     */
+    public boolean canConquer(Player player, ArrayList<Player> players) {
 
-        ArrayList<Player> players_influence = new ArrayList<Player>(Arrays.asList(player1, player2, player3, player4));
-        int max_influence =0;
-        Player chosen_player = null;
-
-        for(Player p: players_influence){
-            if (p.getCurrent_influence()>max_influence) {
-                max_influence = p.getCurrent_influence();
-                chosen_player= p;
-            }
+        // get the influence of the conquering player
+        int player_influence = influence(player);
+        for(Player p: players){
+            // if any of the other players has greater influence
+            if(influence(p)>player_influence)
+                // return false: the player can't conquer the island
+                return false;
         }
-
-        int count=0;
-
-        for(Player p: players_influence){ //influence tied
-            while(count<2){
-                if (p.getCurrent_influence()==max_influence){
-                    count++;
-                }
-            }
-
-        }
-        if (count>=2){
-            return null;
-        }
-
-        return chosen_player;
+        // if no one has greater influence the player can conquer the island
+        return true;
     }
 
-    public Island getIsland() {
-        return island;
-    }
-
-    public void setIsland(Island island) {
-        this.island = island;
+    /**
+     * changes the color of the towers on the island if the player can and does conquer the island
+     * @param player player conquering the island
+     * @param players list of all the players
+     * @throws Exception Player can't conquer the island
+     */
+    public void conquer(Player player, ArrayList<Player> players) throws Exception {
+        if(canConquer(player, players))
+            this.tower = player.getTeam();
+        else {
+            throw new Exception("Player cant conquer the island"); // TODO define better exception
+        }
     }
 
     public int getIsland_size() {
@@ -158,27 +137,7 @@ public class Island implements Tile {
         return tower;
     }
 
-    public List<Long> getPlayer_influence() {
-        return player_influence;
-    }
-
-    public void setPlayer_influence(List<Long> player_influence) {
-        this.player_influence = player_influence;
-    }
-
-    public Colour getInfluence_colour() {
-        return influence_colour;
-    }
-
-    public void setInfluence_colour(Colour influence_colour) {
-        this.influence_colour = influence_colour;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
+    public void setTower(TowerColour tower) {
+        this.tower = tower;
     }
 }

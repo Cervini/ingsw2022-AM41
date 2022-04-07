@@ -2,7 +2,7 @@ package it.polimi.ingsw.am41;
 
 import java.util.Objects;
 
-public class DiningRoom{
+public class DiningRoom implements Tile{
     private final Colour colour; // color of the students stored in the Dining_room
     private int students; // number of students currently in the Dining_room
     private int given_coins; // number of coins already given to the player by this Dining_room
@@ -56,13 +56,10 @@ public class DiningRoom{
         }
     }
 
-     /** remove one student from the DiningRoom
-      *  returning a Student instance with the color of the DiningRoom
-      * @ensures (student.color == this.color)
-     */
-     public Student removeStudent(){
-        this.students--;
-        Student student = new Student(this.colour);
-        return student;
+    @Override
+    public void removeStudent(Student student) {
+        if(student.getColour()==this.colour){
+            this.students--;
+        }
     }
 }

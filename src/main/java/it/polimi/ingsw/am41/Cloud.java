@@ -6,20 +6,10 @@ import java.util.List;
 
 public class Cloud implements Tile {
 
-    private Cloud cloud;
-    private List<Student> students = new ArrayList<Student>();
+    private List<Student> students;
 
-    private int count=0;
-
-    public Cloud Cloud() {
-        if(count<4){
-            cloud = new Cloud();
-            count++;
-            return cloud;
-        }
-        else{
-            return null;
-        }
+    public Cloud() {
+        students = new ArrayList<Student>();
     }
 
     @Override
@@ -27,16 +17,9 @@ public class Cloud implements Tile {
         students.add(student);
     }
 
-    public void removeStudent(Student Student) {
-        students.remove(Student);
-    }
-
-    public Cloud getCloud() {
-        return cloud;
-    }
-
-    public void setCloud(Cloud cloud) {
-        this.cloud = cloud;
+    @Override
+    public void removeStudent(Student student) {
+        students.remove(student);
     }
 
     public List<Student> getStudents() {
@@ -45,13 +28,5 @@ public class Cloud implements Tile {
 
     public void setStudents(List<Student> students) {
         this.students = students;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 }
