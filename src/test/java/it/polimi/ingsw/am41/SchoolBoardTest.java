@@ -1,16 +1,19 @@
 package it.polimi.ingsw.am41;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import it.polimi.ingsw.am41.Colour;
+import it.polimi.ingsw.am41.DiningRoom;
+import it.polimi.ingsw.am41.SchoolBoard;
+import it.polimi.ingsw.am41.Student;
+import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-class SchoolBoardTest {
+import static org.junit.Assert.assertEquals;
+
+public class SchoolBoardTest {
     @Test
-    @DisplayName("Builder Test")
-    void testConstructor(){
+    public void testConstructor(){
         SchoolBoard s = new SchoolBoard();
         ArrayList<DiningRoom> m = new ArrayList<DiningRoom>();
         m.add(new DiningRoom(Colour.RED));
@@ -19,11 +22,14 @@ class SchoolBoardTest {
         m.add(new DiningRoom(Colour.YELLOW));
         m.add(new DiningRoom(Colour.PINK));
 
-        assertEquals(s.getDining_rooms(), m);
-    }
+        Collections.sort(m);
+        Collections.sort(s.getDining_rooms());
+
+        assertEquals(m.equals(s.getDining_rooms()),true);
+        }
 
     @Test
-    void putStudentTest(){
+    public void putStudentTest(){
         SchoolBoard s = new SchoolBoard();
         Student student = new Student(Colour.YELLOW);
         try {
@@ -35,7 +41,7 @@ class SchoolBoardTest {
     }
 
     @Test
-    void fullEntranceTest(){
+    public void fullEntranceTest(){
         SchoolBoard s = new SchoolBoard();
         Student student = new Student(Colour.YELLOW);
         int x=0;

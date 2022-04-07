@@ -1,8 +1,6 @@
 package it.polimi.ingsw.am41;
 
-import java.util.Objects;
-
-public class DiningRoom implements Tile{
+public class DiningRoom implements Tile, Comparable{
     private final Colour colour; // color of the students stored in the Dining_room
     private int students; // number of students currently in the Dining_room
     private int given_coins; // number of coins already given to the player by this Dining_room
@@ -33,15 +31,10 @@ public class DiningRoom implements Tile{
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o){
         if (this == o) return true;
         if (!(o instanceof DiningRoom that)) return false;
         return getStudents() == that.getStudents() && getColour() == that.getColour();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getColour());
     }
 
     /**
@@ -61,5 +54,11 @@ public class DiningRoom implements Tile{
         if(student.getColour()==this.colour){
             this.students--;
         }
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        DiningRoom d = (DiningRoom) o;
+        return colour.compareTo(d.getColour());
     }
 }

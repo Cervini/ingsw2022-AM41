@@ -1,13 +1,17 @@
 package it.polimi.ingsw.am41;
 
-import org.junit.jupiter.api.Test;
+import it.polimi.ingsw.am41.Colour;
+import it.polimi.ingsw.am41.DiningRoom;
+import it.polimi.ingsw.am41.Student;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class DiningRoomTest {
 
     @Test
-    void addRightStudentTest(){
+    public void addRightStudentTest(){
         Student pinkStudent = new Student(Colour.PINK);
         DiningRoom room = new DiningRoom(Colour.PINK);
         assertEquals(room.getStudents(),0);
@@ -20,7 +24,7 @@ public class DiningRoomTest {
     }
 
     @Test
-    void addWrongStudentTest(){
+    public void addWrongStudentTest(){
         Student redStudent = new Student(Colour.RED);
         DiningRoom room = new DiningRoom(Colour.GREEN);
         assertEquals(room.getStudents(),0);
@@ -33,7 +37,7 @@ public class DiningRoomTest {
     }
 
     @Test
-    void removeStudentTest() {
+    public void removeStudentTest() {
         Student pinkStudent = new Student(Colour.PINK);
         DiningRoom room = new DiningRoom(Colour.PINK);
         try {
@@ -50,35 +54,21 @@ public class DiningRoomTest {
     }
 
     @Test
-    void hashRightTest(){
-        DiningRoom room1 = new DiningRoom(Colour.BLUE);
-        DiningRoom room2 = new DiningRoom(Colour.BLUE);
-        assertEquals(room1.hashCode(),room2.hashCode());
-    }
-
-    @Test
-    void hashWrongTest(){
-        DiningRoom room1 = new DiningRoom(Colour.BLUE);
-        DiningRoom room2 = new DiningRoom(Colour.PINK);
-        assertNotEquals(room1.hashCode(),room2.hashCode());
-    }
-
-    @Test
-    void notEqualsTest(){
+    public void notEqualsTest(){
         DiningRoom room1 = new DiningRoom(Colour.BLUE);
         DiningRoom room2 = new DiningRoom(Colour.PINK);
         assertEquals(room1.equals(room2), false);
     }
 
     @Test
-    void equalsTest(){
+    public void equalsTest(){
         DiningRoom room1 = new DiningRoom(Colour.BLUE);
         DiningRoom room2 = new DiningRoom(Colour.BLUE);
         assertEquals(room1.equals(room2), true);
     }
 
     @Test
-    void numberEqualsTest(){
+    public void numberEqualsTest(){
         DiningRoom room1 = new DiningRoom(Colour.BLUE);
         DiningRoom room2 = new DiningRoom(Colour.BLUE);
         Student s1 = new Student(Colour.BLUE);
@@ -92,7 +82,7 @@ public class DiningRoomTest {
     }
 
     @Test
-    void numberNotEqualsTest(){
+    public void numberNotEqualsTest(){
         DiningRoom room1 = new DiningRoom(Colour.BLUE);
         DiningRoom room2 = new DiningRoom(Colour.BLUE);
         Student s1 = new Student(Colour.BLUE);

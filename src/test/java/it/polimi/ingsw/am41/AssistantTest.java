@@ -1,13 +1,16 @@
 package it.polimi.ingsw.am41;
 
-import org.junit.jupiter.api.Test;
+import it.polimi.ingsw.am41.Assistant;
+import it.polimi.ingsw.am41.Player;
+import it.polimi.ingsw.am41.TowerColour;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-class AssistantTest {
+public class AssistantTest {
 
     @Test
-    void compareTo1() {
+    public void compareTo1() {
         Player player = new Player(TowerColour.BLACK);
         Assistant card1 = new Assistant(10,3,player);
         Assistant card2 = new Assistant(5,1,player);
@@ -15,7 +18,7 @@ class AssistantTest {
     }
 
     @Test
-    void compareTo2() {
+    public void compareTo2() {
         Player player = new Player(TowerColour.BLACK);
         Assistant card1 = new Assistant(10,3,player);
         Assistant card2 = new Assistant(5,1,player);
@@ -23,7 +26,7 @@ class AssistantTest {
     }
 
     @Test
-    void compareTo() {
+    public void compareTo() {
         Player player = new Player(TowerColour.BLACK);
         Assistant card1 = new Assistant(5,3,player);
         Assistant card2 = new Assistant(5,1,player);

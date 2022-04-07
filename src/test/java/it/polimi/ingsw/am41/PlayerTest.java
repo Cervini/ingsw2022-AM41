@@ -1,11 +1,14 @@
 package it.polimi.ingsw.am41;
 
-import org.junit.jupiter.api.Test;
+import it.polimi.ingsw.am41.Assistant;
+import it.polimi.ingsw.am41.Player;
+import it.polimi.ingsw.am41.TowerColour;
+import org.junit.Test;
 
-class PlayerTest {
+public class PlayerTest {
 
     @Test
-    void testConstructor(){
+    public void testConstructor(){
         Player player = new Player(TowerColour.BLACK);
         for (Assistant assistant : player.getAssistants()){
             System.out.println("\ninitiative: " + assistant.getValue() +
