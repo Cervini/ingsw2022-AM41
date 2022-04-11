@@ -1,11 +1,9 @@
 package it.polimi.ingsw.am41;
 
-import it.polimi.ingsw.am41.Assistant;
-import it.polimi.ingsw.am41.Player;
-import it.polimi.ingsw.am41.TowerColour;
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AssistantTest {
 

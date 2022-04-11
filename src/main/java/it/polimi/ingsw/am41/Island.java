@@ -6,22 +6,23 @@ import java.util.List;
 public class Island implements Tile {
 
     private int island_size; // how many base Island form the island
-    private boolean is_mother_nature; // true if Mother Nature is currently on the island
-    private boolean is_deny_card; // true if a No Entry Card is present on the island
+    private boolean mother_nature; // true if Mother Nature is currently on the island
+    private boolean deny_card; // true if a No Entry Card is present on the island
     private List <Student> students; // list of all the students on the island
     private TowerColour tower = null; // color of the team that controls the island, null if it's no one's
 
     // constructor creates an empty island of size 1
     public Island(){
         this.island_size = 1;
-        this.is_mother_nature = false;
-        this.is_deny_card = false;
+        this.mother_nature = false;
+        this.deny_card = false;
         this.students = new ArrayList<>();
     }
 
     @Override
-    public void putStudent(Student Student) {
-        students.add(Student);
+    public void putStudent(Student student) {
+        if(student != null)
+            students.add(student);
     }
 
     @Override
@@ -89,13 +90,34 @@ public class Island implements Tile {
 
     /**
      * changes the color of the towers on the island if the player can and does conquer the island
+     * removing towers from the conquering team and giving towers back to the conquered team
      * @param player player conquering the island
      * @param players list of all the players
      * @throws Exception Player can't conquer the island
      */
     public void conquer(Player player, ArrayList<Player> players) throws Exception {
-        if(canConquer(player, players))
+        TowerColour old_team = this.tower;
+        // if the player can conquer the island
+        if(canConquer(player, players)){
+            // change the colour of the towers
             this.tower = player.getTeam();
+            // take the towers needed by the tower_holder of the team
+            if(player.isTower_holder()){
+                player.getSchool().takeTowers(this.island_size);
+            } else {
+                for(Player player1: players){
+                    if((player1.getTeam()==player.getTeam())&&(player1.isTower_holder())){
+                        player1.getSchool().takeTowers(this.island_size);
+                    }
+                }
+            }
+            // give back the towers to the conquered team
+            for(Player player1: players){
+                if((player1.getTeam()==old_team)&&(player1.isTower_holder())){
+                    player1.getSchool().giveTowers(this.island_size);
+                }
+            }
+        }
         else {
             throw new Exception("Player cant conquer the island"); // TODO define better exception
         }
@@ -109,28 +131,24 @@ public class Island implements Tile {
         this.island_size = island_size;
     }
 
-    public boolean getIs_mother_nature() {
-        return is_mother_nature;
+    public boolean isMother_nature() {
+        return mother_nature;
     }
 
-    public void setIs_mother_nature(boolean is_mother_nature) {
-        this.is_mother_nature = is_mother_nature;
+    public void setMother_nature(boolean mother_nature) {
+        this.mother_nature = mother_nature;
     }
 
-    public boolean getIs_deny_card() {
-        return is_deny_card;
+    public boolean getDeny_card() {
+        return deny_card;
     }
 
-    public void setIs_deny_card(boolean is_deny_card) {
-        this.is_deny_card = is_deny_card;
+    public void setDeny_card(boolean deny_card) {
+        this.deny_card = deny_card;
     }
 
     public List<Student> getStudents() {
         return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
     }
 
     public TowerColour getTower() {

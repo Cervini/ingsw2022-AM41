@@ -1,9 +1,7 @@
 package it.polimi.ingsw.am41;
 
-import it.polimi.ingsw.am41.Assistant;
-import it.polimi.ingsw.am41.Player;
-import it.polimi.ingsw.am41.TowerColour;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 public class PlayerTest {
 

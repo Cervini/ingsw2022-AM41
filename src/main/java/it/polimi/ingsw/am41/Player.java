@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class Player{
+public class Player implements Comparable{
 
     private final String player_id; // player's unique ID
     private ArrayList<Assistant> assistants; // list of not yet played assistant cards
@@ -16,6 +16,7 @@ public class Player{
     private ArrayList<Professor> owned_professor; // list of all the currently owned professors
     private int coins; // number of owned coins
     private SchoolBoard school; // School_board associated with the player
+    private boolean tower_holder; // used to check winners and the end of the game is set true if the player hold the towers for the team
 
     // default constructor, creates the player and gives them 8 towers
     public Player(TowerColour team) {
@@ -29,6 +30,7 @@ public class Player{
         //set up assistants deck
         deck_setup();
         this.school = new SchoolBoard();
+        this.tower_holder = true;
     }
 
     // alternative constructor, creates the player and gives them nTowers number of tower
@@ -43,6 +45,10 @@ public class Player{
         //set up assistants deck
         deck_setup();
         this.school = new SchoolBoard(nTowers);
+        if(nTowers != 0)
+            this.tower_holder = true;
+        else
+            this.tower_holder = false;
     }
 
     // read the assistants card stats from assistants_stats.txt and set up the Assistant list
@@ -99,10 +105,6 @@ public class Player{
         return owned_professor;
     }
 
-    public void setOwned_professor(ArrayList<Professor> owned_professor) {
-        this.owned_professor = owned_professor;
-    }
-
     public int getCoins() {
         return coins;
     }
@@ -115,7 +117,31 @@ public class Player{
         return school;
     }
 
-    public void setSchool(SchoolBoard school) {
-        this.school = school;
+    public boolean isTower_holder() {
+        return tower_holder;
+    }
+
+    public void setTower_holder(boolean tower_holder) {
+        this.tower_holder = tower_holder;
+    }
+
+
+    /**
+     * @param o player to compare to
+     * @return { if the players' played assistants have the same value return 0;
+     *     if this player's assistant has a lower value return -1;
+     *     else return 1;
+     * }
+     */
+    @Override
+    public int compareTo(Object o) {
+        Player p = (Player) o;
+        if(this.equals(p))
+            return 0;
+        if(this.face_up_assistant.getValue() < p.getFace_up_assistant().getValue())
+            return -1;
+        else{
+            return 1;
+        }
     }
 }
