@@ -12,29 +12,30 @@ public class Island implements Tile {
     private List <Student> students; // list of all the students on the island
     private TowerColour tower = null; // color of the team that controls the island, null if it's no one's
 
-    public boolean getMotherNature() {return is_mother_nature;}
+    public boolean getMotherNature() {return mother_nature;}
+
     public void removeMotherNature() {
-        is_mother_nature = false;
+        mother_nature = false;
         return;
     }
     public void putMotherNature(){
-        is_mother_nature = true;
+        mother_nature = true;
         return;
     }
+
     public int islandGetSize(){
-        return size_island;
+        return island_size;
     }
+
     public TowerColour getColour(){
         return tower;
     }
-
-
 
     int count=0;
 
     public Island island() { //instantiates only 12 islands
         if (count < 12) {
-            island = new Island();
+            Island island = new Island();
             count++;
             return island;
         } else {
