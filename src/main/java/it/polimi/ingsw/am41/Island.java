@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am41;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Island implements Tile {
@@ -10,6 +11,36 @@ public class Island implements Tile {
     private boolean deny_card; // true if a No Entry Card is present on the island
     private List <Student> students; // list of all the students on the island
     private TowerColour tower = null; // color of the team that controls the island, null if it's no one's
+
+    public boolean getMotherNature() {return is_mother_nature;}
+    public void removeMotherNature() {
+        is_mother_nature = false;
+        return;
+    }
+    public void putMotherNature(){
+        is_mother_nature = true;
+        return;
+    }
+    public int islandGetSize(){
+        return size_island;
+    }
+    public TowerColour getColour(){
+        return tower;
+    }
+
+
+
+    int count=0;
+
+    public Island island() { //instantiates only 12 islands
+        if (count < 12) {
+            island = new Island();
+            count++;
+            return island;
+        } else {
+            return null;
+        }
+    }
 
     // constructor creates an empty island of size 1
     public Island(){
@@ -146,6 +177,7 @@ public class Island implements Tile {
     public void setDeny_card(boolean deny_card) {
         this.deny_card = deny_card;
     }
+
 
     public List<Student> getStudents() {
         return students;
