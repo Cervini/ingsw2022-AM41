@@ -3,9 +3,11 @@ package it.polimi.ingsw.am41;
 public class Assistant implements Comparable<Assistant>{
     private final int value; //determines card's value used for turn order
     private final int movement_points; //determines movements Mother Nature may perform with the use of this card
-    private final Player player;
+    private final Player player; // player who played the card
 
-    /* @requires (value >= 1) && (movement_points >= 1) */
+    /**
+     *  @requires (value >= 1) && (movement_points >= 1)
+     */
     public Assistant(int value, int movement_points, Player player) {
         this.value = value;
         this.movement_points = movement_points;

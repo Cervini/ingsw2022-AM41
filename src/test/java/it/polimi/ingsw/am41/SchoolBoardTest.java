@@ -9,6 +9,7 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SchoolBoardTest {
+
     @Test
     public void testConstructor(){
         SchoolBoard s = new SchoolBoard();

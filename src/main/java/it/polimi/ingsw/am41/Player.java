@@ -3,6 +3,7 @@ package it.polimi.ingsw.am41;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -125,7 +126,6 @@ public class Player implements Comparable{
         this.tower_holder = tower_holder;
     }
 
-
     /**
      * @param o player to compare to
      * @return { if the players' played assistants have the same value return 0;
@@ -136,7 +136,7 @@ public class Player implements Comparable{
     @Override
     public int compareTo(Object o) {
         Player p = (Player) o;
-        if(this.equals(p))
+        if(this.face_up_assistant.getValue() == p.getFace_up_assistant().getValue())
             return 0;
         if(this.face_up_assistant.getValue() < p.getFace_up_assistant().getValue())
             return -1;

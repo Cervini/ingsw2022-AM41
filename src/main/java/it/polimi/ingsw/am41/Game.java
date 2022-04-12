@@ -100,8 +100,13 @@ public class Game {
         if(cloud.getStudents().size()==0){
             // fill the cloud with 3 students picked from bag
             for(int i=0; i<3; i++){
-                cloud.putStudent(bag.get(0));
-                bag.removeFirst();
+                try {
+                    cloud.putStudent(bag.get(0));
+                    bag.removeFirst();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }
@@ -310,11 +315,11 @@ public class Game {
         for(Student s: cloud.getStudents()){
             try {
                 player.getSchool().putStudent(s);
+                cloud.removeStudent(s);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        cloud.getStudents().clear();
     }
 
 
@@ -338,6 +343,7 @@ public class Game {
 
 
     // NOT SURE IF THIS METHOD IS NEEDED (ALREADY PRESENT IN Island CLASS)
+
     //This functions returns the player who has the most influence on the island on which is positioned Mother Nature, it requires the subfunctions motherNaturePosition and checkInfluenceByPlayer
     public Player checkInfluence(){
         int influence = 0;

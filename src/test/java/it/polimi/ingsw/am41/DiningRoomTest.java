@@ -2,8 +2,7 @@ package it.polimi.ingsw.am41;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DiningRoomTest {
 
@@ -54,14 +53,14 @@ public class DiningRoomTest {
     public void notEqualsTest(){
         DiningRoom room1 = new DiningRoom(Colour.BLUE);
         DiningRoom room2 = new DiningRoom(Colour.PINK);
-        assertEquals(room1.equals(room2), false);
+        assertFalse(room1.equals(room2));
     }
 
     @Test
     public void equalsTest(){
         DiningRoom room1 = new DiningRoom(Colour.BLUE);
         DiningRoom room2 = new DiningRoom(Colour.BLUE);
-        assertEquals(room1.equals(room2), true);
+        assertTrue(room1.equals(room2));
     }
 
     @Test
@@ -75,7 +74,7 @@ public class DiningRoomTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        assertEquals(room1.equals(room2), true);
+        assertTrue(room1.equals(room2));
     }
 
     @Test

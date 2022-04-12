@@ -12,21 +12,6 @@ public class Island implements Tile {
     private List <Student> students; // list of all the students on the island
     private TowerColour tower = null; // color of the team that controls the island, null if it's no one's
 
-    public boolean getMotherNature() {return mother_nature;}
-
-    public void removeMotherNature() {
-        mother_nature = false;
-        return;
-    }
-    public void putMotherNature(){
-        mother_nature = true;
-        return;
-    }
-
-    public int islandGetSize(){
-        return island_size;
-    }
-
     public TowerColour getColour(){
         return tower;
     }
@@ -58,16 +43,15 @@ public class Island implements Tile {
     }
 
     @Override
-    public void removeStudent(Student student) {
-        throw new UnsupportedOperationException();
-
+    public void removeStudent(Student student) throws Exception {
+        throw new Exception("Students can't be removed from islands"); // TODO better exception
     }
 
     /**
      * @param player player whose influence is calculated
      * @return influence player has on the island
      */
-    private int influence(Player player) {
+    public int influence(Player player) {
 
         // set starting influence at 0
         int player_influence=0;
@@ -82,15 +66,15 @@ public class Island implements Tile {
         for (Professor p: player.getOwned_professor()){
             switch(p.getColour()){
                 case BLUE:
-                    player_influence+=blue;
+                    player_influence+=blue; break;
                 case GREEN:
-                    player_influence+=green;
+                    player_influence+=green; break;
                 case PINK:
-                    player_influence+=pink;
+                    player_influence+=pink; break;
                 case YELLOW:
-                    player_influence+=yellow;
+                    player_influence+=yellow; break;
                 case RED:
-                    player_influence+=red;
+                    player_influence+=red; break;
             }
         }
 
@@ -107,16 +91,15 @@ public class Island implements Tile {
      * @return true if the player has the most influence on the island
      */
     public boolean canConquer(Player player, ArrayList<Player> players) {
-
         // get the influence of the conquering player
         int player_influence = influence(player);
         for(Player p: players){
-            // if any of the other players has greater influence
-            if(influence(p)>player_influence)
+            // if any of the other players has greater or equal influence
+            if((p!=player)&&(influence(p)>=player_influence))
                 // return false: the player can't conquer the island
                 return false;
         }
-        // if no one has greater influence the player can conquer the island
+        // if no one has greater or equal influence the player can conquer the island
         return true;
     }
 
@@ -128,7 +111,7 @@ public class Island implements Tile {
      * @throws Exception Player can't conquer the island
      */
     public void conquer(Player player, ArrayList<Player> players) throws Exception {
-        TowerColour old_team = this.tower;
+        TowerColour old_team = tower;
         // if the player can conquer the island
         if(canConquer(player, players)){
             // change the colour of the towers
@@ -151,7 +134,7 @@ public class Island implements Tile {
             }
         }
         else {
-            throw new Exception("Player cant conquer the island"); // TODO define better exception
+            throw  new Exception("Player can't conquer the island"); // TODO define better exception
         }
     }
 
