@@ -1,4 +1,20 @@
-# ingsw2022-AM41
-Simone Cervini simone1.cervini@mail.polimi.it
-Ludovica Cova ludovica.cova@mail.polimi.it
-Davide Fugazza davide2.fugazza@mail.polimi.it
+# Prova Finale Ingegneria del Software 2022
+## Gruppo AM41
+
+- ###   10628276   Simone Cervini ([@Cervini](https://github.com/Cervini))<br>simone1.cervini@mail.polimi.it
+- ###   --------    Ludovica Cova ([@LudovicaCova](https://github.com/LudovicaCova))<br>ludovica.cova@mail.polimi.it
+- ###   --------    Davide Fugazza ([@davofuga](https://github.com/davofuga))<br>davide2.fugazza@mail.polimi.it
+
+| Functionality    |                       State                        |
+|:-----------------|:--------------------------------------------------:|
+| Basic rules      | 🟡 | Testing
+| Complete rules   | 🟡 | Implementation
+| Socket           | 🔴 |
+| GUI              | 🔴 |
+| CLI              | 🔴 |
+| Multiple games   | 🔴 |
+| Persistence      | 🔴 |
+
+🔴
+🟢
+🟡
