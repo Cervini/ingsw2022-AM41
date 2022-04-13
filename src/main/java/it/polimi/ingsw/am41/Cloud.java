@@ -18,7 +18,7 @@ public class Cloud implements Tile {
             if(students.size()<3)
                 students.add(student);
             else {
-                throw new Exception("Cloud is already full"); // TODO better exception
+                throw new Exception("Cloud is already full"); // TODO improve exception
             }
         }
     }
