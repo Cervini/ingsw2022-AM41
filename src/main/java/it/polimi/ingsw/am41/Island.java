@@ -173,4 +173,13 @@ public class Island implements Tile {
     public void setTower(TowerColour tower) {
         this.tower = tower;
     }
+
+    // This function merges this island with the island it gets as a parameter
+    public boolean mergeIslands(Island islandToMerge){
+        setIsland_size(island_size + islandToMerge.getIsland_size());
+        setMother_nature(mother_nature || islandToMerge.isMother_nature());
+        setDeny_card(deny_card || islandToMerge.getDeny_card());
+        students.addAll(islandToMerge.getStudents());
+        return true;
+    }
 }

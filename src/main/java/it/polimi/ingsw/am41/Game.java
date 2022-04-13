@@ -16,7 +16,7 @@ public class Game {
     // Game constructor sets up the game
     public Game(int numberOfPlayers){
         turnOrder = new LinkedList<>();
-        // create and set up the players
+        //TODO create and set up the players
         players = new LinkedList<Player>();
         switch(numberOfPlayers){
             case 2: {
@@ -199,11 +199,10 @@ public class Game {
      * @param island2
      */
     public void merge(Island island1, Island island2){
-        island1.setIsland_size(island1.getIsland_size() + island2.getIsland_size());
-        island1.setMother_nature(island1.isMother_nature() || island2.isMother_nature());
-        island1.setDeny_card(island1.getDeny_card() || island2.getDeny_card());
-        island1.getStudents().addAll(island2.getStudents());
-        archipelago.remove(island2);
+        if(island1.mergeIslands(island2)){
+            archipelago.remove(island2);
+        }
+        return;
     }
 
     //This function moves mother nature from an island to another by finding the island where it is standing now, changing its boolean value of motherNature to false and setting it to true to another island that is exactly after a number of islands equals to "movement"
@@ -334,44 +333,8 @@ public class Game {
         }
     }
 
-
     public void playCharacter(SimpleCharacter character){
         character.effect();
-    }
-
-
-    // NOT SURE IF THIS METHOD IS NEEDED (ALREADY PRESENT IN Island CLASS)
-
-    //This functions returns the player who has the most influence on the island on which is positioned Mother Nature, it requires the subfunctions motherNaturePosition and checkInfluenceByPlayer
-    public Player checkInfluence(){
-        int influence = 0;
-        int tmp = 0;
-        Player influencePlayer = null;
-        Island islandToCheck = motherNaturePosition();
-        for(Player playerToCheck : players){
-            tmp = checkInfluenceByPlayer(islandToCheck, playerToCheck);
-            if(tmp > influence){
-                influence = tmp;
-                influencePlayer = playerToCheck;
-            }
-        }
-        return influencePlayer;
-    }
-
-    //This function returns the influence given an island and a player
-    private int checkInfluenceByPlayer(Island islandToCheck, Player playerToCheck){
-        int influence = 0;
-        for(Professor currentProfessor : playerToCheck.getOwned_professor()){
-            for(Student currentStudent : islandToCheck.getStudents()){
-                if(currentProfessor.getColour() == currentStudent.getColour()){
-                    influence = influence + 1;
-                }
-            }
-        }
-        if(playerToCheck.equals(islandToCheck.getTower())){
-            influence = influence + islandToCheck.getIsland_size();
-        }
-        return influence;
     }
 
     public LinkedList<Player> getPlayers() {
