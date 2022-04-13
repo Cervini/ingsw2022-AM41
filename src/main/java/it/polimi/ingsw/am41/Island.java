@@ -162,7 +162,6 @@ public class Island implements Tile {
         this.deny_card = deny_card;
     }
 
-
     public List<Student> getStudents() {
         return students;
     }

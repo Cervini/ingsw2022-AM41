@@ -42,4 +42,95 @@ public class PlayerTest {
         player2.setFace_up_assistant(new Assistant(3,4, player2));
         assertEquals(player1.compareTo(player2), 0);
     }
+
+    @Test
+    public void coin_checkSingle(){
+        Player player = new Player(TowerColour.BLACK);
+        DiningRoom redRoom = player.getSchool().getDining_room(Colour.RED);
+        // put two students
+        for(int i=0; i<2; i++){
+            try {
+                redRoom.putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        player.coin_check();
+        // should not have earned any coins
+        assertEquals(player.getCoins(), 1);
+
+        // put a third student
+        try {
+            redRoom.putStudent(new Student(Colour.RED));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        player.coin_check();
+
+        // should have earned another coin
+        assertEquals(player.getCoins(), 2);
+    }
+
+    @Test
+    public void coin_checkMultiple(){
+        Player player = new Player(TowerColour.BLACK);
+        DiningRoom redRoom = player.getSchool().getDining_room(Colour.RED);
+        DiningRoom blueRoom = player.getSchool().getDining_room(Colour.BLUE);
+        DiningRoom yellowRoom = player.getSchool().getDining_room(Colour.YELLOW);
+        DiningRoom greenRoom = player.getSchool().getDining_room(Colour.GREEN);
+
+        for(int i=0; i<2; i++){
+            try {
+                redRoom.putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            blueRoom.putStudent(new Student(Colour.BLUE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for(int i=0; i<2; i++){
+            try {
+                yellowRoom.putStudent(new Student(Colour.YELLOW));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i=0; i<2; i++){
+            try {
+                greenRoom.putStudent(new Student(Colour.GREEN));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // put a third student
+        try {
+            redRoom.putStudent(new Student(Colour.RED));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            greenRoom.putStudent(new Student(Colour.GREEN));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            blueRoom.putStudent(new Student(Colour.BLUE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        player.coin_check();
+
+        // should have earned another coin
+        assertEquals(player.getCoins(), 3);
+    }
 }

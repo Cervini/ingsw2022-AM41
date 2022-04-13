@@ -33,6 +33,50 @@ public class DiningRoomTest {
     }
 
     @Test
+    public void gainCoinTest(){
+        Student pinkStudent = new Student(Colour.PINK);
+        DiningRoom room = new DiningRoom(Colour.PINK);
+        assertEquals(room.getStudents(),0);
+        assertEquals(room.getGiven_coins(), 0);
+        for(int i=0; i<3; i++){
+            try{
+                room.putStudent(pinkStudent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        assertEquals(room.getStudents(),3);
+        assertEquals(room.getGiven_coins(), 1);
+    }
+
+    @Test
+    public void reGainCoinTest(){
+        Student pinkStudent = new Student(Colour.PINK);
+        DiningRoom room = new DiningRoom(Colour.PINK);
+        assertEquals(room.getStudents(),0);
+        for(int i=0; i<3; i++){
+            try{
+                room.putStudent(pinkStudent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        assertEquals(room.getStudents(),3);
+        try{
+            room.removeStudent(pinkStudent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(room.getGiven_coins(), 1);
+        try{
+            room.putStudent(pinkStudent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertEquals(room.getGiven_coins(), 1);
+    }
+
+    @Test
     public void removeStudentTest() {
         Student pinkStudent = new Student(Colour.PINK);
         DiningRoom room = new DiningRoom(Colour.PINK);

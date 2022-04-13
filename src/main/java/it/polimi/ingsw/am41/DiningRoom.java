@@ -42,10 +42,17 @@ public class DiningRoom implements Tile, Comparable{
      * @requires (student != null) && (student.getColor() == this.color)
      */
     public void putStudent(Student student) throws Exception {
-        if(student.getColour() == this.colour)
-            this.students++;
-        else {
-            throw new Exception("Student must be put in the dining room of its color"); //TODO define better exception
+        if (student.getColour() != this.colour) {
+            throw new Exception("Student must be put in the dining room of its color"); // TODO define better exception
+        } else {
+            if (this.students < 10) {
+                this.students++;
+                if (this.students % 3 == 0) {
+                    given_coins = students / 3;
+                }
+            } else {
+                throw new Exception("Dining room is already full!"); // TODO better exception
+            }
         }
     }
 

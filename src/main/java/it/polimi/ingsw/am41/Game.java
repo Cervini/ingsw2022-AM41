@@ -191,7 +191,6 @@ public class Game {
         }
     }
 
-
     //This function has to be executed when two islands that are next to each other are conquered by the same player, this means that they have to merge into a single island
 
     /**
@@ -322,7 +321,6 @@ public class Game {
         }
     }
 
-
     public void moveStudent(Tile fromTile, Tile toTile, Student student){
         try {
             fromTile.removeStudent(student);
@@ -374,5 +372,73 @@ public class Game {
             influence = influence + islandToCheck.getIsland_size();
         }
         return influence;
+    }
+
+    public LinkedList<Player> getPlayers() {
+        return players;
+    }
+
+    public int getAvailable_coins() {
+        return available_coins;
+    }
+
+    public void setAvailable_coins(int available_coins) {
+        this.available_coins = available_coins;
+    }
+
+    public LinkedList<Student> getBag() {
+        return bag;
+    }
+
+    public void setBag(LinkedList<Student> bag) {
+        this.bag = bag;
+    }
+
+    public List<Professor> getProfessors() {
+        return professors;
+    }
+
+    public void setProfessors(List<Professor> professors) {
+        this.professors = professors;
+    }
+
+    public List<Island> getArchipelago() {
+        return archipelago;
+    }
+
+    public void setArchipelago(List<Island> archipelago) {
+        this.archipelago = archipelago;
+    }
+
+    public LinkedList<Player> getTurnOrder() {
+        return turnOrder;
+    }
+
+    public void setTurnOrder(LinkedList<Player> turnOrder) {
+        this.turnOrder = turnOrder;
+    }
+
+    public List<Cloud> getClouds() {
+        return clouds;
+    }
+
+    public void setClouds(List<Cloud> clouds) {
+        this.clouds = clouds;
+    }
+
+    public ArrayList<SimpleCharacter> getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(ArrayList<SimpleCharacter> characters) {
+        this.characters = characters;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -3,7 +3,7 @@ package it.polimi.ingsw.am41;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Objects;
+
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -18,6 +18,7 @@ public class Player implements Comparable{
     private int coins; // number of owned coins
     private SchoolBoard school; // School_board associated with the player
     private boolean tower_holder; // used to check winners and the end of the game is set true if the player hold the towers for the team
+    private int dining_coins; // number of coins obtained by adding students in the dining rooms
 
     // default constructor, creates the player and gives them 8 towers
     public Player(TowerColour team) {
@@ -32,6 +33,7 @@ public class Player implements Comparable{
         deck_setup();
         this.school = new SchoolBoard();
         this.tower_holder = true;
+        this.dining_coins = 0;
     }
 
     // alternative constructor, creates the player and gives them nTowers number of tower
@@ -50,9 +52,12 @@ public class Player implements Comparable{
             this.tower_holder = true;
         else
             this.tower_holder = false;
+        this.dining_coins = 0;
     }
 
-    // read the assistants card stats from assistants_stats.txt and set up the Assistant list
+    /**
+     * read the assistants card stats from assistants_stats.txt and set up the Assistant list
+     */
     private void deck_setup() {
         try {
             Scanner reader = new Scanner(new File("src/main/resources/it/polimi/ingsw/am41/assistants_stats.txt"));
@@ -65,9 +70,21 @@ public class Player implements Comparable{
         }
     }
 
-    // increment coins by 1
-    public void giveCoin() {
-        this.coins++;
+
+    // TODO implement a way to check available coins from game (maybe this event should be managed by Game)
+
+    /**
+     * method called after moving a student from entrance to dining room,
+     * checks if the player in entitled to gain a coin
+     */
+    public void coin_check(){
+        int entitled = 0; // debt is the difference between the earned and given coins
+        for(DiningRoom room: school.getDining_rooms()){
+            entitled += room.getGiven_coins();
+        }
+        int difference = entitled - this.dining_coins;
+        this.coins += difference;
+        this.dining_coins = entitled;
     }
 
     public String getPlayer_id() {
