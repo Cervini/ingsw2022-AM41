@@ -263,7 +263,7 @@ class GameTest {
     }
 
     @Test
-    void chooseCloudTest1() throws Exception{
+    void chooseCloudTest1(){
         Game game = new Game(3);
         Cloud cloud = new Cloud();
         Player player = new Player(TowerColour.WHITE);
@@ -274,10 +274,28 @@ class GameTest {
         LinkedList<Student> students = new LinkedList<Student>();
         LinkedList<Student> outputStudents = new LinkedList<Student>();
 
-        cloud.putStudent(student1);
-        cloud.putStudent(student2);
-        cloud.putStudent(student3);
-        cloud.putStudent(student4);
+        try {
+            cloud.putStudent(student1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            cloud.putStudent(student2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            cloud.putStudent(student3);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // putting a 4th student on the cloud should throw an exception
+        try {
+            cloud.putStudent(student4);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         //TODO work in progress
 
