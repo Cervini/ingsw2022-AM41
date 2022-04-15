@@ -251,7 +251,85 @@ class GameTest {
     }
 
     @Test
-    void moveMotherNature() {
+    void moveMotherNatureTest1() {
+        Game game = new Game(2);
+        List<Island> archipelagoTest;
+        archipelagoTest = game.getArchipelago();
+
+        game.moveMotherNature(3);
+
+        assertTrue(archipelagoTest.get(3).isMother_nature());
+
+        System.out.println("moveMotherNatureTest1 complete");
+    }
+
+    @Test
+    void moveMotherNatureTest2() {
+        Game game = new Game(3);
+        List<Island> archipelagoTest;
+        archipelagoTest = game.getArchipelago();
+
+        game.moveMotherNature(1);
+
+        assertTrue(archipelagoTest.get(1).isMother_nature());
+
+        System.out.println("moveMotherNatureTest2 complete");
+    }
+
+    @Test
+    void moveMotherNatureTest3() {
+        Game game = new Game(4);
+        List<Island> archipelagoTest;
+        archipelagoTest = game.getArchipelago();
+
+        game.moveMotherNature(3);
+        game.moveMotherNature(3);
+
+        assertTrue(archipelagoTest.get(6).isMother_nature());
+
+        System.out.println("moveMotherNatureTest3 complete");
+    }
+
+    @Test
+    void moveMotherNatureTest4() {
+        Game game = new Game(4);
+        List<Island> archipelagoTest;
+        archipelagoTest = game.getArchipelago();
+
+        game.moveMotherNature(11);
+        game.moveMotherNature(3);
+
+        assertTrue(archipelagoTest.get(2).isMother_nature());
+
+        System.out.println("moveMotherNatureTest4 complete");
+    }
+
+    @Test
+    void moveMotherNatureTest5() {
+        Game game = new Game(4);
+        List<Island> archipelagoTest;
+        archipelagoTest = game.getArchipelago();
+
+        game.moveMotherNature(11);
+        game.moveMotherNature(3);
+
+        assertTrue(archipelagoTest.get(2).isMother_nature());
+
+        System.out.println("moveMotherNatureTest5 complete");
+    }
+
+    @Test
+    void moveMotherNatureTest6() {
+        Game game = new Game(2);
+        List<Island> archipelagoTest;
+        archipelagoTest = game.getArchipelago();
+
+        game.merge(archipelagoTest.get(1), archipelagoTest.get(2));
+        game.moveMotherNature(3);
+
+        assertTrue(archipelagoTest.get(3).isMother_nature());
+
+        System.out.println("moveMotherNatureTest6 complete");
     }
 
     @Test
@@ -259,7 +337,29 @@ class GameTest {
     }
 
     @Test
-    void checkOwnership() {
+    void checkOwnership() throws Exception {
+        Game game = new Game(2);
+        LinkedList<Player> players = new LinkedList<Player>();
+        Player player1;
+        Player player2;
+        Student student1 = new Student(Colour.RED);
+        Student student2 = new Student(Colour.RED);
+        Student student3 = new Student(Colour.RED);
+        Student student4 = new Student(Colour.RED);
+        Student student5 = new Student(Colour.RED);
+
+        players = game.getPlayers();
+        player1 = players.getFirst();
+        player2 = players.getLast();
+        player1.getSchool().putStudent(student1);
+        player1.getSchool().putStudent(student2);
+        player1.getSchool().putStudent(student3);
+        player2.getSchool().putStudent(student4);
+        player2.getSchool().putStudent(student5);
+
+        checkOwnership();
+
+        //TODO write method getProfessor in Player
     }
 
     @Test
@@ -296,6 +396,12 @@ class GameTest {
             e.printStackTrace();
         }
 
+        outputStudents.add(student1);
+        outputStudents.add(student2);
+        outputStudents.add(student3);
+        outputStudents.add(student4);
+
+
 
         //TODO work in progress
 
@@ -307,9 +413,5 @@ class GameTest {
 
     @Test
     void playCharacter() {
-    }
-
-    @Test
-    void checkInfluence() {
     }
 }
