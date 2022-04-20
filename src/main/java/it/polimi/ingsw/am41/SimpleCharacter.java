@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am41;
 
 public class SimpleCharacter implements Character{
+
     private int price;
     private boolean is_increased;
 
@@ -12,6 +13,6 @@ public class SimpleCharacter implements Character{
 
     @Override
     public void effect() {
-
+        increaseValue();
     }
 }

@@ -140,3 +140,5 @@ AM41.iml
 .idea/vcs.xml
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/inspectionProfiles/
+
+.idea/
