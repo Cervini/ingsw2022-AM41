@@ -88,6 +88,7 @@ public class Game {
         for(Colour colour: Colour.values()){
             professors.add(new Professor(colour));
         }
+        //TODO set up assistants
         // set up characters
         characterSetup();
     }
@@ -265,6 +266,7 @@ public class Game {
     /**
      * moves professors according to the number of students in players' dining rooms
      */
+    //TODO fix
     public void checkOwnership(){
         int tmp; // temp variable used to check the maximum
         LinkedList<Integer> tie_checker = new LinkedList<Integer>(); // temp list used to check possible ties

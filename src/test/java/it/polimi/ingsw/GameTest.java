@@ -15,14 +15,131 @@ class GameTest {
 
     @Test
     void setTurnOrder() {
+        //TODO set up assistants in Game
     }
 
     @Test
-    void checkTurn() {
+    void checkTurnTest1() {
+        /*Game game = new Game(2);
+        Player player1;
+        Player player2;
+
+        player1 = game.getPlayers().getFirst();
+        player2 = game.getPlayers().getLast();
+
+        //TODO set up assistants in Game
+        player1.setFace_up_assistant();
+        player2.setFace_up_assistant();
+
+        game.setTurnOrder();
+        game.checkTurn();
+
+        assertTrue(game.getTurnOrder().getFirst().isTurn());
+
+        System.out.println("checkTurnTest1 complete");*/
     }
 
     @Test
-    void endGame() {
+    void endGameTest1() throws Exception {
+        Game game = new Game(2);
+
+        game.getPlayers().getFirst().getSchool().takeTowers(8);
+
+        assertEquals(game.endGame(), game.getPlayers().getFirst().getTeam());
+
+        System.out.println("endGameTest1 complete");
+    }
+
+    @Test
+    void endGameTest2() throws Exception {
+        Game game = new Game(3);
+
+        game.getPlayers().getFirst().getSchool().takeTowers(5);
+        game.getPlayers().getLast().getSchool().takeTowers(6);
+
+        assertEquals(game.endGame(), game.getPlayers().getLast().getTeam());
+
+        System.out.println("endGameTest2 complete");
+    }
+
+    @Test
+    void endGameTest3() throws Exception {
+        Game game = new Game(4);
+
+        game.getPlayers().getFirst().getSchool().takeTowers(3);
+        game.getPlayers().get(1).getSchool().takeTowers(5);
+        game.getPlayers().get(0).getSchool().giveTowers(2);
+        game.getPlayers().get(0).getSchool().takeTowers(7);
+
+        assertEquals(game.endGame(), game.getPlayers().getFirst().getTeam());
+
+        System.out.println("endGameTest3 complete");
+    }
+
+    @Test
+    void endGameTest4() throws Exception {
+        Game game = new Game(2);
+
+        game.getArchipelago().get(0).setTower(TowerColour.BLACK);
+        while(game.endGame() == null){
+            game.getArchipelago().get(1).setTower(TowerColour.BLACK);
+            game.merge(game.getArchipelago().get(0), game.getArchipelago().get(1));
+        }
+
+        //TODO fix checkWinner
+
+        assertTrue(game.endGame().equals(TowerColour.BLACK) && game.getArchipelago().size() == 3);
+
+        System.out.println("endGameTest4 complete");
+    }
+
+    @Test
+    void endGameTest7() throws Exception {
+        Game game = new Game(4);
+
+        game.getBag().clear();
+
+        assertTrue(game.endGame() != null);
+
+        System.out.println("endGameTest7 complete");
+    }
+
+    @Test
+    void endGameTest8() throws Exception {
+        Game game = new Game(4);
+
+        game.getPlayers().getLast().getAssistants().clear();
+
+        assertTrue(game.endGame() != null);
+
+        System.out.println("endGameTest8 complete");
+    }
+
+    @Test
+    void endGameTest9() throws Exception {
+        Game game = new Game(2);
+
+        game.getPlayers().getFirst().getSchool().takeTowers(2);
+        game.getPlayers().getLast().getSchool().takeTowers(2);
+
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.YELLOW));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.YELLOW));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.YELLOW));
+        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.YELLOW));
+        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.YELLOW));
+        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.BLUE));
+        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.GREEN));
+
+        game.checkOwnership();
+        game.getBag().clear();
+
+        //TODO fix checkOwnership
+        assertEquals(game.endGame(), game.getPlayers().getLast().getTeam());
+
+        System.out.println("endGameTest9 complete");
     }
 
     @Test
