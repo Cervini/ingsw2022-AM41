@@ -256,7 +256,13 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.moveMotherNature(3);
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,10,game.getPlayers().getFirst()));
+
+        try {
+            game.moveMotherNature(3, game.getPlayers().getFirst());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         assertTrue(archipelagoTest.get(3).isMother_nature());
 
@@ -269,7 +275,13 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.moveMotherNature(1);
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,10,game.getPlayers().getFirst()));
+
+        try {
+            game.moveMotherNature(1, game.getPlayers().getFirst());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         assertTrue(archipelagoTest.get(1).isMother_nature());
 
@@ -282,8 +294,18 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.moveMotherNature(3);
-        game.moveMotherNature(3);
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,10,game.getPlayers().getFirst()));
+
+        try {
+            game.moveMotherNature(3, game.getPlayers().getFirst());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            game.moveMotherNature(3, game.getPlayers().getFirst());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         assertTrue(archipelagoTest.get(6).isMother_nature());
 
@@ -296,8 +318,18 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.moveMotherNature(11);
-        game.moveMotherNature(3);
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,20,game.getPlayers().getFirst()));
+
+        try {
+            game.moveMotherNature(11, game.getPlayers().getFirst());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            game.moveMotherNature(3, game.getPlayers().getFirst());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         assertTrue(archipelagoTest.get(2).isMother_nature());
 
@@ -310,8 +342,18 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.moveMotherNature(11);
-        game.moveMotherNature(3);
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,20,game.getPlayers().getFirst()));
+
+        try {
+            game.moveMotherNature(11, game.getPlayers().getFirst());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            game.moveMotherNature(3, game.getPlayers().getFirst());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         assertTrue(archipelagoTest.get(2).isMother_nature());
 
@@ -324,8 +366,14 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,10,game.getPlayers().getFirst()));
+
         game.merge(archipelagoTest.get(1), archipelagoTest.get(2));
-        game.moveMotherNature(3);
+        try {
+            game.moveMotherNature(3, game.getPlayers().getFirst());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         assertTrue(archipelagoTest.get(3).isMother_nature());
 

@@ -10,7 +10,7 @@ public class Game {
     private List<Island> archipelago; // list of all the islands
     private LinkedList<Player> turnOrder; // playing order of the turn
     private List<Cloud> clouds; // list of all the clouds
-    private ArrayList<SimpleCharacter> characters; // list of the three character playable in the current match
+    // private ArrayList<SimpleCharacter> characters; // list of the three character playable in the current match
     private String status; // status of the game
 
     // Game constructor sets up the game
@@ -88,7 +88,18 @@ public class Game {
         for(Colour colour: Colour.values()){
             professors.add(new Professor(colour));
         }
-        // TODO set up characters
+        // set up characters
+        characterSetup();
+    }
+
+
+    // -- SEEING IF CONSTRUCTOR AND DECORATOR COMPILE --
+    private void characterSetup(){
+        ArrayList<Integer> random = new ArrayList<Integer>();
+        for(int i=1; i<13; i++){
+            random.add(i);
+        }
+        Collections.shuffle(random);
     }
 
     /**
@@ -206,11 +217,15 @@ public class Game {
     }
 
     //This function moves mother nature from an island to another by finding the island where it is standing now, changing its boolean value of motherNature to false and setting it to true to another island that is exactly after a number of islands equals to "movement"
-    public void moveMotherNature(int movement){
-        Island fromIsland = motherNaturePosition();
-        int from = archipelago.indexOf(fromIsland);
-        archipelago.get((from + movement)% archipelago.size()).setMother_nature(true);
-        archipelago.get(from).setMother_nature(false);
+    public void moveMotherNature(int movement, Player player) throws Exception {
+        if(player.getFace_up_assistant().getMovement_points()>=movement){
+            Island fromIsland = motherNaturePosition();
+            int from = archipelago.indexOf(fromIsland);
+            archipelago.get((from + movement)% archipelago.size()).setMother_nature(true);
+            archipelago.get(from).setMother_nature(false);
+        } else {
+            throw new Exception("Can't move Mother Nature this far!");
+        }
     }
 
     /**
@@ -280,14 +295,18 @@ public class Game {
                     tie = true;
                 }
             }
-            // professors are moved only if ownership is no tied
+            // professors are moved only if ownership isn't tied
             if(!tie){
                 moveProfessor(colour, owner);
             }
         }
     }
 
-    //This function returns true if a player has the professor of a specified color
+    /**
+     * @param colour
+     * @param playerToCheck
+     * @return true if playerToCheck owns professor of color colour
+     */
     private boolean ownsProfessor(Colour colour, Player playerToCheck) {
         for(Professor professorToCheck : playerToCheck.getOwned_professor()) {
             if (professorToCheck.getColour() == colour) {
@@ -297,7 +316,11 @@ public class Game {
         return false;
     }
 
-    //This function returns the professor of a specified color from a specified player
+    /**
+     * @param colour
+     * @param playerToCheck
+     * @return professor of specified color from playerToCheck
+     */
     private Professor returnProfessor(Colour colour, Player playerToCheck) {
         for(Professor professorToCheck : playerToCheck.getOwned_professor()) {
             if (professorToCheck.getColour() == colour) {
@@ -307,8 +330,25 @@ public class Game {
         return null;
     }
 
+    /**
+     * checks if any player can conquer the island
+     * @param island island to be checked
+     */
+    public void islandCheck(Island island){
+        for(Player player: players){
+            try {
+                island.conquer(player, players);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-    //When a player chooses a cloud it takes all the students on top of it and moves them to it's SchoolBoard entrance, this function returns all the students from a cloud and deletes it after so that no other player can choose it again.
+    /**
+     * moves students from cloud to player's entrance
+     * @param cloud chosen cloud
+     * @param player player whose entrance is going to be filled
+     */
     public void chooseCloud(Cloud cloud, Player player){
         for(Student s: cloud.getStudents()){
             try {
@@ -320,6 +360,12 @@ public class Game {
         }
     }
 
+    /**
+     * moves student from Tile instance to another
+     * @param fromTile tile with student
+     * @param toTile tile where the student is going to be moved
+     * @param student moved student
+     */
     public void moveStudent(Tile fromTile, Tile toTile, Student student){
         try {
             fromTile.removeStudent(student);
@@ -333,9 +379,22 @@ public class Game {
         }
     }
 
-    public void playCharacter(SimpleCharacter character){
-        character.effect();
+    /**
+     * draws student from bag
+     * @return first student in the bag list
+     */
+    public Student drawStudent(){
+        Student drawn;
+        drawn = bag.getFirst();
+        bag.removeFirst();
+        return drawn;
     }
+
+    /*
+    public void playCharacter(SimpleCharacter character, LinkedList<Object> args, Player user){
+        character.effect(args, user);
+    }
+     */
 
     public LinkedList<Player> getPlayers() {
         return players;
@@ -387,14 +446,6 @@ public class Game {
 
     public void setClouds(List<Cloud> clouds) {
         this.clouds = clouds;
-    }
-
-    public ArrayList<SimpleCharacter> getCharacters() {
-        return characters;
-    }
-
-    public void setCharacters(ArrayList<SimpleCharacter> characters) {
-        this.characters = characters;
     }
 
     public String getStatus() {

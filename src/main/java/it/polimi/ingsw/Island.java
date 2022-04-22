@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Island implements Tile {
@@ -89,7 +90,7 @@ public class Island implements Tile {
      * @param players list of all the players
      * @return true if the player has the most influence on the island
      */
-    public boolean canConquer(Player player, ArrayList<Player> players) {
+    public boolean canConquer(Player player, LinkedList<Player> players) {
         // get the influence of the conquering player
         int player_influence = influence(player);
         for(Player p: players){
@@ -109,7 +110,7 @@ public class Island implements Tile {
      * @param players list of all the players
      * @throws Exception Player can't conquer the island
      */
-    public void conquer(Player player, ArrayList<Player> players) throws Exception {
+    public void conquer(Player player, LinkedList<Player> players) throws Exception {
         TowerColour old_team = tower;
         // if the player can conquer the island
         if(canConquer(player, players)){

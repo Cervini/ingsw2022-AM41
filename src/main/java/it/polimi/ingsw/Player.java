@@ -60,7 +60,7 @@ public class Player implements Comparable{
      */
     private void deck_setup() {
         try {
-            Scanner reader = new Scanner(new File("src/main/resources/it/polimi/ingsw/am41/assistants_stats.txt"));
+            Scanner reader = new Scanner(new File("src/main/resources/it/polimi/ingsw/assistants_stats.txt"));
             while (reader.hasNextInt()) {
                 assistants.add(new Assistant(reader.nextInt(), reader.nextInt(), this));
             }
@@ -85,6 +85,14 @@ public class Player implements Comparable{
         int difference = entitled - this.dining_coins;
         this.coins += difference;
         this.dining_coins = entitled;
+    }
+
+    public void spend(int price) throws Exception {
+        if(coins>=price)
+            coins -= price;
+        else {
+            throw new Exception("Not enough coins!");
+        }
     }
 
     public String getPlayer_id() {

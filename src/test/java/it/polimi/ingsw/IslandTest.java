@@ -3,6 +3,7 @@ package it.polimi.ingsw;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -136,7 +137,7 @@ class IslandTest {
     @Test
     void canConquerFalse() {
         Island island = new Island();
-        ArrayList<Player> players = new ArrayList<>();
+        LinkedList<Player> players = new LinkedList<>();
         Player player1 = new Player(TowerColour.BLACK);
         Player player2 = new Player(TowerColour.WHITE);
         players.add(player1);
@@ -162,7 +163,7 @@ class IslandTest {
     @Test
     void canConquerTrue() {
         Island island = new Island();
-        ArrayList<Player> players = new ArrayList<>();
+        LinkedList<Player> players = new LinkedList<>();
         Player player1 = new Player(TowerColour.BLACK);
         Player player2 = new Player(TowerColour.WHITE);
         players.add(player1);
@@ -188,7 +189,7 @@ class IslandTest {
     @Test
     void canConquerTied() {
         Island island = new Island();
-        ArrayList<Player> players = new ArrayList<>();
+        LinkedList<Player> players = new LinkedList<Player>();
         Player player1 = new Player(TowerColour.BLACK);
         Player player2 = new Player(TowerColour.WHITE);
         players.add(player1);
@@ -215,7 +216,7 @@ class IslandTest {
     @Test
     void conquer() {
         Island island = new Island();
-        ArrayList<Player> players = new ArrayList<>();
+        LinkedList<Player> players = new LinkedList<>();
         Player player1 = new Player(TowerColour.BLACK);
         Player player2 = new Player(TowerColour.WHITE);
         players.add(player1);
@@ -247,7 +248,7 @@ class IslandTest {
     @Test
     void conquerTie() {
         Island island = new Island();
-        ArrayList<Player> players = new ArrayList<>();
+        LinkedList<Player> players = new LinkedList<>();
         Player player1 = new Player(TowerColour.BLACK);
         Player player2 = new Player(TowerColour.WHITE);
         players.add(player1);

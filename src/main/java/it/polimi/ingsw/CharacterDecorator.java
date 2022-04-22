@@ -1,15 +1,20 @@
 package it.polimi.ingsw;
 
+import java.util.ArrayList;
+
 public abstract class CharacterDecorator implements Character{
+    private final SimpleCharacter decoratedCharacter;
 
-    protected Character decoratedCharacter;
-
-    public CharacterDecorator(Character decoratedCharacter){
+    public CharacterDecorator(SimpleCharacter decoratedCharacter) {
         this.decoratedCharacter = decoratedCharacter;
     }
 
     @Override
-    public void effect() {
-        decoratedCharacter.effect();
+    public void effect(ArrayList<Object> args) {
+
+    }
+
+    public SimpleCharacter getDecoratedCharacter() {
+        return decoratedCharacter;
     }
 }
