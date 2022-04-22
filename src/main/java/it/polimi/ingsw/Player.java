@@ -151,6 +151,10 @@ public class Player implements Comparable{
         this.tower_holder = tower_holder;
     }
 
+    public ArrayList<Professor> getProfessor(){
+        return owned_professor;
+    }
+
     /**
      * @param o player to compare to
      * @return { if the players' played assistants have the same value return 0;

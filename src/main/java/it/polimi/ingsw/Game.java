@@ -88,9 +88,31 @@ public class Game {
         for(Colour colour: Colour.values()){
             professors.add(new Professor(colour));
         }
-        //TODO set up assistants
+
+        assistantSetup(numberOfPlayers);
+
         // set up characters
         characterSetup();
+    }
+
+    //This function generates the assistants and assigns them to each player
+    private void assistantSetup(int playerNumber){
+        for(int i=1; i<=10; i++){
+            if(playerNumber == 2) {
+                players.getFirst().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getFirst()));
+                players.getLast().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getLast()));
+            }else if(playerNumber == 3){
+                players.getFirst().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getFirst()));
+                players.get(1).getAssistants().add(new Assistant(i, (i + 1) / 2, players.get(1)));
+                players.getLast().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getLast()));
+            }else if(playerNumber == 4){
+                players.getFirst().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getFirst()));
+                players.get(1).getAssistants().add(new Assistant(i, (i + 1) / 2, players.get(1)));
+                players.get(2).getAssistants().add(new Assistant(i, (i + 1) / 2, players.get(2)));
+                players.getLast().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getLast()));
+            }
+        }
+        return;
     }
 
 

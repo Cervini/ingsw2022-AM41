@@ -15,7 +15,6 @@ class GameTest {
 
     @Test
     void setTurnOrder() {
-        //TODO set up assistants in Game
     }
 
     @Test
@@ -27,7 +26,7 @@ class GameTest {
         player1 = game.getPlayers().getFirst();
         player2 = game.getPlayers().getLast();
 
-        //TODO set up assistants in Game
+        //TODO check
         player1.setFace_up_assistant();
         player2.setFace_up_assistant();
 
@@ -501,13 +500,10 @@ class GameTest {
     void moveProfessor() {
     }
 
-    // TODO complete test
-
-/*
     @Test
     void checkOwnership() throws Exception {
         Game game = new Game(2);
-        LinkedList<Player> players = new LinkedList<Player>();
+        LinkedList<Player> players;
         Player player1;
         Player player2;
         Student student1 = new Student(Colour.RED);
@@ -515,6 +511,7 @@ class GameTest {
         Student student3 = new Student(Colour.RED);
         Student student4 = new Student(Colour.RED);
         Student student5 = new Student(Colour.RED);
+        ArrayList<Professor> professors = new ArrayList<>();
 
         players = game.getPlayers();
         player1 = players.getFirst();
@@ -525,12 +522,13 @@ class GameTest {
         player2.getSchool().putStudent(student4);
         player2.getSchool().putStudent(student5);
 
+        professors.add(new Professor(Colour.RED));
         checkOwnership();
 
-        //TODO write method getProfessor in Player
-    }
+        //TODO fix checkOwnership
 
- */
+        assertEquals(player1.getProfessor(), professors);
+    }
 
     @Test
     void chooseCloudTest1(){
