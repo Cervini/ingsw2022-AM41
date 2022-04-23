@@ -576,8 +576,61 @@ class GameTest {
     }
 
     @Test
-    void moveStudent() {
+    void moveStudentTest1() throws Exception {
+        Game game = new Game(2);
+        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        List<Student> islandStudents = game.getArchipelago().get(0).getStudents();
+        Student student = new Student(Colour.RED);
+        game.getPlayers().getFirst().getSchool().putStudent(student);
+        game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getArchipelago().get(0), student);
+        islandStudents.add(student);
+
+        assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getArchipelago().get(0).getStudents().equals(islandStudents));
+
+        System.out.println("moveStudentTest1 complete");
     }
+
+    @Test
+    void moveStudentTest2() throws Exception {
+        Game game = new Game(2);
+        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        Student student = new Student(Colour.RED);
+        game.getPlayers().getFirst().getSchool().putStudent(student);
+        game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED), student);
+
+        assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).getStudents() == 1);
+
+        System.out.println("moveStudentTest2 complete");
+    }
+
+    @Test
+    void moveStudentTest3() throws Exception {
+        Game game = new Game(2);
+        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        List<Student> islandStudents = game.getArchipelago().get(0).getStudents();
+        Student student = new Student(Colour.BLUE);
+        game.getPlayers().getFirst().getSchool().putStudent(student);
+        game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getArchipelago().get(0), student);
+        islandStudents.add(student);
+
+        assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getArchipelago().get(0).getStudents().equals(islandStudents));
+
+        System.out.println("moveStudentTest3 complete");
+    }
+
+    @Test
+    void moveStudentTest4() throws Exception {
+        Game game = new Game(2);
+        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        Student student = new Student(Colour.BLUE);
+        game.getPlayers().getFirst().getSchool().putStudent(student);
+        game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getPlayers().getFirst().getSchool().getDining_room(Colour.BLUE), student);
+
+        assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getPlayers().getFirst().getSchool().getDining_room(Colour.BLUE).getStudents() == 1);
+
+        System.out.println("moveStudentTest4 complete");
+    }
+
 
     @Test
     void playCharacter() {

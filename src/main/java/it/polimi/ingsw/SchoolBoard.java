@@ -109,4 +109,8 @@ public class SchoolBoard implements Tile{
     public void removeStudent(Student student) {
         entrance.remove(student);
     }
+
+    public ArrayList<Student> getEntrance() {
+        return entrance;
+    }
 }
