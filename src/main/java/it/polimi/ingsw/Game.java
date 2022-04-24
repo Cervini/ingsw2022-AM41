@@ -81,7 +81,7 @@ public class Game {
         }
         // fill clouds
         for(Cloud cloud: clouds){
-            fillCloud(cloud);
+            fillCloud(cloud, numberOfPlayers);
         }
         // set up professors
         professors = new ArrayList<Professor>();
@@ -129,18 +129,28 @@ public class Game {
      * if the cloud given as parameter is empty it gets filled
      * @param cloud cloud to be filled
      */
-    public void fillCloud(Cloud cloud){
+    public void fillCloud(Cloud cloud, int numberOfPlayers){
         // if the cloud is empty
         if(cloud.getStudents().size()==0){
             // fill the cloud with 3 students picked from bag
-            for(int i=0; i<3; i++){
-                try {
-                    cloud.putStudent(bag.get(0));
-                    bag.removeFirst();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if(numberOfPlayers == 3) {
+                for (int i = 0; i < 4; i++) {
+                    try {
+                        cloud.putStudent(bag.get(0));
+                        bag.removeFirst();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-
+            }else{
+                for (int i = 0; i < 3; i++) {
+                    try {
+                        cloud.putStudent(bag.get(0));
+                        bag.removeFirst();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }

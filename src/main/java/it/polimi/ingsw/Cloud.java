@@ -14,10 +14,11 @@ public class Cloud implements Tile {
 
     @Override
     public void putStudent(Student student) throws Exception {
+        int cloudSize;
         if(student != null){
-            if(students.size()<3)
+            try{
                 students.add(student);
-            else {
+            }catch (Exception e){
                 throw new Exception("Cloud is already full"); // TODO improve exception
             }
         }
@@ -30,5 +31,10 @@ public class Cloud implements Tile {
 
     public List<Student> getStudents() {
         return students;
+    }
+
+    public void emptyIsland(){
+        students.clear();
+        return;
     }
 }
