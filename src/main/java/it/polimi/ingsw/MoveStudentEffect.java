@@ -2,9 +2,9 @@ package it.polimi.ingsw;
 
 import java.util.ArrayList;
 
-public class StudentToTile extends CharacterDecorator{
+public class MoveStudentEffect extends CharacterDecorator{
 
-    public StudentToTile(SimpleCharacter decoratedCharacter) {
+    public MoveStudentEffect(SimpleCharacter decoratedCharacter) {
         super(decoratedCharacter);
     }
 
@@ -23,5 +23,8 @@ public class StudentToTile extends CharacterDecorator{
         }
         getDecoratedCharacter().getGame().moveStudent(getDecoratedCharacter(), destination, student);
         getDecoratedCharacter().reFill();
+        // remove the two used arguments
+        args.remove(1);
+        args.remove(0);
     }
 }

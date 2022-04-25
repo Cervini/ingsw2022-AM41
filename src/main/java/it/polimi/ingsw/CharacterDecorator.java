@@ -14,6 +14,11 @@ public abstract class CharacterDecorator implements Character{
 
     }
 
+    @Override
+    public void endEffect(){
+
+    }
+
     public SimpleCharacter getDecoratedCharacter() {
         return decoratedCharacter;
     }

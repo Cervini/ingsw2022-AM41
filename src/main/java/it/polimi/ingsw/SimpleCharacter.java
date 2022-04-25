@@ -31,6 +31,10 @@ public class SimpleCharacter implements Character, Tile{
     }
 
     @Override
+    public void endEffect() {
+    }
+
+    @Override
     public void putStudent(Student student) throws Exception {
         if(student != null)
             students.add(student);

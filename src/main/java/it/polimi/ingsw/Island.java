@@ -8,7 +8,7 @@ public class Island implements Tile {
 
     private int island_size; // how many base Island form the island
     private boolean mother_nature; // true if Mother Nature is currently on the island
-    private boolean deny_card; // true if a No Entry Card is present on the island
+    private boolean no_entry; // true if a No Entry Card is present on the island
     private List <Student> students; // list of all the students on the island
     private TowerColour tower = null; // color of the team that controls the island, null if it's no one's
 
@@ -16,23 +16,11 @@ public class Island implements Tile {
         return tower;
     }
 
-    int count=0;
-
-    public Island island() { //instantiates only 12 islands
-        if (count < 12) {
-            Island island = new Island();
-            count++;
-            return island;
-        } else {
-            return null;
-        }
-    }
-
     // constructor creates an empty island of size 1
     public Island(){
         this.island_size = 1;
         this.mother_nature = false;
-        this.deny_card = false;
+        this.no_entry = false;
         this.students = new ArrayList<>();
     }
 
@@ -154,12 +142,12 @@ public class Island implements Tile {
         this.mother_nature = mother_nature;
     }
 
-    public boolean getDeny_card() {
-        return deny_card;
+    public boolean getNo_entry() {
+        return no_entry;
     }
 
-    public void setDeny_card(boolean deny_card) {
-        this.deny_card = deny_card;
+    public void setNo_entry(boolean no_entry) {
+        this.no_entry = no_entry;
     }
 
     public List<Student> getStudents() {
@@ -178,7 +166,7 @@ public class Island implements Tile {
     public boolean mergeIslands(Island islandToMerge){
         setIsland_size(island_size + islandToMerge.getIsland_size());
         setMother_nature(mother_nature || islandToMerge.isMother_nature());
-        setDeny_card(deny_card || islandToMerge.getDeny_card());
+        setNo_entry(no_entry || islandToMerge.getNo_entry());
         students.addAll(islandToMerge.getStudents());
         return true;
     }

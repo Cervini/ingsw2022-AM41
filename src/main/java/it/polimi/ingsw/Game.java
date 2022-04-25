@@ -16,7 +16,7 @@ public class Game {
     // Game constructor sets up the game
     public Game(int numberOfPlayers){
         turnOrder = new LinkedList<>();
-        //TODO create and set up the players
+        // set up and create the players
         players = new LinkedList<Player>();
         switch(numberOfPlayers){
             case 2: {
@@ -89,7 +89,7 @@ public class Game {
             professors.add(new Professor(colour));
         }
 
-        assistantSetup(numberOfPlayers);
+        // assistantSetup(numberOfPlayers); <-- when initializing Player assistants are already generated and given to each player
 
         // set up characters
         characterSetup();
@@ -255,6 +255,8 @@ public class Game {
             Island fromIsland = motherNaturePosition();
             int from = archipelago.indexOf(fromIsland);
             archipelago.get((from + movement)% archipelago.size()).setMother_nature(true);
+            // run influence check and change owner of the island if possible
+            islandCheck(archipelago.get((from + movement)% archipelago.size()));
             archipelago.get(from).setMother_nature(false);
         } else {
             throw new Exception("Can't move Mother Nature this far!");
@@ -365,17 +367,22 @@ public class Game {
     }
 
     /**
-     * checks if any player can conquer the island
+     * checks if any player can conquer the island, to be called when Mother Nature lands on an island
      * @param island island to be checked
      */
     public void islandCheck(Island island){
-        for(Player player: players){
-            try {
-                island.conquer(player, players);
-            } catch (Exception e) {
-                e.printStackTrace();
+        if(!island.getNo_entry()){
+            for(Player player: players){
+                try {
+                    island.conquer(player, players);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        } else {
+            island.setNo_entry(false);
         }
+
     }
 
     /**

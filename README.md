@@ -7,7 +7,7 @@
 
 | Functionality    |                       State                        |
 |:-----------------|:--------------------------------------------------:|
-| Basic rules      | 🟡 | Testing
+| Basic rules      | 🟢 | Testing
 | Complete rules   | 🟡 | Implementation
 | Socket           | 🔴 |
 | GUI              | 🔴 |

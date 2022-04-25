@@ -9,73 +9,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTest {
 
     @Test
-    void fillCloudTest1() {
+    void fillCloud() {
         Game game = new Game(2);
-        game.fillCloud(game.getClouds().get(0), game.getPlayers().size());
-
-        assertTrue(game.getClouds().get(0).getStudents().size() == 3);
-
-        System.out.println("fillCloudTest1 complete");
     }
 
     @Test
-    void fillCloudTest2() {
-        Game game = new Game(3);
-        game.fillCloud(game.getClouds().get(0), game.getPlayers().size());
-
-        assertTrue(game.getClouds().get(0).getStudents().size() == 4);
-
-        System.out.println("fillCloudTest2 complete");
-    }
-
-    @Test
-    void fillCloudTest3() {
-        Game game = new Game(4);
-        game.fillCloud(game.getClouds().get(2), game.getPlayers().size());
-
-        assertTrue(game.getClouds().get(2).getStudents().size() == 3);
-
-        System.out.println("fillCloudTest3 complete");
-    }
-
-    @Test
-    void fillCloudTest4() {
-        Game game = new Game(4);
-
-        game.getClouds().get(2).emptyIsland();
-        game.fillCloud(game.getClouds().get(2), game.getPlayers().size());
-
-        assertTrue(game.getClouds().get(2).getStudents().size() == 3);
-
-        System.out.println("fillCloudTest4 complete");
-    }
-
-    @Test
-    void fillCloudTest5() {
-        Game game = new Game(4);
-
-        int bagSize = game.getBag().size();
-
-        game.getClouds().get(2).emptyIsland();
-        game.fillCloud(game.getClouds().get(2), game.getPlayers().size());
-
-        assertTrue(game.getBag().size() == bagSize - 3);
-
-        System.out.println("fillCloudTest5 complete");
-    }
-
-    @Test
-    void setTurnOrderTest1() {
-        /*Game game = new Game(2);
-        game.getPlayers().getFirst().setFace_up_assistant(game.getPlayers().getFirst().getAssistants().get(1));
-        game.getPlayers().getLast().setFace_up_assistant(game.getPlayers().getLast().getAssistants().get(7));
-
-        game.setTurnOrder();
-
-        //TODO fix setTurnOrder
-        assertTrue(game.getTurnOrder().getFirst().equals(game.getPlayers().getLast()));
-
-        System.out.println("setTurnOrderTest1 complete");*/
+    void setTurnOrder() {
     }
 
     @Test
@@ -136,9 +75,12 @@ class GameTest {
         System.out.println("endGameTest3 complete");
     }
 
+
+    //TODO fix checkWinner
+    /*
     @Test
     void endGameTest4() throws Exception {
-        /*Game game = new Game(2);
+        Game game = new Game(2);
 
         game.getArchipelago().get(0).setTower(TowerColour.BLACK);
         while(game.endGame() == null){
@@ -146,14 +88,12 @@ class GameTest {
             game.merge(game.getArchipelago().get(0), game.getArchipelago().get(1));
         }
 
-        //TODO fix checkWinner
+         assertTrue(game.endGame().equals(TowerColour.BLACK) && game.getArchipelago().size() == 3);
 
-        assertTrue(game.endGame().equals(TowerColour.BLACK) && game.getArchipelago().size() == 3);
-
-        System.out.println("endGameTest4 complete");*/
+        System.out.println("endGameTest4 complete");
     }
 
-    //TODO add endGameTest5 and endGameTest6
+     */
 
     @Test
     void endGameTest7() throws Exception {
@@ -177,9 +117,13 @@ class GameTest {
         System.out.println("endGameTest8 complete");
     }
 
+
+
+    //TODO fix checkOwnership
+    /*
     @Test
     void endGameTest9() throws Exception {
-        /*Game game = new Game(2);
+        Game game = new Game(2);
 
         game.getPlayers().getFirst().getSchool().takeTowers(2);
         game.getPlayers().getLast().getSchool().takeTowers(2);
@@ -198,11 +142,13 @@ class GameTest {
         game.checkOwnership();
         game.getBag().clear();
 
-        //TODO fix checkOwnership
+
         assertEquals(game.endGame(), game.getPlayers().getLast().getTeam());
 
-        System.out.println("endGameTest9 complete");*/
+        System.out.println("endGameTest9 complete");
     }
+
+     */
 
     @Test
     void mergeTest1() throws NullPointerException{
@@ -216,13 +162,13 @@ class GameTest {
         LinkedList<Student> students = new LinkedList<Student>();
 
         island1.setIsland_size(1);
-        island1.setDeny_card(false);
+        island1.setNo_entry(false);
         island1.setMother_nature(false);
         island1.putStudent(student1);
         island1.putStudent(student2);
         island1.putStudent(student3);
         island2.setIsland_size(1);
-        island2.setDeny_card(false);
+        island2.setNo_entry(false);
         island2.setMother_nature(false);
         island2.putStudent(student4);
         island2.putStudent(student5);
@@ -234,7 +180,7 @@ class GameTest {
 
         island1.mergeIslands(island2);
         assertEquals(island1.getIsland_size(), 2);
-        assertFalse(island1.getDeny_card());
+        assertFalse(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertFalse(island1.isMother_nature());
 
@@ -253,7 +199,7 @@ class GameTest {
         LinkedList<Student> students = new LinkedList<Student>();
 
         island1.setIsland_size(2);
-        island1.setDeny_card(true);
+        island1.setNo_entry(true);
         island1.setMother_nature(false);
         island1.putStudent(student1);
         island1.putStudent(student2);
@@ -261,7 +207,7 @@ class GameTest {
         island1.putStudent(student4);
         island1.putStudent(student5);
         island2.setIsland_size(4);
-        island2.setDeny_card(false);
+        island2.setNo_entry(false);
         island2.setMother_nature(false);
 
         students.add(student1);
@@ -272,7 +218,7 @@ class GameTest {
 
         island1.mergeIslands(island2);
         assertEquals(island1.getIsland_size(), 6);
-        assertTrue(island1.getDeny_card());
+        assertTrue(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertFalse(island1.isMother_nature());
 
@@ -290,14 +236,14 @@ class GameTest {
         LinkedList<Student> students = new LinkedList<Student>();
 
         island1.setIsland_size(5);
-        island1.setDeny_card(false);
+        island1.setNo_entry(false);
         island1.setMother_nature(true);
         island2.putStudent(student1);
         island2.putStudent(student2);
         island2.putStudent(student3);
         island2.putStudent(student4);
         island2.setIsland_size(4);
-        island2.setDeny_card(true);
+        island2.setNo_entry(true);
         island2.setMother_nature(true);
 
         students.add(student1);
@@ -307,7 +253,7 @@ class GameTest {
 
         island1.mergeIslands(island2);
         assertEquals(island1.getIsland_size(), 9);
-        assertTrue(island1.getDeny_card());
+        assertTrue(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertTrue(island1.isMother_nature());
 
@@ -331,7 +277,7 @@ class GameTest {
         LinkedList<Student> students = new LinkedList<Student>();
 
         island1.setIsland_size(8);
-        island1.setDeny_card(false);
+        island1.setNo_entry(false);
         island1.setMother_nature(false);
         island1.putStudent(student1);
         island1.putStudent(student2);
@@ -339,7 +285,7 @@ class GameTest {
         island1.putStudent(student4);
         island1.putStudent(student5);
         island2.setIsland_size(1);
-        island2.setDeny_card(false);
+        island2.setNo_entry(false);
         island2.setMother_nature(true);
         island2.putStudent(student6);
         island2.putStudent(student7);
@@ -360,7 +306,7 @@ class GameTest {
 
         island1.mergeIslands(island2);
         assertEquals(island1.getIsland_size(), 9);
-        assertFalse(island1.getDeny_card());
+        assertFalse(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertTrue(island1.isMother_nature());
 
@@ -387,10 +333,10 @@ class GameTest {
         LinkedList<Student> students = new LinkedList<Student>();
 
         island1.setIsland_size(8);
-        island1.setDeny_card(false);
+        island1.setNo_entry(false);
         island1.setMother_nature(false);
         island2.setIsland_size(1);
-        island2.setDeny_card(true);
+        island2.setNo_entry(true);
         island2.setMother_nature(true);
         island2.putStudent(student1);
         island2.putStudent(student2);
@@ -422,7 +368,7 @@ class GameTest {
 
         island1.mergeIslands(island2);
         assertEquals(island1.getIsland_size(), 9);
-        assertTrue(island1.getDeny_card());
+        assertTrue(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertTrue(island1.isMother_nature());
 
@@ -563,9 +509,11 @@ class GameTest {
     void moveProfessor() {
     }
 
+    //TODO fix checkOwnership
+    /*
     @Test
     void checkOwnership() throws Exception {
-        /*Game game = new Game(2);
+        Game game = new Game(2);
         LinkedList<Player> players;
         Player player1;
         Player player2;
@@ -588,10 +536,10 @@ class GameTest {
         professors.add(new Professor(Colour.RED));
         checkOwnership();
 
-        //TODO fix checkOwnership
-
-        assertEquals(player1.getProfessor(), professors);*/
+        assertEquals(player1.getProfessor(), professors);
     }
+
+     */
 
     @Test
     void chooseCloudTest1(){

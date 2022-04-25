@@ -28,7 +28,7 @@ public class Assistant implements Comparable<Assistant>{
 
     /**
      * Override to set as determinant field 'value'
-     * @ensures if(this.getValue() > that.getValue())
+     * @return  if(this.getValue() > that.getValue())
      *              return 1;
      *          else
      *              return 0;

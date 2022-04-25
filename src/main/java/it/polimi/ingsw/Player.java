@@ -173,4 +173,13 @@ public class Player implements Comparable{
             return 1;
         }
     }
+
+    public void playAssistant(Assistant assistant) throws Exception {
+        if(assistants.contains(assistant)){
+            setFace_up_assistant(assistant);
+        }
+        else {
+            throw new Exception("Can't play this assistant");
+        }
+    }
 }
