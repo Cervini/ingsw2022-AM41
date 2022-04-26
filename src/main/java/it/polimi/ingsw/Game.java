@@ -129,11 +129,11 @@ public class Game {
      * if the cloud given as parameter is empty it gets filled
      * @param cloud cloud to be filled
      */
-    public void fillCloud(Cloud cloud, int numberOfPlayers){
+    public void fillCloud(Cloud cloud, int numberOfPlayers) {
         // if the cloud is empty
-        if(cloud.getStudents().size()==0){
+        if (cloud.getStudents().size() == 0) {
             // fill the cloud with 3 students picked from bag
-            if(numberOfPlayers == 3) {
+            if (numberOfPlayers == 3) {
                 for (int i = 0; i < 4; i++) {
                     try {
                         cloud.putStudent(bag.get(0));
@@ -142,7 +142,7 @@ public class Game {
                         e.printStackTrace();
                     }
                 }
-            }else{
+            } else {
                 for (int i = 0; i < 3; i++) {
                     try {
                         cloud.putStudent(bag.get(0));
