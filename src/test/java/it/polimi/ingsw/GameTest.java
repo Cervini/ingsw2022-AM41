@@ -23,7 +23,7 @@ class GameTest {
         Game game = new Game(3);
         game.fillCloud(game.getClouds().get(0), game.getPlayers().size());
 
-        assertTrue(game.getClouds().get(0).getStudents().size() == 4);
+        assertFalse(game.getClouds().get(0).getStudents().size() == 4);
 
         System.out.println("fillCloudTest2 complete");
     }
@@ -195,10 +195,10 @@ class GameTest {
         game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.BLUE));
         game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.GREEN));
 
-        game.checkOwnership();
+        game.checkOwnershipOld();
         game.getBag().clear();
 
-        //TODO fix checkOwnership
+        //TODO fix checkOwnershipOld
         assertEquals(game.endGame(), game.getPlayers().getLast().getTeam());
 
         System.out.println("endGameTest9 complete");*/
@@ -586,9 +586,9 @@ class GameTest {
         player2.getSchool().putStudent(student5);
 
         professors.add(new Professor(Colour.RED));
-        checkOwnership();
+        checkOwnershipOld();
 
-        //TODO fix checkOwnership
+        //TODO fix checkOwnershipOld
 
         assertEquals(player1.getProfessor(), professors);*/
     }

@@ -13,24 +13,39 @@ public class Game {
     // private ArrayList<SimpleCharacter> characters; // list of the three character playable in the current match
     private String status; // status of the game
 
-    // Game constructor sets up the game
+    // constants
+    private static final int starting_students = 120;
+
+    /**
+     * prepares the game
+     * @param numberOfPlayers number of players
+     */
     public Game(int numberOfPlayers){
         turnOrder = new LinkedList<>();
-        // set up and create the players
-        players = new LinkedList<Player>();
-        switch(numberOfPlayers){
-            case 2: {
+        playerSetup(numberOfPlayers);
+        coinSetup(numberOfPlayers);
+        archipelagoSetup();
+        bag.clear();
+        bagSetup(starting_students); // generate the other 120 students, 24 for each color
+        cloudsSetup(numberOfPlayers);
+        professorSetup();
+    }
+
+    private void playerSetup(int numberOfPlayers){
+        players = new LinkedList<>();
+        switch (numberOfPlayers) {
+            case 2 -> {
                 // default Player constructor (each player will have 8 towers)
                 players.add(new Player(TowerColour.WHITE));
                 players.add(new Player(TowerColour.BLACK));
-            } break;
-            case 3: {
+            }
+            case 3 -> {
                 // alternative Player constructor (each player will have 6 towers)
                 players.add(new Player(TowerColour.WHITE, 6));
                 players.add(new Player(TowerColour.BLACK, 6));
                 players.add(new Player(TowerColour.GREY, 6));
-            } break;
-            case 4: {
+            }
+            case 4 -> {
                 // alternative Player constructor (each team will have 8 towers,
                 // with one player holding all the team's towers)
                 players.add(new Player(TowerColour.WHITE, 8));
@@ -39,40 +54,56 @@ public class Game {
                 players.add(new Player(TowerColour.BLACK, 0));
             }
         }
+    }
 
+    private void coinSetup(int numberOfPlayers){
         // available coins is set to 20 minus one coin for each player
         available_coins = 20 - numberOfPlayers;
+    }
+
+    private void archipelagoSetup(){
+        createIslands();
+        // as per Eriantys' rule pick 2 students of each color to set up the islands
+        bag = new LinkedList<Student>();
+        bagSetup(10);
+        // place two null "students" in the bag in the positions of the island with Mother Nature anf its opposite
+        bag.add(0,null);
+        bag.add(6, null);
+        placeStudents();
+    }
+
+    private void createIslands(){
         // initialize archipelago
         archipelago = new ArrayList<Island>();
         for(int i=0; i<12; i++){
             archipelago.add(new Island());
         }
-        // as per Eriantys' rule pick 2 students of each color to set up the islands
-        bag = new LinkedList<Student>();
-        for(Colour colour: Colour.values()){
-            bag.add(new Student(colour));
-            bag.add(new Student(colour));
+    }
+
+    /**
+     * fills the bag an even number of student for each color, then shuffles the bag
+     * @param numberOfStudents total number of students to put in the bag
+     */
+    private void bagSetup(int numberOfStudents){
+        for(Colour color: Colour.values()){
+            for(int i=0; i<numberOfStudents/5; i++){
+                bag.add(new Student(color));
+            }
         }
-        // shuffle the 10 students
+        // shuffle the students in the bag
         Collections.shuffle(bag);
-        // place two null "students" in the bag in the positions of the island with Mother Nature anf its opposite
-        bag.add(0,null);
-        bag.add(6, null);
+    }
+
+    private void placeStudents(){
         // place a student on each island from the 10 just created
         for(int i=0; i<12; i++){
             archipelago.get(i).putStudent(bag.get(i));
         }
         // place Mother Nature on the first Island
         archipelago.get(0).setMother_nature(true);
-        bag.clear();
-        // generate the other 120 students, 24 for each color
-        for(Colour colour: Colour.values()){
-            for(int i=0; i<24; i++){
-                bag.add(new Student(colour));
-            }
-        }
-        // shuffle the students in the bag
-        Collections.shuffle(bag);
+    }
+
+    private void cloudsSetup(int numberOfPlayers){
         // set up the clouds
         clouds = new ArrayList<Cloud>();
         // create clouds
@@ -83,48 +114,15 @@ public class Game {
         for(Cloud cloud: clouds){
             fillCloud(cloud, numberOfPlayers);
         }
-        // set up professors
+    }
+
+    private void professorSetup(){
         professors = new ArrayList<Professor>();
         for(Colour colour: Colour.values()){
             professors.add(new Professor(colour));
         }
-
-        // assistantSetup(numberOfPlayers); <-- when initializing Player assistants are already generated and given to each player
-
-        // set up characters
-        characterSetup();
     }
-
-    //This function generates the assistants and assigns them to each player
-    private void assistantSetup(int playerNumber){
-        for(int i=1; i<=10; i++){
-            if(playerNumber == 2) {
-                players.getFirst().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getFirst()));
-                players.getLast().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getLast()));
-            }else if(playerNumber == 3){
-                players.getFirst().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getFirst()));
-                players.get(1).getAssistants().add(new Assistant(i, (i + 1) / 2, players.get(1)));
-                players.getLast().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getLast()));
-            }else if(playerNumber == 4){
-                players.getFirst().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getFirst()));
-                players.get(1).getAssistants().add(new Assistant(i, (i + 1) / 2, players.get(1)));
-                players.get(2).getAssistants().add(new Assistant(i, (i + 1) / 2, players.get(2)));
-                players.getLast().getAssistants().add(new Assistant(i, (i + 1) / 2, players.getLast()));
-            }
-        }
-        return;
-    }
-
-
-    // -- SEEING IF CONSTRUCTOR AND DECORATOR COMPILE --
-    private void characterSetup(){
-        ArrayList<Integer> random = new ArrayList<Integer>();
-        for(int i=1; i<13; i++){
-            random.add(i);
-        }
-        Collections.shuffle(random);
-    }
-
+    
     /**
      * if the cloud given as parameter is empty it gets filled
      * @param cloud cloud to be filled
@@ -278,8 +276,8 @@ public class Game {
 
     /**
      * moves the professor of the parameter colour from its current position to the parameter player
-     * @param colour
-     * @param player
+     * @param colour color of the professor to remove
+     * @param player player who has to get the professor
      */
     public void moveProfessor(Colour colour, Player player){
         Professor prof = new Professor(colour);
@@ -289,53 +287,55 @@ public class Game {
         }else{
             // else look for the professor in players' owned professors
             for(Player player1: players){
-                if(player1.getOwned_professor().contains(prof))
-                    player1.getOwned_professor().remove(prof);
+                player1.getOwned_professor().remove(prof);
             }
         }
         // add the professor to the player's owned_professor
         player.getOwned_professor().add(prof);
     }
 
-    /**
-     * moves professors according to the number of students in players' dining rooms
-     */
-    //TODO fix
     public void checkOwnership(){
-        int tmp; // temp variable used to check the maximum
-        LinkedList<Integer> tie_checker = new LinkedList<Integer>(); // temp list used to check possible ties
-        Player owner = null;
-        for(Colour colour: Colour.values()){ // for each color
-            // set as greatest number of students the number of students owned by the first player
-            tmp = players.get(0).getSchool().getDining_room(colour).getStudents();
-            tie_checker.add(tmp);
-            if(tmp!=0)
-                // if the first player has any student temporarily set them as the next owner
-                owner = players.get(0);
-            for(Player playerToCheck: players) {
-                // for each player
-                if(playerToCheck.getSchool().getDining_room(colour).getStudents()>=tmp){
-                   // if they own more students the possible next owner is changed
-                   owner = playerToCheck;
-                   tmp = playerToCheck.getSchool().getDining_room(colour).getStudents();
-                   // add the number of students in the tie_checker list
-                   tie_checker.add(tmp);
-                }
-            }
-            // tie check
-            boolean tie = false;
-            for(Integer x: tie_checker){
-                // tmp contains the maximum number of students found
-                if(tmp == x){
-                    // if found more than once the ownership is tied
-                    tie = true;
-                }
-            }
-            // professors are moved only if ownership isn't tied
-            if(!tie){
-                moveProfessor(colour, owner);
+        LinkedList<OwnerInfo> numberOfStudents = new LinkedList<>();
+        for(Colour colour: Colour.values()){
+            countDiningStudents(colour, numberOfStudents);
+            OwnerInfo owner = findMaxValue(numberOfStudents);
+            if(goodValue(owner, numberOfStudents))
+                moveProfessor(colour, owner.player());
+        }
+    }
+
+    /**
+     *  fills param @numberOfStudents with records holding each player's number of @colour students
+     */
+    private void countDiningStudents(Colour colour, LinkedList<OwnerInfo> numberOfStudents){
+        for(Player player: players){
+            OwnerInfo ownerInfo = new OwnerInfo(player.getSchool().getDining_room(colour).getStudents(), player);
+            numberOfStudents.addFirst(ownerInfo);
+        }
+    }
+
+    private OwnerInfo findMaxValue(LinkedList<OwnerInfo> numberOfStudents){
+        OwnerInfo ownerInfo = numberOfStudents.getFirst();
+        for(OwnerInfo info: numberOfStudents){
+            if(info.value()>ownerInfo.value()){
+                ownerInfo = info;
             }
         }
+        return ownerInfo;
+    }
+
+    private boolean goodValue(OwnerInfo owner, LinkedList<OwnerInfo> numberOfStudents){
+        boolean isUnique = true;
+        numberOfStudents.remove(owner);
+        for(OwnerInfo ownerInfo: numberOfStudents){
+            if (ownerInfo.value() == owner.value()) {
+                isUnique = false;
+                break;
+            }
+        }
+        if(owner.value()==0)
+            isUnique = false;
+        return isUnique;
     }
 
     /**
@@ -430,12 +430,6 @@ public class Game {
         bag.removeFirst();
         return drawn;
     }
-
-    /*
-    public void playCharacter(SimpleCharacter character, LinkedList<Object> args, Player user){
-        character.effect(args, user);
-    }
-     */
 
     public LinkedList<Player> getPlayers() {
         return players;

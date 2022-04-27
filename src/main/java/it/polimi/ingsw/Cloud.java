@@ -14,24 +14,10 @@ public class Cloud implements Tile {
 
     @Override
     public void putStudent(Student student) throws Exception {
-        if(student != null){
-            students.add(student);
+        if (student != null) {
+            if (students.size() < 3)
+                students.add(student);
         }
-        /*if(student != null){
-<<<<<<< HEAD
-            if(students.size()<3){
-                students.add(student);
-            }
-            else{
-                throw new Exception("Cloud is already full");
-=======
-            if(students.size()<3)
-                students.add(student);
-            else {
-                throw new Exception("Cloud is already full"); // TODO improve exception
->>>>>>> parent of ee58181 (Update of GameTest, added getStudents and emptyIsland in Cloud, fixed fillCloud in Game)
-            }
-        }*/
     }
 
     @Override

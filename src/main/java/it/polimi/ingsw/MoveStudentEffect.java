@@ -19,7 +19,7 @@ public class MoveStudentEffect extends CharacterDecorator{
             destination = (Tile) args.get(1);
         } catch (IndexOutOfBoundsException e){
             System.out.println("Invalid arguments!");
-            e.printStackTrace();
+            // e.printStackTrace(); -- needed?
         }
         getDecoratedCharacter().getGame().moveStudent(getDecoratedCharacter(), destination, student);
         getDecoratedCharacter().reFill();
