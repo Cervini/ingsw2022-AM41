@@ -37,10 +37,13 @@ public class Game {
     private List<Cloud> cloudsSetup(int numberOfPlayers){
         clouds = new ArrayList<Cloud>();
         for(int i=0; i<numberOfPlayers; i++){   // create clouds
-            clouds.add(new Cloud());
+            if(numberOfPlayers == 3)
+                clouds.add(new Cloud(4));
+            else
+                clouds.add(new Cloud());
         }
         for(Cloud cloud: clouds){
-            fillCloud(cloud, numberOfPlayers);
+            fillCloud(cloud);
         }
         return clouds;
     }
@@ -49,34 +52,14 @@ public class Game {
      * if the cloud given as parameter is empty it gets filled
      * @param cloud cloud to be filled
      */
-    public void fillCloud(Cloud cloud, int numberOfPlayers) {
+    public void fillCloud(Cloud cloud) {
         if (cloud.getStudents().size() == 0) {  // if the cloud is empty
-            if (numberOfPlayers == 3) {
-                threePlayersCloudRefill(cloud);
-            } else {
-                twoOrFourPlayersCloudRefill(cloud);
-            }
-        }
-    }
-
-    private void threePlayersCloudRefill(Cloud cloud){
-        for (int i = 0; i < threePlayerIslandSize; i++) {
-            try {
-                cloud.putStudent(bag.get(0));
-                bag.removeFirst();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void twoOrFourPlayersCloudRefill(Cloud cloud){
-        for (int i = 0; i < twoOrFourPlayerIslandSize; i++) {
-            try {
-                cloud.putStudent(bag.get(0));
-                bag.removeFirst();
-            } catch (Exception e) {
-                e.printStackTrace();
+            for(int i=0; i<cloud.getMaxStudents(); i++){
+                try {
+                    cloud.putStudent(drawStudent());
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
             }
         }
     }
@@ -281,12 +264,12 @@ public class Game {
         try {
             fromTile.removeStudent(student);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             toTile.putStudent(student);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 

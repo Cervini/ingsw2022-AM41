@@ -16,18 +16,18 @@ class IslandTest {
         try {
             island.putStudent(new Student(Colour.BLUE));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             island.putStudent(new Student(Colour.GREEN));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         assertEquals(island.getStudents().size(),2);
         try {
             island.putStudent(new Student(Colour.PINK));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         assertEquals(island.getStudents().size(),3);
     }
@@ -39,7 +39,7 @@ class IslandTest {
         try {
             island.putStudent(null);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         assertEquals(island.getStudents().size(),0);
     }
@@ -50,12 +50,12 @@ class IslandTest {
         try {
             island.putStudent(new Student(Colour.BLUE));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try{
             island.removeStudent(new Student(Colour.BLUE));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         assertEquals(island.getStudents().size(), 1);
     }
@@ -239,7 +239,7 @@ class IslandTest {
         try {
             island.conquer(player1, players);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
         assertEquals(island.getTower(), TowerColour.BLACK);
@@ -269,7 +269,7 @@ class IslandTest {
         try {
             island.conquer(player1, players);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
         assertNull(island.getTower());

@@ -1,5 +1,6 @@
 package it.polimi.ingsw;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -11,7 +12,7 @@ class GameTest {
     @Test
     void fillCloudTest1() {
         Game game = new Game(2);
-        game.fillCloud(game.getClouds().get(0), game.getPlayers().size());
+        game.fillCloud(game.getClouds().get(0));
 
         assertTrue(game.getClouds().get(0).getStudents().size() == 3);
 
@@ -21,9 +22,9 @@ class GameTest {
     @Test
     void fillCloudTest2() {
         Game game = new Game(3);
-        game.fillCloud(game.getClouds().get(0), game.getPlayers().size());
+        game.fillCloud(game.getClouds().get(0));
 
-        assertFalse(game.getClouds().get(0).getStudents().size() == 4);
+        assertTrue(game.getClouds().get(0).getStudents().size() == 4);
 
         System.out.println("fillCloudTest2 complete");
     }
@@ -31,7 +32,7 @@ class GameTest {
     @Test
     void fillCloudTest3() {
         Game game = new Game(4);
-        game.fillCloud(game.getClouds().get(2), game.getPlayers().size());
+        game.fillCloud(game.getClouds().get(2));
 
         assertTrue(game.getClouds().get(2).getStudents().size() == 3);
 
@@ -43,7 +44,7 @@ class GameTest {
         Game game = new Game(4);
 
         game.getClouds().get(2).emptyIsland();
-        game.fillCloud(game.getClouds().get(2), game.getPlayers().size());
+        game.fillCloud(game.getClouds().get(2));
 
         assertTrue(game.getClouds().get(2).getStudents().size() == 3);
 
@@ -57,7 +58,7 @@ class GameTest {
         int bagSize = game.getBag().size();
 
         game.getClouds().get(2).emptyIsland();
-        game.fillCloud(game.getClouds().get(2), game.getPlayers().size());
+        game.fillCloud(game.getClouds().get(2));
 
         assertTrue(game.getBag().size() == bagSize - 3);
 
@@ -205,7 +206,7 @@ class GameTest {
     }
 
     @Test
-    void mergeTest1() throws NullPointerException{
+    void mergeTest1() throws NullPointerException {
         Island island1 = new Island();
         Island island2 = new Island();
         Student student1 = new Student(Colour.RED);
@@ -242,7 +243,7 @@ class GameTest {
     }
 
     @Test
-    void mergeTest2() throws NullPointerException{
+    void mergeTest2() throws NullPointerException {
         Island island1 = new Island();
         Island island2 = new Island();
         Student student1 = new Student(Colour.RED);
@@ -280,7 +281,7 @@ class GameTest {
     }
 
     @Test
-    void mergeTest3() throws NullPointerException{
+    void mergeTest3() throws NullPointerException {
         Island island1 = new Island();
         Island island2 = new Island();
         Student student1 = new Student(Colour.RED);
@@ -315,7 +316,7 @@ class GameTest {
     }
 
     @Test
-    void mergeTest4() throws NullPointerException{
+    void mergeTest4() throws NullPointerException {
         Island island1 = new Island();
         Island island2 = new Island();
         Student student1 = new Student(Colour.GREEN);
@@ -368,7 +369,7 @@ class GameTest {
     }
 
     @Test
-    void mergeTest5() throws NullPointerException{
+    void mergeTest5() throws NullPointerException {
         Island island1 = new Island();
         Island island2 = new Island();
         Student student1 = new Student(Colour.GREEN);
@@ -435,12 +436,12 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,10,game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10, game.getPlayers().getFirst()));
 
         try {
             game.moveMotherNature(3, game.getPlayers().getFirst());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
         assertTrue(archipelagoTest.get(3).isMother_nature());
@@ -454,12 +455,12 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,10,game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10, game.getPlayers().getFirst()));
 
         try {
             game.moveMotherNature(1, game.getPlayers().getFirst());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
         assertTrue(archipelagoTest.get(1).isMother_nature());
@@ -473,17 +474,17 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,10,game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10, game.getPlayers().getFirst()));
 
         try {
             game.moveMotherNature(3, game.getPlayers().getFirst());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             game.moveMotherNature(3, game.getPlayers().getFirst());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
         assertTrue(archipelagoTest.get(6).isMother_nature());
@@ -497,17 +498,17 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,20,game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 20, game.getPlayers().getFirst()));
 
         try {
             game.moveMotherNature(11, game.getPlayers().getFirst());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             game.moveMotherNature(3, game.getPlayers().getFirst());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
         assertTrue(archipelagoTest.get(2).isMother_nature());
@@ -521,17 +522,17 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,20,game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 20, game.getPlayers().getFirst()));
 
         try {
             game.moveMotherNature(11, game.getPlayers().getFirst());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             game.moveMotherNature(3, game.getPlayers().getFirst());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
         assertTrue(archipelagoTest.get(2).isMother_nature());
@@ -545,13 +546,13 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1,10,game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10, game.getPlayers().getFirst()));
 
         game.merge(archipelagoTest.get(1), archipelagoTest.get(2));
         try {
             game.moveMotherNature(3, game.getPlayers().getFirst());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
         assertTrue(archipelagoTest.get(3).isMother_nature());
@@ -594,7 +595,7 @@ class GameTest {
     }
 
     @Test
-    void chooseCloudTest1(){
+    void chooseCloudTest1() {
         Game game = new Game(3);
         Cloud cloud = new Cloud();
         Player player = new Player(TowerColour.WHITE);
@@ -608,30 +609,29 @@ class GameTest {
         try {
             cloud.putStudent(student1);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(student2);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(student3);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         // putting a 4th student on the cloud should throw an exception
         try {
             cloud.putStudent(student4);
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(e);;
         }
 
         outputStudents.add(student1);
         outputStudents.add(student2);
         outputStudents.add(student3);
         outputStudents.add(student4);
-
 
 
         //TODO work in progress
@@ -690,12 +690,39 @@ class GameTest {
         game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getPlayers().getFirst().getSchool().getDining_room(Colour.BLUE), student);
 
         assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getPlayers().getFirst().getSchool().getDining_room(Colour.BLUE).getStudents() == 1);
-
-        System.out.println("moveStudentTest4 complete");
     }
 
+    @Test
+    @DisplayName("2 Players Game")
+    void constructorTest01() {
+        Game game = new Game(2);
+        assertEquals(game.getPlayers().size(), 2);
+        assertNotEquals(game.getPlayers().getFirst(), game.getPlayers().getLast());
+        assertEquals(game.getAvailable_coins(),18);
+    }
 
     @Test
-    void playCharacter() {
+    @DisplayName("3 Players Game")
+    void constructorTest02() {
+        Game game = new Game(3);
+        assertEquals(game.getPlayers().size(), 3);
+        assertNotEquals(game.getPlayers().get(0), game.getPlayers().get(1));
+        assertNotEquals(game.getPlayers().get(1), game.getPlayers().get(2));
+        assertNotEquals(game.getPlayers().get(0), game.getPlayers().get(2));
+        assertEquals(game.getAvailable_coins(),17);
+    }
+
+    @Test
+    @DisplayName("4 Players Game")
+    void constructorTest03() {
+        Game game = new Game(4);
+        assertEquals(game.getPlayers().size(), 4);
+        assertNotEquals(game.getPlayers().get(0), game.getPlayers().get(1));
+        assertNotEquals(game.getPlayers().get(1), game.getPlayers().get(2));
+        assertNotEquals(game.getPlayers().get(0), game.getPlayers().get(2));
+        assertNotEquals(game.getPlayers().get(0), game.getPlayers().get(3));
+        assertNotEquals(game.getPlayers().get(1), game.getPlayers().get(3));
+        assertNotEquals(game.getPlayers().get(3), game.getPlayers().get(2));
+        assertEquals(game.getAvailable_coins(),16);
     }
 }

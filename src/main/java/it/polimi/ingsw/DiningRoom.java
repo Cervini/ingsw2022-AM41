@@ -23,13 +23,6 @@ public class DiningRoom implements Tile, Comparable{
         return given_coins;
     }
 
-    /**
-     * increases by one the value of given_coins
-     */
-    public void giveCoin(){
-        given_coins++;
-    }
-
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
@@ -43,7 +36,7 @@ public class DiningRoom implements Tile, Comparable{
      */
     public void putStudent(Student student) throws Exception {
         if (student.getColour() != this.colour) {
-            throw new Exception("Student must be put in the dining room of its color"); // TODO define better exception
+            throw new Exception("Student can't be placed in this dining room");
         } else {
             if (this.students < 10) {
                 this.students++;
@@ -51,15 +44,17 @@ public class DiningRoom implements Tile, Comparable{
                     given_coins = students / 3;
                 }
             } else {
-                throw new Exception("Dining room is already full!"); // TODO better exception
+                throw new Exception("Dining room is already full!");
             }
         }
     }
 
     @Override
-    public void removeStudent(Student student) {
-        if(student.getColour()==this.colour){
+    public void removeStudent(Student student) throws Exception {
+        if((student.getColour()==this.colour)&&(students>0)){
             this.students--;
+        } else {
+            throw new Exception("Impossible to remove student");
         }
     }
 

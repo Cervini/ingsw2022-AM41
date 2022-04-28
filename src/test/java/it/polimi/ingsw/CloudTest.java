@@ -13,18 +13,18 @@ class CloudTest {
         try {
             cloud.putStudent(new Student(Colour.BLUE));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.GREEN));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         assertEquals(cloud.getStudents().size(),2);
         try {
             cloud.putStudent(new Student(Colour.PINK));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         assertEquals(cloud.getStudents().size(),3);
     }
@@ -36,7 +36,7 @@ class CloudTest {
         try {
             cloud.putStudent(null);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         assertEquals(cloud.getStudents().size(),0);
     }
@@ -47,22 +47,22 @@ class CloudTest {
         try {
             cloud.putStudent(new Student(Colour.BLUE));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.GREEN));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.PINK));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.RED));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         assertEquals(cloud.getStudents().size(),3);
     }
@@ -74,17 +74,17 @@ class CloudTest {
         try {
             cloud.putStudent(new Student(Colour.BLUE));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.GREEN));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.PINK));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         cloud.removeStudent(new Student(Colour.GREEN));
         assertEquals(cloud.getStudents().size(),2);
@@ -96,17 +96,17 @@ class CloudTest {
         try {
             cloud.putStudent(new Student(Colour.BLUE));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.GREEN));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.PINK));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         cloud.removeStudent(new Student(Colour.RED));
         assertEquals(cloud.getStudents().size(),3);
@@ -118,17 +118,17 @@ class CloudTest {
         try {
             cloud.putStudent(new Student(Colour.BLUE));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.GREEN));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         try {
             cloud.putStudent(new Student(Colour.PINK));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         cloud.removeStudent(null);
         assertEquals(cloud.getStudents().size(),3);

@@ -2,7 +2,7 @@ package it.polimi.ingsw;
 
 public class Assistant implements Comparable<Assistant>{
     private final int value; //determines card's value used for turn order
-    private int movement_points; //determines movements Mother Nature may perform with the use of this card
+    private final int movement_points; //determines movements Mother Nature may perform with the use of this card
     private final Player player; // player who played the card
 
     /**
@@ -40,9 +40,5 @@ public class Assistant implements Comparable<Assistant>{
         else {
             return 1;
         }
-    }
-
-    public void setMovement_points(int movement_points) {
-        this.movement_points = movement_points;
     }
 }

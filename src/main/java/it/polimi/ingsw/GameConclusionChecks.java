@@ -2,8 +2,10 @@ package it.polimi.ingsw;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class GameConclusionChecks {
+
     public TowerColour endBecauseOfArchipelagoSize(int minSize, List<Island> archipelago, List<Player> players){
         Player winner = null;
         if(archipelago.size()<=minSize){

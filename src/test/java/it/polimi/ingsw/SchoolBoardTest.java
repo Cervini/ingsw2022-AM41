@@ -33,7 +33,7 @@ public class SchoolBoardTest {
         try {
             s.putStudent(student);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         assertEquals(s.getEntranceSize(), 1);
     }
@@ -48,7 +48,7 @@ public class SchoolBoardTest {
                 s.putStudent(student);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e);
             }
             x++;
             if(x>9)
