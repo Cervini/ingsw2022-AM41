@@ -10,15 +10,17 @@ class ProfessorTest {
     void testNotEquals() {
         Professor prof1 = new Professor(Colour.RED);
         Professor prof2 = new Professor(Colour.GREEN);
+        boolean equal = prof1.equals(prof2);
 
-        assertNotEquals(prof1, prof2);
+        assertFalse(equal);
     }
 
     @Test
     void testEquals() {
         Professor prof1 = new Professor(Colour.RED);
         Professor prof2 = new Professor(Colour.RED);
+        boolean equal = prof1.equals(prof2);
 
-        assertEquals(prof1, prof2);
+        assertTrue(equal);
     }
 }

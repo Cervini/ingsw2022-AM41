@@ -2,12 +2,11 @@ package it.polimi.ingsw;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class GameConclusionChecks {
 
     public TowerColour endBecauseOfArchipelagoSize(int minSize, List<Island> archipelago, List<Player> players){
-        Player winner = null;
+        Player winner;
         if(archipelago.size()<=minSize){
             winner = checkWinner(players, archipelago);
             return winner.getTeam();
@@ -16,7 +15,7 @@ public class GameConclusionChecks {
     }
 
     public TowerColour endBecauseAvailableStudentsFinished(LinkedList<Student> bag, List<Island> archipelago, List<Player> players, TowerColour winner){
-        Player winnerPlayer = null;
+        Player winnerPlayer;
         if(winner == null) {
             if (bag.size() == 0) {
                 winnerPlayer = checkWinner(players, archipelago);
@@ -28,7 +27,7 @@ public class GameConclusionChecks {
 
     public TowerColour endBecauseAvailableAssistantsFinished(List<Island> archipelago, List<Player> players, TowerColour winner){
         if(winner == null) {
-            Player winnerPlayer = null;
+            Player winnerPlayer;
             for (Player playerToCheck : players) {
                 if (playerToCheck.getAssistants().size() == 0) {
                     winnerPlayer = checkWinner(players, archipelago);
@@ -57,12 +56,12 @@ public class GameConclusionChecks {
     private Player checkWinner(List<Player> players, List<Island> archipelago){
         Player winner = null;
         int towers = 0;
-        int tmp = 0;
+        int tmp;
         boolean tie = false;
         for(Player playerToCheck : players){
             tmp = 0;
             for(Island islandToCheck : archipelago){
-                if(playerToCheck.equals(islandToCheck.getTower())){
+                if(playerToCheck.getTeam().equals(islandToCheck.getTower())){
                     tmp = tmp + islandToCheck.getIsland_size();
                 }
             }
@@ -74,21 +73,18 @@ public class GameConclusionChecks {
                 tie = true;
             }
         }
-        if(!tie){
-            return winner;
-        }
-        else{
-            for(Player playerToCheck : players){
-                if(winner == null){
+        if (tie) {
+            for (Player playerToCheck : players) {
+                if (winner == null) {
                     winner = playerToCheck;
-                }else{
-                    if(playerToCheck.getOwned_professor().size() > winner.getOwned_professor().size()){
+                } else {
+                    if (playerToCheck.getOwned_professor().size() > winner.getOwned_professor().size()) {
                         winner = playerToCheck;
                     }
                 }
             }
-            return winner;
         }
+        return winner;
     }
 }
 

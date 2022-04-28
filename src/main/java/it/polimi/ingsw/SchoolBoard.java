@@ -3,16 +3,16 @@ package it.polimi.ingsw;
 import java.util.ArrayList;
 
 public class SchoolBoard implements Tile{
-    private ArrayList<Student> entrance; // list of students at the entrance section of the School_board
-    private ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
+    private final ArrayList<Student> entrance; // list of students at the entrance section of the School_board
+    private final ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
     private int towers; // number of towers currently on the School_board
 
     /**
      * default constructor sets up School_board with 8 towers
      */
     public SchoolBoard(){
-        this.entrance = new ArrayList<Student>(9);
-        this.dining_rooms = new ArrayList<DiningRoom>(5);
+        this.entrance = new ArrayList<>(9);
+        this.dining_rooms = new ArrayList<>(5);
         /* initialize a dining_room for every color */
         for(Colour colour : Colour.values()){
             dining_rooms.add(new DiningRoom(colour));
@@ -25,8 +25,8 @@ public class SchoolBoard implements Tile{
      *  @requires towers >= 0
      */
     public SchoolBoard(int towers) {
-        this.entrance = new ArrayList<Student>(9);
-        this.dining_rooms = new ArrayList<DiningRoom>(5);
+        this.entrance = new ArrayList<>(9);
+        this.dining_rooms = new ArrayList<>(5);
         /* initialize a dining_room for every color */
         for(Colour colour : Colour.values()){
             dining_rooms.add(new DiningRoom(colour));
@@ -94,7 +94,6 @@ public class SchoolBoard implements Tile{
 
     /**
      * add a student to entrance
-     * @signals (Exception e) (entrance.size()>=9)
      */
     @Override
     public void putStudent(Student student) throws Exception {

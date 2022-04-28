@@ -15,8 +15,6 @@ public class Professor{
     @Override
     public boolean equals(Object o) {
         Professor p = (Professor) o;
-        if(p.getColour()==this.colour)
-            return true;
-        return false;
+        return p.getColour() == this.colour;
     }
 }

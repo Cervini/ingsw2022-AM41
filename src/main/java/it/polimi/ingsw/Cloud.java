@@ -6,16 +6,16 @@ import java.util.List;
 
 public class Cloud implements Tile {
 
-    private List<Student> students;
-    private int maxStudents;
+    private final List<Student> students;
+    private final int maxStudents;
 
     public Cloud() {
-        students = new ArrayList<Student>();
+        students = new ArrayList<>();
         this.maxStudents = 3;
     }
 
     public Cloud(int maxStudents){
-        students = new ArrayList<Student>();
+        students = new ArrayList<>();
         this.maxStudents = maxStudents;
     }
 
@@ -41,7 +41,6 @@ public class Cloud implements Tile {
 
     public void emptyIsland(){
         students.clear();
-        return;
     }
 
     public int getMaxStudents() {

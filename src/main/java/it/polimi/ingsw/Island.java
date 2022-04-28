@@ -9,7 +9,7 @@ public class Island implements Tile {
     private int island_size; // how many base Island form the island
     private boolean mother_nature; // true if Mother Nature is currently on the island
     private boolean no_entry; // true if a No Entry Card is present on the island
-    private List <Student> students; // list of all the students on the island
+    private final List <Student> students; // list of all the students on the island
     private TowerColour tower = null; // color of the team that controls the island, null if it's no one's
 
     public TowerColour getColour(){
@@ -52,17 +52,12 @@ public class Island implements Tile {
 
         // add influence gained from owned professors
         for (Professor p: player.getOwned_professor()){
-            switch(p.getColour()){
-                case BLUE:
-                    player_influence+=blue; break;
-                case GREEN:
-                    player_influence+=green; break;
-                case PINK:
-                    player_influence+=pink; break;
-                case YELLOW:
-                    player_influence+=yellow; break;
-                case RED:
-                    player_influence+=red; break;
+            switch (p.getColour()) {
+                case BLUE -> player_influence += blue;
+                case GREEN -> player_influence += green;
+                case PINK -> player_influence += pink;
+                case YELLOW -> player_influence += yellow;
+                case RED -> player_influence += red;
             }
         }
 

@@ -292,55 +292,15 @@ public class Game {
         return available_coins;
     }
 
-    public void setAvailable_coins(int available_coins) {
-        this.available_coins = available_coins;
-    }
-
     public LinkedList<Student> getBag() {
         return bag;
-    }
-
-    public void setBag(LinkedList<Student> bag) {
-        this.bag = bag;
-    }
-
-    public List<Professor> getProfessors() {
-        return professors;
-    }
-
-    public void setProfessors(List<Professor> professors) {
-        this.professors = professors;
     }
 
     public List<Island> getArchipelago() {
         return archipelago;
     }
 
-    public void setArchipelago(List<Island> archipelago) {
-        this.archipelago = archipelago;
-    }
-
-    public LinkedList<Player> getTurnOrder() {
-        return turnOrder;
-    }
-
-    public void setTurnOrder(LinkedList<Player> turnOrder) {
-        this.turnOrder = turnOrder;
-    }
-
     public List<Cloud> getClouds() {
         return clouds;
-    }
-
-    public void setClouds(List<Cloud> clouds) {
-        this.clouds = clouds;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

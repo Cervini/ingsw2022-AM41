@@ -3,11 +3,8 @@ package it.polimi.ingsw;
 import java.util.*;
 
 public class GameSetup {
-    private LinkedList<Player> players;
-    private int available_coins;
     private LinkedList<Student> bag;
     private List<Island> archipelago;
-    private List<Professor> professors;
 
     private static final int twoOrFourPlayerGameTowers = 8;
     private static final int threePlayerGameTowers = 6;
@@ -17,7 +14,7 @@ public class GameSetup {
     private static final int numberOfColours = 5;
 
     public LinkedList<Player> playerSetup(int numberOfPlayers){
-        players = new LinkedList<>();
+        LinkedList<Player> players = new LinkedList<>();
         switch (numberOfPlayers) {
             case 2 -> {
                 // default Player constructor (each player will have 8 towers)
@@ -44,14 +41,13 @@ public class GameSetup {
 
     public int coinSetup(int numberOfPlayers){
         // available coins is set to 20 minus one coin for each player
-        available_coins = initialNumberOfCoins - numberOfPlayers;
-        return available_coins;
+        return initialNumberOfCoins - numberOfPlayers;
     }
 
     public List<Island> archipelagoSetup(){
         createIslands();
         // as per Eriantys' rule pick 2 students of each color to set up the islands
-        bag = new LinkedList<Student>();
+        bag = new LinkedList<>();
         bagSetup(islandSetupStudentNumber);
         // place two null "students" in the bag in the positions of the island with Mother Nature anf its opposite
         bag.add(0,null);
@@ -62,7 +58,7 @@ public class GameSetup {
 
     private void createIslands(){
         // initialize archipelago
-        archipelago = new ArrayList<Island>();
+        archipelago = new ArrayList<>();
         for(int i=0; i<numberOfIslands; i++){
             archipelago.add(new Island());
         }
@@ -93,7 +89,7 @@ public class GameSetup {
     }
 
     public List<Professor> professorSetup(){
-        professors = new ArrayList<Professor>();
+        List<Professor> professors = new ArrayList<>();
         for(Colour colour: Colour.values()){
             professors.add(new Professor(colour));
         }

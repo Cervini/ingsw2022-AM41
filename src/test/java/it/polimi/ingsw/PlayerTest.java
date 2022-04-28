@@ -133,4 +133,54 @@ public class PlayerTest {
         // should have earned another coin
         assertEquals(player.getCoins(), 3);
     }
+
+    @Test
+    public void playAssistantTest(){
+        Player player = new Player(TowerColour.BLACK);
+        Assistant assistant = new Assistant(7, 4, player);
+
+        try {
+            player.playAssistant(assistant);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        assertEquals(player.getFace_up_assistant(), assistant);
+    }
+
+    @Test
+    public void replayAssistantTest(){
+        Player player = new Player(TowerColour.BLACK);
+        Assistant assistant = new Assistant(7, 4, player);
+
+        try {
+            player.playAssistant(assistant);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        assertEquals(player.getFace_up_assistant(), assistant);
+
+        try {
+            player.playAssistant(assistant);
+        } catch (Exception e) {
+            System.out.println(e);
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void wrongAssistantTest(){
+        Player player = new Player(TowerColour.BLACK);
+        Assistant assistant = new Assistant(1, 7, player);
+
+        try {
+            player.playAssistant(assistant);
+        } catch (Exception e) {
+            System.out.println(e);
+            assertTrue(true);
+        }
+
+        assertNull(player.getFace_up_assistant());
+    }
 }

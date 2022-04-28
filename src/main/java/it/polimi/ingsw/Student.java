@@ -1,13 +1,9 @@
 package it.polimi.ingsw;
 
 public class Student {
-    private Colour colour;
+    private final Colour colour;
 
     public Student(Colour colour){
-        this.colour = colour;
-    }
-
-    public void setColour() {
         this.colour = colour;
     }
 
@@ -20,9 +16,7 @@ public class Student {
         if (this == o)
             return true;
         Student s = (Student) o;
-        if(s.getColour() == this.colour)
-            return true;
-        return false;
+        return s.getColour() == this.colour;
     }
 
 }
