@@ -14,6 +14,9 @@ public class Game {
     private String status; // status of the game
 
     // constants
+    private static final int twoOrFourPlayerIslandSize = 3;
+    private static final int threePlayerIslandSize = 4;
+    private static final int minimumNumberOfIslands = 3;
     private static final int starting_students = 120;
 
     /**
@@ -21,134 +24,59 @@ public class Game {
      * @param numberOfPlayers number of players
      */
     public Game(int numberOfPlayers){
+        GameSetup gameSetup = new GameSetup();
         turnOrder = new LinkedList<>();
-        playerSetup(numberOfPlayers);
-        coinSetup(numberOfPlayers);
-        archipelagoSetup();
-        bag.clear();
-        bagSetup(starting_students); // generate the other 120 students, 24 for each color
-        cloudsSetup(numberOfPlayers);
-        professorSetup();
+        players = gameSetup.playerSetup(numberOfPlayers);
+        available_coins = gameSetup.coinSetup(numberOfPlayers);
+        archipelago = gameSetup.archipelagoSetup();
+        bag = gameSetup.bagSetup(starting_students); // generate the other 120 students, 24 for each color
+        clouds = cloudsSetup(numberOfPlayers);
+        professors = gameSetup.professorSetup();
     }
 
-    private void playerSetup(int numberOfPlayers){
-        players = new LinkedList<>();
-        switch (numberOfPlayers) {
-            case 2 -> {
-                // default Player constructor (each player will have 8 towers)
-                players.add(new Player(TowerColour.WHITE));
-                players.add(new Player(TowerColour.BLACK));
-            }
-            case 3 -> {
-                // alternative Player constructor (each player will have 6 towers)
-                players.add(new Player(TowerColour.WHITE, 6));
-                players.add(new Player(TowerColour.BLACK, 6));
-                players.add(new Player(TowerColour.GREY, 6));
-            }
-            case 4 -> {
-                // alternative Player constructor (each team will have 8 towers,
-                // with one player holding all the team's towers)
-                players.add(new Player(TowerColour.WHITE, 8));
-                players.add(new Player(TowerColour.BLACK, 8));
-                players.add(new Player(TowerColour.WHITE, 0));
-                players.add(new Player(TowerColour.BLACK, 0));
-            }
-        }
-    }
-
-    private void coinSetup(int numberOfPlayers){
-        // available coins is set to 20 minus one coin for each player
-        available_coins = 20 - numberOfPlayers;
-    }
-
-    private void archipelagoSetup(){
-        createIslands();
-        // as per Eriantys' rule pick 2 students of each color to set up the islands
-        bag = new LinkedList<Student>();
-        bagSetup(10);
-        // place two null "students" in the bag in the positions of the island with Mother Nature anf its opposite
-        bag.add(0,null);
-        bag.add(6, null);
-        placeStudents();
-    }
-
-    private void createIslands(){
-        // initialize archipelago
-        archipelago = new ArrayList<Island>();
-        for(int i=0; i<12; i++){
-            archipelago.add(new Island());
-        }
-    }
-
-    /**
-     * fills the bag an even number of student for each color, then shuffles the bag
-     * @param numberOfStudents total number of students to put in the bag
-     */
-    private void bagSetup(int numberOfStudents){
-        for(Colour color: Colour.values()){
-            for(int i=0; i<numberOfStudents/5; i++){
-                bag.add(new Student(color));
-            }
-        }
-        // shuffle the students in the bag
-        Collections.shuffle(bag);
-    }
-
-    private void placeStudents(){
-        // place a student on each island from the 10 just created
-        for(int i=0; i<12; i++){
-            archipelago.get(i).putStudent(bag.get(i));
-        }
-        // place Mother Nature on the first Island
-        archipelago.get(0).setMother_nature(true);
-    }
-
-    private void cloudsSetup(int numberOfPlayers){
-        // set up the clouds
+    private List<Cloud> cloudsSetup(int numberOfPlayers){
         clouds = new ArrayList<Cloud>();
-        // create clouds
-        for(int i=0; i<numberOfPlayers; i++){
+        for(int i=0; i<numberOfPlayers; i++){   // create clouds
             clouds.add(new Cloud());
         }
-        // fill clouds
         for(Cloud cloud: clouds){
             fillCloud(cloud, numberOfPlayers);
         }
+        return clouds;
     }
 
-    private void professorSetup(){
-        professors = new ArrayList<Professor>();
-        for(Colour colour: Colour.values()){
-            professors.add(new Professor(colour));
-        }
-    }
-    
     /**
      * if the cloud given as parameter is empty it gets filled
      * @param cloud cloud to be filled
      */
     public void fillCloud(Cloud cloud, int numberOfPlayers) {
-        // if the cloud is empty
-        if (cloud.getStudents().size() == 0) {
-            // fill the cloud with 3 students picked from bag
+        if (cloud.getStudents().size() == 0) {  // if the cloud is empty
             if (numberOfPlayers == 3) {
-                for (int i = 0; i < 4; i++) {
-                    try {
-                        cloud.putStudent(bag.get(0));
-                        bag.removeFirst();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                threePlayersCloudRefill(cloud);
             } else {
-                for (int i = 0; i < 3; i++) {
-                    try {
-                        cloud.putStudent(bag.get(0));
-                        bag.removeFirst();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                twoOrFourPlayersCloudRefill(cloud);
+            }
+        }
+    }
+
+    private void threePlayersCloudRefill(Cloud cloud){
+        for (int i = 0; i < threePlayerIslandSize; i++) {
+            try {
+                cloud.putStudent(bag.get(0));
+                bag.removeFirst();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void twoOrFourPlayersCloudRefill(Cloud cloud){
+        for (int i = 0; i < twoOrFourPlayerIslandSize; i++) {
+            try {
+                cloud.putStudent(bag.get(0));
+                bag.removeFirst();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -162,79 +90,22 @@ public class Game {
     //The boolean attribute "turn" of the player in the first position of the queue is set to true
     public void checkTurn(){
         turnOrder.peek().setTurn(true);
-        return;
     }
 
     /**
      * @return winner team or null if the game has to continue
      */
     public TowerColour endGame(){
-        Player winner;
-        if(archipelago.size() <= 3){
-            winner = checkWinner();
-            return winner.getTeam();
-        }
-        if(bag.size() == 0){
-            winner = checkWinner();
-            return winner.getTeam();
-        }
-        for(Player playerToCheck : players){
-                if(playerToCheck.getAssistants().size()==0){
-                    winner = checkWinner();
-                    return winner.getTeam();
-                }
-        }
-        for(Player playerToCheck : players){
-            if((playerToCheck.isTower_holder())&&(playerToCheck.getSchool().getTowers() == 0)){
-                return playerToCheck.getTeam();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * method used in endGame
-     * @return the player who meets the winning conditions
-     */
-    private Player checkWinner(){
-        Player winner = null;
-        int towers = 0;
-        int tmp = 0;
-        boolean tie = false;
-        for(Player playerToCheck : players){
-            tmp = 0;
-            for(Island islandToCheck : archipelago){
-                if(playerToCheck.equals(islandToCheck.getTower())){
-                    tmp = tmp + islandToCheck.getIsland_size();
-                }
-            }
-            if(towers < tmp){
-                winner = playerToCheck;
-                towers = tmp;
-            }
-            else if(towers == tmp){
-                tie = true;
-            }
-        }
-        if(!tie){
-            return winner;
-        }
-        else{
-            for(Player playerToCheck : players){
-                if(winner == null){
-                    winner = playerToCheck;
-                }else{
-                    if(playerToCheck.getOwned_professor().size() > winner.getOwned_professor().size()){
-                        winner = playerToCheck;
-                    }
-                }
-            }
-            return winner;
-        }
+        TowerColour winner = null;
+        GameConclusionChecks check = new GameConclusionChecks();
+        winner = check.endBecauseOfArchipelagoSize(minimumNumberOfIslands, archipelago, players);
+        winner = check.endBecauseAvailableStudentsFinished(bag, archipelago, players, winner);
+        winner = check.endBecauseAvailableAssistantsFinished(archipelago, players, winner);
+        winner = check.endBecauseAvailableTowersFinished(players, winner);
+        return winner;
     }
 
     //This function has to be executed when two islands that are next to each other are conquered by the same player, this means that they have to merge into a single island
-
     /**
      * merges island2 into island1
      * @param island1
@@ -244,7 +115,6 @@ public class Game {
         if(island1.mergeIslands(island2)){
             archipelago.remove(island2);
         }
-        return;
     }
 
     //This function moves mother nature from an island to another by finding the island where it is standing now, changing its boolean value of motherNature to false and setting it to true to another island that is exactly after a number of islands equals to "movement"
@@ -254,7 +124,7 @@ public class Game {
             int from = archipelago.indexOf(fromIsland);
             archipelago.get((from + movement)% archipelago.size()).setMother_nature(true);
             // run influence check and change owner of the island if possible
-            islandCheck(archipelago.get((from + movement)% archipelago.size()));
+            //islandCheck(archipelago.get((from + movement)% archipelago.size()));
             archipelago.get(from).setMother_nature(false);
         } else {
             throw new Exception("Can't move Mother Nature this far!");
@@ -367,7 +237,7 @@ public class Game {
     }
 
     /**
-     * checks if any player can conquer the island, to be called when Mother Nature lands on an island
+     * checks if any player can conquer the island, to be called when an island is subject to change
      * @param island island to be checked
      */
     public void islandCheck(Island island){
