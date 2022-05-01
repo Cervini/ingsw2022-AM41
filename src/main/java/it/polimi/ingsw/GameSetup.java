@@ -69,6 +69,7 @@ public class GameSetup {
      * @param numberOfStudents total number of students to put in the bag
      */
     public LinkedList<Student> bagSetup(int numberOfStudents){
+        bag = new LinkedList<Student>();
         for(Colour color: Colour.values()){
             for(int i=0; i<numberOfStudents/numberOfColours; i++){
                 bag.add(new Student(color));
