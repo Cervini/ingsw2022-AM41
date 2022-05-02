@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
 import java.util.*;
 
@@ -90,7 +90,7 @@ public class GameSetup {
     }
 
     public List<Professor> professorSetup(){
-        List<Professor> professors = new ArrayList<>();
+        List<Professor> professors = new LinkedList<>();
         for(Colour colour: Colour.values()){
             professors.add(new Professor(colour));
         }

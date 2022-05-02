@@ -1,5 +1,8 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.model.Colour;
+import it.polimi.ingsw.model.DiningRoom;
+import it.polimi.ingsw.model.Student;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

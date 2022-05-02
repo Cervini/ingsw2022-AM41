@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
 public class Assistant implements Comparable<Assistant>{
     private final int value; //determines card's value used for turn order

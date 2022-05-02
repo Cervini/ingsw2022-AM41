@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
 import java.util.*;
 
@@ -133,18 +133,24 @@ public class Game {
      * @param player player who has to get the professor
      */
     public void moveProfessor(Colour colour, Player player){
-        Professor prof = new Professor(colour);
-        // if the professor is not owned by anyone
-        if(professors.contains(prof)){
-            professors.remove(prof);
-        }else{
-            // else look for the professor in players' owned professors
-            for(Player player1: players){
-                player1.getOwned_professor().remove(prof);
+        // remove the professor from professor in case it is still not owned by anyone
+        for(Professor professor: professors){
+            if(professor.getColour()==colour){
+                player.getOwned_professor().add(professor);
+                professors.remove(professor);
+                break;
             }
         }
-        // add the professor to the player's owned_professor
-        player.getOwned_professor().add(prof);
+        // remove the professor from the owner and add it to player's owned professors
+        for(Player old: players){
+            for(Professor professor: old.getOwned_professor()){
+                if(professor.getColour()==colour){
+                    old.getOwned_professor().remove(professor);
+                    player.getOwned_professor().add(professor);
+                    break;
+                }
+            }
+        }
     }
 
     public void checkOwnership(){
@@ -154,20 +160,26 @@ public class Game {
             OwnerInfo owner = findMaxValue(numberOfStudents);
             if(goodValue(owner, numberOfStudents))
                 moveProfessor(colour, owner.player());
+            numberOfStudents.clear(); // clear the list for the next cycle
         }
     }
 
     /**
      *  fills param @numberOfStudents with records holding each player's number of @colour students
      */
-    private void countDiningStudents(Colour colour, LinkedList<OwnerInfo> numberOfStudents){
+    public void countDiningStudents(Colour colour, LinkedList<OwnerInfo> numberOfStudents){
         for(Player player: players){
             OwnerInfo ownerInfo = new OwnerInfo(player.getSchool().getDining_room(colour).getStudents(), player);
             numberOfStudents.addFirst(ownerInfo);
         }
     }
 
-    private OwnerInfo findMaxValue(LinkedList<OwnerInfo> numberOfStudents){
+    /**
+     * @param numberOfStudents list to check
+     * @return OwnerInfo with the maximum value of the list,
+     * if all the OwnerInfo have same values returns the first in the list
+     */
+    public OwnerInfo findMaxValue(LinkedList<OwnerInfo> numberOfStudents){
         OwnerInfo ownerInfo = numberOfStudents.getFirst();
         for(OwnerInfo info: numberOfStudents){
             if(info.value()>ownerInfo.value()){
@@ -177,17 +189,21 @@ public class Game {
         return ownerInfo;
     }
 
-    private boolean goodValue(OwnerInfo owner, LinkedList<OwnerInfo> numberOfStudents){
+    /**
+     * @param owner
+     * @param numberOfStudents
+     * @return true if the owner parameter has value > 0 and is not tied with any other owner
+     */
+    public boolean goodValue(OwnerInfo owner, LinkedList<OwnerInfo> numberOfStudents){
+        if(owner.value()==0)
+            return false;
         boolean isUnique = true;
         numberOfStudents.remove(owner);
         for(OwnerInfo ownerInfo: numberOfStudents){
             if (ownerInfo.value() == owner.value()) {
-                isUnique = false;
-                break;
+                return false;
             }
         }
-        if(owner.value()==0)
-            isUnique = false;
         return isUnique;
     }
 
@@ -302,5 +318,9 @@ public class Game {
 
     public List<Cloud> getClouds() {
         return clouds;
+    }
+
+    public List<Professor> getProfessors(){
+        return professors;
     }
 }

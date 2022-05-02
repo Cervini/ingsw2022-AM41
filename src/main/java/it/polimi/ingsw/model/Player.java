@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -130,10 +130,6 @@ public class Player implements Comparable{
 
     public boolean isTower_holder() {
         return tower_holder;
-    }
-
-    public ArrayList<Professor> getProfessor(){
-        return owned_professor;
     }
 
     /**

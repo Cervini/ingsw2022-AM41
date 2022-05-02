@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
 public class DiningRoom implements Tile, Comparable{
     private final Colour colour; // color of the students stored in the Dining_room

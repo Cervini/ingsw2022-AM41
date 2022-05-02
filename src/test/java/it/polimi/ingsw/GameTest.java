@@ -1,5 +1,6 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ class GameTest {
         Game game = new Game(2);
         game.fillCloud(game.getClouds().get(0));
 
-        assertTrue(game.getClouds().get(0).getStudents().size() == 3);
+        assertEquals(3, game.getClouds().get(0).getStudents().size());
 
         System.out.println("fillCloudTest1 complete");
     }
@@ -24,7 +25,7 @@ class GameTest {
         Game game = new Game(3);
         game.fillCloud(game.getClouds().get(0));
 
-        assertTrue(game.getClouds().get(0).getStudents().size() == 4);
+        assertEquals(4, game.getClouds().get(0).getStudents().size());
 
         System.out.println("fillCloudTest2 complete");
     }
@@ -34,7 +35,7 @@ class GameTest {
         Game game = new Game(4);
         game.fillCloud(game.getClouds().get(2));
 
-        assertTrue(game.getClouds().get(2).getStudents().size() == 3);
+        assertEquals(3, game.getClouds().get(2).getStudents().size());
 
         System.out.println("fillCloudTest3 complete");
     }
@@ -46,7 +47,7 @@ class GameTest {
         game.getClouds().get(2).emptyIsland();
         game.fillCloud(game.getClouds().get(2));
 
-        assertTrue(game.getClouds().get(2).getStudents().size() == 3);
+        assertEquals(3, game.getClouds().get(2).getStudents().size());
 
         System.out.println("fillCloudTest4 complete");
     }
@@ -561,40 +562,6 @@ class GameTest {
     }
 
     @Test
-    void moveProfessor() {
-    }
-
-    @Test
-    void checkOwnership() throws Exception {
-        /*Game game = new Game(2);
-        LinkedList<Player> players;
-        Player player1;
-        Player player2;
-        Student student1 = new Student(Colour.RED);
-        Student student2 = new Student(Colour.RED);
-        Student student3 = new Student(Colour.RED);
-        Student student4 = new Student(Colour.RED);
-        Student student5 = new Student(Colour.RED);
-        ArrayList<Professor> professors = new ArrayList<>();
-
-        players = game.getPlayers();
-        player1 = players.getFirst();
-        player2 = players.getLast();
-        player1.getSchool().putStudent(student1);
-        player1.getSchool().putStudent(student2);
-        player1.getSchool().putStudent(student3);
-        player2.getSchool().putStudent(student4);
-        player2.getSchool().putStudent(student5);
-
-        professors.add(new Professor(Colour.RED));
-        checkOwnershipOld();
-
-        //TODO fix checkOwnershipOld
-
-        assertEquals(player1.getProfessor(), professors);*/
-    }
-
-    @Test
     void chooseCloudTest1() {
         Game game = new Game(3);
         Cloud cloud = new Cloud();
@@ -724,5 +691,519 @@ class GameTest {
         assertNotEquals(game.getPlayers().get(1), game.getPlayers().get(3));
         assertNotEquals(game.getPlayers().get(3), game.getPlayers().get(2));
         assertEquals(game.getAvailable_coins(),16);
+    }
+
+    @Test
+    void countDiningTest01(){
+        Game game = new Game(4);
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<4; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<1; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        LinkedList<OwnerInfo> list = new LinkedList<>();
+        game.countDiningStudents(Colour.BLUE, list);
+        assertEquals(list.get(0).value(), 2);
+        assertEquals(list.get(1).value(), 1);
+        assertEquals(list.get(2).value(), 4);
+        assertEquals(list.get(3).value(), 3);
+    }
+
+    @Test
+    void countDiningTest02(){
+        Game game = new Game(4);
+
+        LinkedList<OwnerInfo> list = new LinkedList<>();
+        game.countDiningStudents(Colour.BLUE, list);
+        assertEquals(list.get(0).value(), 0);
+        assertEquals(list.get(1).value(), 0);
+        assertEquals(list.get(2).value(), 0);
+        assertEquals(list.get(3).value(), 0);
+        assertEquals(list.size(),4);
+    }
+
+    @Test
+    void findMaxValueTest01(){
+        Game game = new Game(4);
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<4; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<1; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        LinkedList<OwnerInfo> list = new LinkedList<>();
+        game.countDiningStudents(Colour.BLUE, list);
+
+        OwnerInfo expected = new OwnerInfo(4, game.getPlayers().get(1));
+        assertEquals(game.findMaxValue(list), expected);
+    }
+
+    @Test
+    void findMaxValueTest02(){
+        Game game = new Game(4);
+
+        LinkedList<OwnerInfo> list = new LinkedList<>();
+        game.countDiningStudents(Colour.BLUE, list);
+
+        OwnerInfo expected = new OwnerInfo(0, game.getPlayers().get(3));
+        assertEquals(game.findMaxValue(list), expected);
+    }
+
+    @Test
+    void goodValueTest01(){
+        Game game = new Game(4);
+
+        LinkedList<OwnerInfo> list = new LinkedList<>();
+        game.countDiningStudents(Colour.BLUE, list);
+
+        OwnerInfo owner = game.findMaxValue(list);
+
+        assertFalse(game.goodValue(owner,list));
+    }
+
+    @Test
+    void goodValueTest02(){
+        Game game = new Game(4);
+
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<4; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<1; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        LinkedList<OwnerInfo> list = new LinkedList<>();
+        game.countDiningStudents(Colour.BLUE, list);
+
+        OwnerInfo owner = game.findMaxValue(list);
+
+        assertTrue(game.goodValue(owner,list));
+    }
+
+    @Test
+    void moveProfessorTest01(){
+        Game game = new Game(2);
+
+        game.moveProfessor(Colour.BLUE, game.getPlayers().getFirst());
+
+        assertEquals(game.getProfessors().size(), 4);
+        assertEquals(game.getPlayers().getFirst().getOwned_professor().size(), 1);
+    }
+
+    @Test
+    void moveProfessorTest02(){
+        Game game = new Game(2);
+
+        game.moveProfessor(Colour.BLUE, game.getPlayers().getFirst());
+
+        game.moveProfessor(Colour.BLUE, game.getPlayers().get(1));
+
+        assertEquals(game.getProfessors().size(), 4);
+        assertEquals(game.getPlayers().get(1).getOwned_professor().size(), 1);
+        assertEquals(game.getPlayers().getFirst().getOwned_professor().size(), 0);
+    }
+
+    @Test
+    void checkOwnership01(){
+        Game game = new Game(4);
+
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<4; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<1; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i=0; i<5; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i=0; i<5; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i=0; i<1; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.YELLOW).putStudent(new Student(Colour.YELLOW));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.YELLOW).putStudent(new Student(Colour.YELLOW));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<6; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.YELLOW).putStudent(new Student(Colour.YELLOW));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<9; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.YELLOW).putStudent(new Student(Colour.YELLOW));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i=0; i<7; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<6; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        game.checkOwnership();
+
+        assertEquals(game.getProfessors().size(), 0);
+        assertEquals(game.getPlayers().get(0).getOwned_professor().size(), 3);
+        assertEquals(game.getPlayers().get(1).getOwned_professor().size(), 1);
+        assertEquals(game.getPlayers().get(2).getOwned_professor().size(), 0);
+        assertEquals(game.getPlayers().get(3).getOwned_professor().size(), 1);
+    }
+
+
+    @Test
+    void checkOwnership02(){
+        Game game = new Game(4);
+
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<4; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<1; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i=0; i<5; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i=0; i<1; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.YELLOW).putStudent(new Student(Colour.YELLOW));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.YELLOW).putStudent(new Student(Colour.YELLOW));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<6; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.YELLOW).putStudent(new Student(Colour.YELLOW));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<9; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.YELLOW).putStudent(new Student(Colour.YELLOW));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i=0; i<7; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<6; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        game.checkOwnership();
+
+        assertEquals(game.getProfessors().size(), 1);
+        assertEquals(game.getPlayers().get(0).getOwned_professor().size(), 2);
+        assertEquals(game.getPlayers().get(1).getOwned_professor().size(), 1);
+        assertEquals(game.getPlayers().get(2).getOwned_professor().size(), 0);
+        assertEquals(game.getPlayers().get(3).getOwned_professor().size(), 1);
+    }
+
+    @Test
+    void divideAndConquerOwnerShipTest(){
+        Game game = new Game(4);
+
+        for(int i=0; i<3; i++){
+            try {
+                game.getPlayers().get(0).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<4; i++){
+            try {
+                game.getPlayers().get(1).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<1; i++){
+            try {
+                game.getPlayers().get(2).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i=0; i<2; i++){
+            try {
+                game.getPlayers().get(3).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        game.checkOwnership();
+
+        assertEquals(game.getProfessors().size(), 4);
+    }
+
+    @Test
+    void checkOwnership03(){
+        Game game = new Game(4);
+
+        game.checkOwnership();
+
+        assertEquals(game.getProfessors().size(), 5);
     }
 }
