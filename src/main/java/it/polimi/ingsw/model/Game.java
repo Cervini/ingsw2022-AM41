@@ -323,4 +323,8 @@ public class Game {
     public List<Professor> getProfessors(){
         return professors;
     }
+
+    public LinkedList<Player> getTurnOrder() {
+        return turnOrder;
+    }
 }

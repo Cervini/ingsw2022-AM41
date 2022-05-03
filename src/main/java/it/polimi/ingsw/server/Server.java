@@ -1,6 +1,9 @@
 package it.polimi.ingsw.server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -8,16 +11,14 @@ import java.util.concurrent.Executors;
 import static it.polimi.ingsw.server.ServerSocket.openServerSocket;
 import static java.lang.System.exit;
 
-public class Server  {
+public class Server {
 
 
     static String getMode(String[] args) {
-
         return "server";
     }
 
     static int getPort(String[] args) {
-
         return 1234;
     }
 
@@ -26,9 +27,7 @@ public class Server  {
         String mode = getMode(args);
 
         if (mode == "server") {
-
             int port = getPort(args);
-
             startServer(port);
         }
 
@@ -37,40 +36,33 @@ public class Server  {
 
     private static ExecutorService pool = Executors.newCachedThreadPool();
 
-    static boolean startServer(int portNumber) {
+    static void startServer(int portNumber) {
 
         System.out.println("starting server on port " + portNumber);
 
-        ServerSocket serverSocket = openServerSocket(portNumber);
-
-        if (serverSocket == null) {
+        ServerSocket serverSocket = null;
+        try {
+            serverSocket = new ServerSocket(portNumber);
+        } catch (IOException e) {
             System.out.println("cannot start server on port " + portNumber);
             exit(-1);
         }
 
-        while (true) {
+        System.out.println("Accepting..");
 
-            Socket clientSocket = null;
-
-            System.out.println("Accepting..");
-
-            try {
-                clientSocket = serverSocket.accept();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("cannot accept port " + portNumber);
-                exit(-1);
-            }
-
-            System.out.println("Accepted");
-
-            ClientHandler clientThread = new ClientHandler(clientSocket);
-            pool.execute(clientThread);
-
-
+        Socket clientSocket = null;
+        try {
+            clientSocket = serverSocket.accept();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("cannot accept port " + portNumber);
+            exit(-1);
         }
 
+        System.out.println("Accepted");
 
+        ClientHandler clientThread = new ClientHandler(clientSocket);
+        pool.execute(clientThread);
     }
 }
+

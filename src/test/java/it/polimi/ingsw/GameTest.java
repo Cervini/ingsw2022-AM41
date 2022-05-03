@@ -68,16 +68,44 @@ class GameTest {
 
     @Test
     void setTurnOrderTest1() {
-        /*Game game = new Game(2);
-        game.getPlayers().getFirst().setFace_up_assistant(game.getPlayers().getFirst().getAssistants().get(1));
-        game.getPlayers().getLast().setFace_up_assistant(game.getPlayers().getLast().getAssistants().get(7));
+        Game game = new Game(3);
+
+        Player p1 = game.getPlayers().get(0);
+        Player p2 = game.getPlayers().get(1);
+        Player p3 = game.getPlayers().get(2);
+
+        try {
+            p1.playAssistant(new Assistant(7,4, p1));
+            p2.playAssistant(new Assistant(8,4, p2));
+            p3.playAssistant(new Assistant(2,1, p3));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         game.setTurnOrder();
 
-        //TODO fix setTurnOrder
-        assertTrue(game.getTurnOrder().getFirst().equals(game.getPlayers().getLast()));
+        assertEquals(game.getTurnOrder().getFirst(), p3);
+    }
 
-        System.out.println("setTurnOrderTest1 complete");*/
+    @Test
+    void setTurnOrderTest2() {
+        Game game = new Game(3);
+
+        Player p1 = game.getPlayers().get(0);
+        Player p2 = game.getPlayers().get(1);
+        Player p3 = game.getPlayers().get(2);
+
+        try {
+            p1.playAssistant(new Assistant(1,1, p1));
+            p2.playAssistant(new Assistant(8,4, p2));
+            p3.playAssistant(new Assistant(2,1, p3));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        game.setTurnOrder();
+
+        assertEquals(game.getTurnOrder().getFirst(), p1);
     }
 
     @Test
@@ -177,33 +205,6 @@ class GameTest {
         assertTrue(game.endGame() != null);
 
         System.out.println("endGameTest8 complete");
-    }
-
-    @Test
-    void endGameTest9() throws Exception {
-        /*Game game = new Game(2);
-
-        game.getPlayers().getFirst().getSchool().takeTowers(2);
-        game.getPlayers().getLast().getSchool().takeTowers(2);
-
-        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.YELLOW));
-        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.YELLOW));
-        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
-        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
-        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.YELLOW));
-        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.YELLOW));
-        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.YELLOW));
-        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.RED));
-        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.BLUE));
-        game.getPlayers().getLast().getSchool().putStudent(new Student(Colour.GREEN));
-
-        game.checkOwnershipOld();
-        game.getBag().clear();
-
-        //TODO fix checkOwnershipOld
-        assertEquals(game.endGame(), game.getPlayers().getLast().getTeam());
-
-        System.out.println("endGameTest9 complete");*/
     }
 
     @Test
