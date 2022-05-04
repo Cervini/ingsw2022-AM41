@@ -5,11 +5,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Client {
 
     private static final String server_ip = "127.0.0.1";
     private static final int server_port = 1234;
+
 
     public static void main (String[] args) throws IOException {
 

@@ -50,19 +50,22 @@ public class Server {
 
         System.out.println("Accepting..");
 
-        Socket clientSocket = null;
-        try {
-            clientSocket = serverSocket.accept();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("cannot accept port " + portNumber);
-            exit(-1);
+        while(true){
+            Socket clientSocket = null;
+            try {
+                clientSocket = serverSocket.accept();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("cannot accept port " + portNumber);
+                break;
+            }
+
+            System.out.println("Accepted");
+
+            ClientHandler clientThread = new ClientHandler(clientSocket);
+            pool.execute(clientThread);
         }
-
-        System.out.println("Accepted");
-
-        ClientHandler clientThread = new ClientHandler(clientSocket);
-        pool.execute(clientThread);
+        pool.shutdown();
     }
 }
 
