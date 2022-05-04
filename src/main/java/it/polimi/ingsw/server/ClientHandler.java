@@ -1,25 +1,16 @@
 package it.polimi.ingsw.server;
 
-import com.google.gson.Gson;
-import it.polimi.ingsw.model.Cloud;
-import it.polimi.ingsw.model.Colour;
-import it.polimi.ingsw.model.Professor;
-import it.polimi.ingsw.model.Student;
+import it.polimi.ingsw.communication.Message;
+import it.polimi.ingsw.communication.Type;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
-import java.util.Locale;
-
-import static java.lang.System.out;
 
 public class ClientHandler implements Runnable{
 
 
-    private Socket clientSocket;
-    private BufferedReader in;
+    private final Socket clientSocket;
+    private ObjectInputStream in;
     private PrintWriter out;
 
     CommandParser cmdParser = new CommandParser();
@@ -28,7 +19,7 @@ public class ClientHandler implements Runnable{
 
         this.clientSocket= clientSocket;
         try {
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            in = new ObjectInputStream(clientSocket.getInputStream());
             out = new PrintWriter(clientSocket.getOutputStream(),true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,18 +33,28 @@ public class ClientHandler implements Runnable{
 
         while(true) {
 
+            Message msg;
             String s = "";
             try {
-                    while ((s = in.readLine()) != "quit") {
-                        System.out.println("recieved: "+s);
-                        // print in output stream the string s
-                        out.println(s.toLowerCase());
-                        out.flush();
-                        System.out.println("this prints what client has written:  " + s);
-                        //cmdParser.processCmd(s);
+                try {
+                    msg = (Message) in.readObject();
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                while(msg.getType() != Type.END) {
+                    System.out.println("recieved: " + msg);
+                    // print in output stream the string s
+                    out.println(s);
+                    out.flush();
+                    //cmdParser.processCmd(s);
+                    try {
+                        msg = (Message) in.readObject();
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
                     }
+                }
             } catch(IOException e) {
-                    e.printStackTrace();
+                e.printStackTrace();
             }
         }
     }

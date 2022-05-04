@@ -3,19 +3,17 @@ package it.polimi.ingsw.model;
 import java.util.*;
 
 public class Game {
-    private LinkedList<Player> players; // list of all the active players
-    private int available_coins; // number of all the coins not owned by any player or placed on character cards
-    private LinkedList<Student> bag; // list of all the students
-    private List<Professor> professors; // list of all the professors
-    private List<Island> archipelago; // list of all the islands
+    private final LinkedList<Player> players; // list of all the active players
+    private final int available_coins; // number of all the coins not owned by any player or placed on character cards
+    private final LinkedList<Student> bag; // list of all the students
+    private final List<Professor> professors; // list of all the professors
+    private final List<Island> archipelago; // list of all the islands
     private LinkedList<Player> turnOrder; // playing order of the turn
     private List<Cloud> clouds; // list of all the clouds
     // private ArrayList<SimpleCharacter> characters; // list of the three character playable in the current match
     private String status; // status of the game
 
     // constants
-    private static final int twoOrFourPlayerIslandSize = 3;
-    private static final int threePlayerIslandSize = 4;
     private static final int minimumNumberOfIslands = 3;
     private static final int starting_students = 120;
 
@@ -35,7 +33,7 @@ public class Game {
     }
 
     private List<Cloud> cloudsSetup(int numberOfPlayers){
-        clouds = new ArrayList<Cloud>();
+        clouds = new ArrayList<>();
         for(int i=0; i<numberOfPlayers; i++){   // create clouds
             if(numberOfPlayers == 3)
                 clouds.add(new Cloud(4));
@@ -79,7 +77,7 @@ public class Game {
      * @return winner team or null if the game has to continue
      */
     public TowerColour endGame(){
-        TowerColour winner = null;
+        TowerColour winner;
         GameConclusionChecks check = new GameConclusionChecks();
         winner = check.endBecauseOfArchipelagoSize(minimumNumberOfIslands, archipelago, players);
         winner = check.endBecauseAvailableStudentsFinished(bag, archipelago, players, winner);
