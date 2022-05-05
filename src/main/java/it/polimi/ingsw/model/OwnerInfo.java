@@ -5,5 +5,4 @@ public record OwnerInfo(
         Player player
 ) {
 
-
 }

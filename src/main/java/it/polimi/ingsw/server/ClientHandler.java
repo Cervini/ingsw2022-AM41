@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.Message;
-import it.polimi.ingsw.communication.Type;
 
 import java.io.*;
 import java.net.Socket;
@@ -38,7 +38,7 @@ public class ClientHandler implements Runnable{
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-                while(msg.getType() != Type.END) { // while the message is not an END type message
+                while(msg.getCommand() != Command.END) { // while the message is not an END type message
                     System.out.println("received: " + msg); // print the received message
                     out.println(msg); // send through output stream the msg in String form
                     out.flush(); // flush output stream

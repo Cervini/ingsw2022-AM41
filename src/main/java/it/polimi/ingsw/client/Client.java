@@ -1,4 +1,5 @@
 package it.polimi.ingsw.client;
+
 import it.polimi.ingsw.communication.Message;
 
 import java.io.*;

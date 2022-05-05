@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Cloud implements Tile {
 
     private final List<Student> students;

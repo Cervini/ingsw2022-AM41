@@ -4,28 +4,26 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class Message implements Serializable{
-    private Type type = Type.NULL;
+public class Message implements Serializable {
+
     private Command command = Command.NULL;
+    private Integer argNum1 = null;
+    private Integer argNum2 = null;
+    private String argString = null;
+    private FromTile from_tile = FromTile.NULL;
+    private ToTile to_tile = ToTile.NULL;
+    private boolean standard = false; // if true the message has a correct structure
+
+
 
     public Message(String string){
         String[] arguments = string.split("\\W+");
         List<String> args = Arrays.stream(arguments).toList();
 
         if(args.size()>0)
-            this.type = toTypeEnum(args.get(0));
-        if(args.size()>1)
-            this.command = toCommandEnum(args.get(1));
-    }
+            this.command = toCommandEnum(args.get(0));
 
-    private Type toTypeEnum(String string){
-        string = string.toUpperCase();
-        try {
-            Type.valueOf(string);
-            return Type.valueOf(string);
-        } catch (IllegalArgumentException e){
-            return Type.NULL;
-        }
+        checkNextArgument(this.command, args);
     }
 
     private Command toCommandEnum(String string){
@@ -38,16 +36,126 @@ public class Message implements Serializable{
         }
     }
 
-    @Override
-    public String toString(){
-        return getType().toString() + " " + getCommand().toString();
+    private ToTile toToTileEnum(String string){
+        string = string.toUpperCase();
+        try {
+            ToTile.valueOf(string);
+            return ToTile.valueOf(string);
+        } catch (IllegalArgumentException e){
+            return ToTile.NULL;
+        }
     }
 
-    public Type getType() {
-        return type;
+    private FromTile toFromTileEnum(String string){
+        string = string.toUpperCase();
+        try {
+            FromTile.valueOf(string);
+            return FromTile.valueOf(string);
+        } catch (IllegalArgumentException e){
+            return FromTile.NULL;
+        }
+    }
+
+    private void checkNextArgument(Command command, List<String> args){
+        switch (command){
+            case LOGIN -> {
+                if(args.size()>1) {
+                    this.argString = args.get(1);
+                    this.standard = true;
+                }
+                else {
+                    System.out.println("Not enough arguments");
+                }
+            }
+            case START, END -> {
+                this.standard = true;
+                if(args.size()>1)
+                    System.out.println("Excess arguments were ignored");
+            }
+            case CHOOSE, MOVE -> {
+                if(args.size()>1){
+                    try{
+                        this.argNum1 = Integer.parseInt(args.get(1));
+                        this.standard = true;
+                    } catch (NumberFormatException e){
+                        System.out.println("Impossible argument");
+                    }
+
+                }
+            }
+            case PLACE -> {
+                if(args.size()<5){
+                    System.out.println("Not enough arguments");
+                } else {
+                    this.from_tile = toFromTileEnum(args.get(1));
+                    if(this.from_tile == FromTile.NULL)
+                        break;
+                    try{
+                        this.argNum1 = Integer.parseInt(args.get(2));
+                    } catch (NumberFormatException e){
+                        System.out.println("Impossible argument");
+                        break;
+                    }
+                    this.to_tile = toToTileEnum(args.get(3));
+                    if(this.to_tile == ToTile.NULL)
+                        break;
+                    try{
+                        this.argNum2 = Integer.parseInt(args.get(4));
+                    } catch (NumberFormatException e){
+                        System.out.println("Impossible argument");
+                        break;
+                    }
+                    this.standard = true;
+                }
+            }
+        } // switch end
     }
 
     public Command getCommand() {
         return command;
+    }
+
+    public Integer getArgNum1() {
+        return argNum1;
+    }
+
+    public Integer getArgNum2() {
+        return argNum2;
+    }
+
+    public String getArgString() {
+        return argString;
+    }
+
+    public FromTile getFrom_tile() {
+        return from_tile;
+    }
+
+    public ToTile getTo_tile() {
+        return to_tile;
+    }
+
+    public boolean isStandard() {
+        return standard;
+    }
+
+    @Override
+    public String toString(){
+        if(!this.standard)
+            return "invalid command";
+        String s = "";
+        if(command!=Command.NULL)
+            s=s+" "+command.toString();
+        if(argString!=null)
+            s=s+" "+argString;
+        if(this.from_tile!=FromTile.NULL)
+            s=s+" "+from_tile.toString();
+        if(argNum1!=null)
+            s=s+" "+argNum1;
+        if(this.to_tile!=ToTile.NULL)
+            s=s+" "+to_tile.toString();
+        if(argNum2!=null)
+            s=s+" "+argNum2;
+        return s;
     }
 }
