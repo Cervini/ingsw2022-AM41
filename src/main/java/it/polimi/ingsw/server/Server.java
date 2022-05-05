@@ -45,27 +45,25 @@ public class Server {
             serverSocket = new ServerSocket(portNumber);
         } catch (IOException e) {
             System.out.println("cannot start server on port " + portNumber);
-            exit(-1);
+            return;
         }
 
         System.out.println("Accepting..");
 
+        Socket clientSocket = null;
+
+        System.out.println("Accepted");
+
         while(true){
-            Socket clientSocket = null;
-            try {
+            try{
                 clientSocket = serverSocket.accept();
+                ClientHandler clientThread = new ClientHandler(clientSocket);
+                pool.execute(clientThread);
             } catch (IOException e) {
-                e.printStackTrace();
                 System.out.println("cannot accept port " + portNumber);
                 break;
             }
-
-            System.out.println("Accepted");
-
-            ClientHandler clientThread = new ClientHandler(clientSocket);
-            pool.execute(clientThread);
         }
         pool.shutdown();
     }
 }
-

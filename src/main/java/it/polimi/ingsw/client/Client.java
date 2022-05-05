@@ -13,17 +13,17 @@ public class Client {
     public static void main (String[] args) throws IOException {
 
         try (
-                Socket socket = new Socket(server_ip, server_port);
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in))
+                Socket socket = new Socket(server_ip, server_port); // instance server socket
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); // prepare output stream
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); // prepare input stream from server
+                BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)) // prepare input stream from terminal
 
         ) {
             String writtenString;
             while((writtenString = stdIn.readLine()) != null){
-                Message msg = new Message(writtenString);
-                out.writeObject(msg);
-                out.flush();
+                Message msg = new Message(writtenString); // parse the string into message
+                out.writeObject(msg); // send Message object through output stream
+                out.flush(); // flush output stream
                 System.out.println("Server says: " + in.readLine());
             }
         } catch (UnknownHostException e) {

@@ -7,9 +7,9 @@
 
 | Functionality    |                       State                        |
 |:-----------------|:--------------------------------------------------:|
-| Basic rules      | 🟢 | Testing
-| Complete rules   | 🟡 | Implementation
-| Socket           | 🔴 |
+| Basic rules      | 🟢 |
+| Complete rules   | 🟡 |
+| Socket           | 🟡 |
 | GUI              | 🔴 |
 | CLI              | 🔴 |
 | Multiple games   | 🔴 |

@@ -30,25 +30,21 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-
         while(true) {
-
             Message msg;
-            String s = "";
             try {
                 try {
-                    msg = (Message) in.readObject();
+                    msg = (Message) in.readObject(); // read object from input stream and cast it into Message
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-                while(msg.getType() != Type.END) {
-                    System.out.println("recieved: " + msg);
-                    // print in output stream the string s
-                    out.println(s);
-                    out.flush();
+                while(msg.getType() != Type.END) { // while the message is not an END type message
+                    System.out.println("received: " + msg); // print the received message
+                    out.println(msg); // send through output stream the msg in String form
+                    out.flush(); // flush output stream
                     //cmdParser.processCmd(s);
                     try {
-                        msg = (Message) in.readObject();
+                        msg = (Message) in.readObject(); // try reading another Message object from input stream
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -58,5 +54,4 @@ public class ClientHandler implements Runnable{
             }
         }
     }
-
 }
