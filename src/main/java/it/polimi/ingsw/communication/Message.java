@@ -108,6 +108,9 @@ public class Message implements Serializable {
                     this.standard = true;
                 }
             }
+            case PING -> {
+                this.standard = true;
+            }
         } // switch end
     }
 

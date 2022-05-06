@@ -43,11 +43,11 @@ public class ClientHandler implements Runnable{
                     out.println(msg); // send through output stream the msg in String form
                     out.flush(); // flush output stream
                     //cmdParser.processCmd(s);
-                    try {
-                        msg = (Message) in.readObject(); // try reading another Message object from input stream
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
+                    //try {
+                    //    msg = (Message) in.readObject(); // try reading another Message object from input stream
+                    //} catch (ClassNotFoundException e) {
+                    //    throw new RuntimeException(e);
+                    //}
                 }
             } catch(IOException e) {
                 e.printStackTrace();
