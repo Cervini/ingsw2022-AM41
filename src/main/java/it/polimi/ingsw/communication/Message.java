@@ -14,8 +14,6 @@ public class Message implements Serializable {
     private ToTile to_tile = ToTile.NULL;
     private boolean standard = false; // if true the message has a correct structure
 
-
-
     public Message(String string){
         String[] arguments = string.split("\\W+");
         List<String> args = Arrays.stream(arguments).toList();

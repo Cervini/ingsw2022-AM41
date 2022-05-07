@@ -1,18 +1,13 @@
 package it.polimi.ingsw.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import static it.polimi.ingsw.server.ServerSocket.openServerSocket;
 import static java.lang.System.exit;
 
 public class Server {
-
 
     static String getMode(String[] args) {
         return "server";

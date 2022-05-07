@@ -9,7 +9,7 @@ import java.net.SocketException;
 
 public class ClientHandler implements Runnable{
 
-
+    private String username = "new client";
     private final Socket clientSocket;
     private ObjectInputStream in;
     private PrintWriter out;
@@ -40,29 +40,34 @@ public class ClientHandler implements Runnable{
 
                     while(msg.getCommand() != Command.END) { // while the message is not an END type message
                         System.out.println("received: " + msg); // print the received message
-                        out.println(msg); // send through output stream the msg in String form
+                        String response = cmdParser.processCmd(msg,this);
+                        out.println(response); // send through output stream the msg in String form
                         out.flush(); // flush output stream
-                        //cmdParser.processCmd(s);
                         try {
                             msg = (Message) in.readObject(); // try reading another Message object from input stream
                         } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
+                            System.out.println("Unknown object in input stream");
                         }
                     }
             }
-        }  catch (SocketException e){
+        } catch (SocketException e){
                 try {
                     clientSocket.close();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
         System.out.println("Client disconnected, socket closed");
+    }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
