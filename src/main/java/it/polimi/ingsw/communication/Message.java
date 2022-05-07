@@ -114,6 +114,7 @@ public class Message implements Serializable {
         } // switch end
     }
 
+
     public Command getCommand() {
         return command;
     }
@@ -161,4 +162,6 @@ public class Message implements Serializable {
             s=s+" "+argNum2;
         return s;
     }
+
+
 }
