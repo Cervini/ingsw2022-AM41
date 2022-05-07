@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientHandler implements Runnable{
 
@@ -49,10 +50,9 @@ public class ClientHandler implements Runnable{
                         }
                     }
             }
-        } catch (EOFException e) {
+        }  catch (SocketException e){
                 try {
                     clientSocket.close();
-
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
