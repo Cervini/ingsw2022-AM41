@@ -174,7 +174,81 @@ class GameConclusionChecksTest {
 
     @Test
     void endBecauseAvailableAssistantsFinishedTest1() {
-        //TODO
+        GameConclusionChecks check = new GameConclusionChecks();
+        Game game = new Game(2);
+        TowerColour winner = null;
+
+        game.getPlayers().getFirst().getAssistants().remove(0);
+
+        winner = check.endBecauseAvailableAssistantsFinished(game.getArchipelago(), game.getPlayers(), winner);
+
+        assertTrue(winner == null);
+
+        System.out.println("endBecauseAvailableAssistantsFinishedTest1 complete");
+    }
+
+    @Test
+    void endBecauseAvailableAssistantsFinishedTest2() throws Exception{
+        GameConclusionChecks check = new GameConclusionChecks();
+        Game game = new Game(2);
+        TowerColour winner = null;
+
+        game.getPlayers().getFirst().getAssistants().clear();
+        game.getPlayers().getLast().getAssistants().clear();
+        game.getArchipelago().get(0).setTower(TowerColour.BLACK);
+        game.getArchipelago().get(1).setTower(TowerColour.WHITE);
+        game.getArchipelago().get(3).setTower(TowerColour.WHITE);
+        game.getArchipelago().get(4).setTower(TowerColour.BLACK);
+        game.getArchipelago().get(5).setTower(TowerColour.WHITE);
+
+        winner = check.endBecauseAvailableAssistantsFinished(game.getArchipelago(), game.getPlayers(), winner);
+
+        assertTrue(winner.equals(TowerColour.WHITE));
+
+        System.out.println("endBecauseAvailableAssistantsFinishedTest2 complete");
+    }
+
+    @Test
+    void endBecauseAvailableAssistantsFinishedTest3() throws Exception{
+        GameConclusionChecks check = new GameConclusionChecks();
+        Game game = new Game(3);
+        TowerColour winner = null;
+
+        game.getPlayers().getFirst().getAssistants().clear();
+        game.getPlayers().getLast().getAssistants().clear();
+        game.getArchipelago().get(0).setTower(TowerColour.BLACK);
+        game.getArchipelago().get(1).setTower(TowerColour.WHITE);
+        game.getArchipelago().get(9).setTower(TowerColour.GREY);
+        game.getArchipelago().get(10).setTower(TowerColour.GREY);
+        game.getArchipelago().get(11).setTower(TowerColour.GREY);
+
+
+        winner = check.endBecauseAvailableAssistantsFinished(game.getArchipelago(), game.getPlayers(), winner);
+
+        assertTrue(winner.equals(TowerColour.GREY));
+
+        System.out.println("endBecauseAvailableAssistantsFinishedTest3 complete");
+    }
+
+    @Test
+    void endBecauseAvailableAssistantsFinishedTest4() throws Exception{
+        GameConclusionChecks check = new GameConclusionChecks();
+        Game game = new Game(4);
+        TowerColour winner = null;
+        Student student = new Student(Colour.RED);
+
+        game.getPlayers().getFirst().getAssistants().clear();
+        game.getPlayers().getLast().getAssistants().clear();
+        game.getArchipelago().get(0).setTower(TowerColour.BLACK);
+        game.getArchipelago().get(1).setTower(TowerColour.WHITE);
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).putStudent(student);
+        game.checkOwnership();
+
+        winner = check.endBecauseAvailableAssistantsFinished(game.getArchipelago(), game.getPlayers(), winner);
+
+        assertTrue(winner.equals(TowerColour.BLACK));
+
+        System.out.println("endBecauseAvailableAssistantsFinishedTest4 complete");
     }
 
     @Test

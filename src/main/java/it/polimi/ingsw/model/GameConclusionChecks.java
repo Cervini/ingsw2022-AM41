@@ -26,14 +26,10 @@ public class GameConclusionChecks {
     }
 
     public TowerColour endBecauseAvailableAssistantsFinished(List<Island> archipelago, List<Player> players, TowerColour winner){
-        if(winner == null) {
-            Player winnerPlayer;
-            for (Player playerToCheck : players) {
-                if (playerToCheck.getAssistants().size() == 0) {
-                    winnerPlayer = checkWinner(players, archipelago);
-                    return winnerPlayer.getTeam();
-                }
-            }
+        Player winnerPlayer;
+        if(winner == null && players.get(0).getAssistants().isEmpty()) {
+            winnerPlayer = checkWinner(players, archipelago);
+            return winnerPlayer.getTeam();
         }
         return winner;
     }
@@ -50,7 +46,6 @@ public class GameConclusionChecks {
     }
 
     /**
-     * method used in endGame
      * @return the player who meets the winning conditions
      */
     private Player checkWinner(List<Player> players, List<Island> archipelago){
