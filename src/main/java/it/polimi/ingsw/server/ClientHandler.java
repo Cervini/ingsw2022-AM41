@@ -5,10 +5,11 @@ import it.polimi.ingsw.communication.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientHandler implements Runnable{
 
-
+    private String username = "new client";
     private final Socket clientSocket;
     private ObjectInputStream in;
     private PrintWriter out;
@@ -30,28 +31,43 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        while(true) {
             Message msg;
             try {
-                try {
+
+                while(true) {
+
                     msg = (Message) in.readObject(); // read object from input stream and cast it into Message
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
+
+                    while(msg.getCommand() != Command.END) { // while the message is not an END type message
+                        System.out.println("received: " + msg); // print the received message
+                        String response = cmdParser.processCmd(msg,this);
+                        out.println(response); // send through output stream the msg in String form
+                        out.flush(); // flush output stream
+                        try {
+                            msg = (Message) in.readObject(); // try reading another Message object from input stream
+                        } catch (ClassNotFoundException e) {
+                            System.out.println("Unknown object in input stream");
+                        }
+                    }
+            }
+        } catch (SocketException e){
+                try {
+                    clientSocket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
-                while(msg.getCommand() != Command.END) { // while the message is not an END type message
-                    System.out.println("received: " + msg); // print the received message
-                    out.println(msg); // send through output stream the msg in String form
-                    out.flush(); // flush output stream
-                    //cmdParser.processCmd(s);
-                    //try {
-                    //    msg = (Message) in.readObject(); // try reading another Message object from input stream
-                    //} catch (ClassNotFoundException e) {
-                    //    throw new RuntimeException(e);
-                    //}
-                }
-            } catch(IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        }
+
+        System.out.println("Client disconnected, socket closed");
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

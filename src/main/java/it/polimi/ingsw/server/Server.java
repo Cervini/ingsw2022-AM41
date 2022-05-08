@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import static java.lang.System.exit;
 
 public class Server {
 
@@ -16,6 +17,7 @@ public class Server {
         return 1234;
     }
 
+
     public static void main(String[] args) {
         String mode = getMode(args);
 
@@ -25,6 +27,7 @@ public class Server {
         }
 
     }
+
 
     private static ExecutorService pool = Executors.newCachedThreadPool();
 
@@ -37,25 +40,27 @@ public class Server {
             serverSocket = new ServerSocket(portNumber);
         } catch (IOException e) {
             System.out.println("cannot start server on port " + portNumber);
-            return;
+            exit(-1);
         }
 
         System.out.println("Accepting..");
 
-        Socket clientSocket = null;
-
-        System.out.println("Accepted");
-
         while(true){
-            try{
+            Socket clientSocket = null;
+            try {
                 clientSocket = serverSocket.accept();
-                ClientHandler clientThread = new ClientHandler(clientSocket);
-                pool.execute(clientThread);
             } catch (IOException e) {
+                e.printStackTrace();
                 System.out.println("cannot accept port " + portNumber);
                 break;
             }
+
+            System.out.println("Accepted");
+
+            ClientHandler clientThread = new ClientHandler(clientSocket);
+            pool.execute(clientThread);
         }
         pool.shutdown();
     }
 }
+

@@ -1,25 +1,23 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.communication.Message;
-import it.polimi.ingsw.communication.Ping;
-
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Client {
+public class Client{
 
     private static final String server_ip = "127.0.0.1";
     private static final int server_port = 1234;
 
     public static void main (String[] args) throws IOException {
 
-        try (
+        try(
                 Socket socket = new Socket(server_ip, server_port); // instance server socket
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); // prepare output stream
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); // prepare input stream from server
-                BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)); // prepare input stream from terminal
-        ) {
+                BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)) // prepare input stream from terminal
+        ){
             PingThread ping = new PingThread();
             ping.ipAddressSet(server_ip);
             ping.setPortNumber(server_port);

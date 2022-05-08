@@ -1,9 +1,8 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.communication.Ping;
-
 import java.io.IOException;
-import java.net.Socket;
+
 
 public class PingThread implements Runnable{
     private Thread pingThread;
@@ -27,7 +26,7 @@ public class PingThread implements Runnable{
             while (isReachable){
                 isReachable = ping.ping2(ipAddress, portNumber);
                 Thread.sleep(5000);
-                System.out.println("Server is reachable");
+                // System.out.println("Server is reachable");
             }
         }catch (InterruptedException e){
             System.out.println("Thread " + threadName + " interrupted");
