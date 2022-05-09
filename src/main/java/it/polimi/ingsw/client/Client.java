@@ -15,20 +15,24 @@ public class Client{
         try(
                 Socket socket = new Socket(server_ip, server_port); // instance server socket
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); // prepare output stream
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); // prepare input stream from server
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)) // prepare input stream from terminal
         ){
             PingThread ping = new PingThread();
             ping.ipAddressSet(server_ip);
             ping.setPortNumber(server_port);
             ping.start();
-
             String writtenString;
             while((writtenString = stdIn.readLine()) != null){
                 Message msg = new Message(writtenString); // parse the string into message
                 out.writeObject(msg); // send Message object through output stream
                 out.flush(); // flush output stream
-                System.out.println("Server says: " + in.readLine());
+                try {
+                    Message msg2 = (Message) in.readObject();
+                    System.out.println("Server says: " + msg2);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + server_ip);

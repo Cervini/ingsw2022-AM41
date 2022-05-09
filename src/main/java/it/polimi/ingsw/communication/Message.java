@@ -56,6 +56,9 @@ public class Message implements Serializable {
 
     private void checkNextArgument(Command command, List<String> args){
         switch (command){
+            case NULL -> {
+                this.standard = false;
+            }
             case LOGIN -> {
                 if(args.size()>1) {
                     this.argString = args.get(1);
@@ -106,7 +109,7 @@ public class Message implements Serializable {
                     this.standard = true;
                 }
             }
-            case PING -> {
+            case PING, STRING -> {
                 this.standard = true;
             }
         } // switch end
@@ -141,13 +144,21 @@ public class Message implements Serializable {
         return standard;
     }
 
+    public void setArgString(String argString) {
+        this.argString = argString;
+    }
+
+    public void setStandard(boolean standard) {
+        this.standard = standard;
+    }
+
     @Override
     public String toString(){
         if(!this.standard)
             return "invalid command";
         String s = "";
-        if(command!=Command.NULL)
-            s=s+" "+command.toString();
+        if((command!=Command.NULL)&&(command!=Command.STRING))
+            s=command.toString();
         if(argString!=null)
             s=s+" "+argString;
         if(this.from_tile!=FromTile.NULL)

@@ -46,7 +46,7 @@ public class Server {
         System.out.println("Accepting..");
 
         while(true){
-            Socket clientSocket = null;
+            Socket clientSocket;
             try {
                 clientSocket = serverSocket.accept();
             } catch (IOException e) {

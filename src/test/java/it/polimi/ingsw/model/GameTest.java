@@ -197,17 +197,6 @@ class GameTest {
     }
 
     @Test
-    void endGameTest8() throws Exception {
-        Game game = new Game(4);
-
-        game.getPlayers().getLast().getAssistants().clear();
-
-        assertTrue(game.endGame() != null);
-
-        System.out.println("endGameTest8 complete");
-    }
-
-    @Test
     void mergeTest1() throws NullPointerException {
         Island island1 = new Island();
         Island island2 = new Island();

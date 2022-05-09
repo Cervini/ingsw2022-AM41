@@ -6,7 +6,7 @@ public class CommandParser {
 
     Gson gson = new Gson();
 
-    public String processCmd(Message message, ClientHandler client){
+    public Message processCmd(Message message, ClientHandler client){
         /*
             Map map = gson.fromJson(cmd, Map.class);
             System.out.println(map.get(""));
@@ -14,15 +14,19 @@ public class CommandParser {
             int x = (int)m.get("");
             return true;
         */
-        String output = "";
+        Message output = new Message("string");
         switch(message.getCommand()){
             case LOGIN -> {
                 if(client.getUsername().equals("new client")){
                     client.setUsername(message.getArgString());
-                    return "username set";
+                    output.setArgString("Username set");
+                    output.setStandard(true);
                 }
-                else
-                    return "Username already set";
+                else {
+                    output.setArgString("Username already set");
+                    output.setStandard(true);
+                }
+                return output;
             }
         }
         return output;

@@ -11,6 +11,7 @@ public class Ping {
 
     private static final int timeout = 5000;
 
+
     public boolean ping(String ipAddress){
         InetAddress inet;
         try{
@@ -23,15 +24,14 @@ public class Ping {
     }
 
     public boolean ping2(String server_ip, int server_port) throws IOException {
-        String pingMessage = "PING";
         try(Socket socket = new Socket(server_ip, server_port);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))){
-            Message ping = new Message(pingMessage);
-            out.writeObject(ping);
-            out.flush();
-            System.out.println(in.readLine());
-            return true;
+            Message ping = new Message("PING");
+            while(true){
+                out.writeObject(ping);
+                out.flush();
+            }
         }catch (IOException e){
             return false;
         }
