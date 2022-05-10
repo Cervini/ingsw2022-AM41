@@ -11,7 +11,6 @@ public class Ping {
 
     private static final int timeout = 5000;
 
-
     public boolean ping(String ipAddress){
         InetAddress inet;
         try{

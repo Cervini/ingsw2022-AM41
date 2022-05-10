@@ -3,11 +3,14 @@ package it.polimi.ingsw.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import static java.lang.System.exit;
 
 public class Server {
+
+    private List<ClientHandler> clients;
 
     static String getMode(String[] args) {
         return "server";
@@ -20,14 +23,11 @@ public class Server {
 
     public static void main(String[] args) {
         String mode = getMode(args);
-
         if (mode == "server") {
             int port = getPort(args);
             startServer(port);
         }
-
     }
-
 
     private static ExecutorService pool = Executors.newCachedThreadPool();
 

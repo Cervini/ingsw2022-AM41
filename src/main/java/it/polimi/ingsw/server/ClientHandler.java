@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.Message;
+import it.polimi.ingsw.model.Game;
 
 import java.io.*;
 import java.net.Socket;
@@ -12,8 +13,9 @@ public class ClientHandler implements Runnable{
     private String username = "new client";
     private final Socket clientSocket;
     private ObjectInputStream in;
-    private PrintWriter pongOut;
     private ObjectOutputStream out;
+
+    private Game game = null;
 
     CommandParser cmdParser = new CommandParser();
 
@@ -22,12 +24,10 @@ public class ClientHandler implements Runnable{
         try {
             in = new ObjectInputStream(clientSocket.getInputStream());
             out = new ObjectOutputStream(clientSocket.getOutputStream());
-            pongOut = new PrintWriter(clientSocket.getOutputStream(),true);
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("Connection completed!");
-
     }
 
     @Override
@@ -37,11 +37,20 @@ public class ClientHandler implements Runnable{
             while(true) {
                 msg = (Message) in.readObject(); // read object from input stream and cast it into Message
                 while(msg.getCommand() != Command.END) { // while the message is not an END type message
-                    Message response = cmdParser.processCmd(msg,this);
-                    if(msg.getCommand()!=Command.PING){
+                    if(msg.getCommand()!=Command.PING){ // if it's not a PING message
+                        // parsing of not PING commands
                         System.out.println(username + " said: " + msg); // print the received message
+                        Message response;// flush output stream
+                        if((username.equals("new client"))&&(msg.getCommand()!=Command.LOGIN)){
+                            response = new Message("string");
+                            response.setArgString("Must log in before sending any other command\n" +
+                                    "type LOGIN <username>");
+                        } else {
+                            response = cmdParser.processCmd(msg, this);
+                        }
                         out.writeObject(response); // send through output stream the msg in String form
                         out.flush(); // flush output stream
+                        // end of not PING commands
                     } else {
                         // TODO ponging
                     }
@@ -67,8 +76,13 @@ public class ClientHandler implements Runnable{
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
+    }
+    public Game getGame() {
+        return game;
+    }
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

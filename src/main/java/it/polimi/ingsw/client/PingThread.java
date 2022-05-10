@@ -21,7 +21,7 @@ public class PingThread implements Runnable{
 
     public void run(){
         boolean isReachable = true;
-        System.out.println("Running " + threadName);
+        //System.out.println("Running " + threadName);
         try{
             while (isReachable){
                 isReachable = ping.ping2(ipAddress, portNumber);
@@ -37,7 +37,7 @@ public class PingThread implements Runnable{
     }
 
     public void start(){
-        System.out.println("Starting " + threadName);
+        // System.out.println("Starting " + threadName);
         if(pingThread == null){
             pingThread = new Thread(this, threadName);
             pingThread.start();

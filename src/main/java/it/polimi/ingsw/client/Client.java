@@ -11,7 +11,6 @@ public class Client{
     private static final int server_port = 1234;
 
     public static void main (String[] args) throws IOException {
-
         try(
                 Socket socket = new Socket(server_ip, server_port); // instance server socket
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); // prepare output stream
