@@ -1,10 +1,5 @@
 package it.polimi.ingsw.model;
 
-
-import it.polimi.ingsw.model.Colour;
-import it.polimi.ingsw.model.DiningRoom;
-import it.polimi.ingsw.model.SchoolBoard;
-import it.polimi.ingsw.model.Student;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

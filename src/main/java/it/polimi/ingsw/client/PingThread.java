@@ -9,6 +9,11 @@ public class PingThread implements Runnable{
     private String threadName = "PingThread";
     private String ipAddress;
     private int portNumber;
+
+    public PingThread(String ipAddress, int portNumber){
+        this.ipAddress = ipAddress;
+        this.portNumber = portNumber;
+    }
     Ping ping = new Ping();
 
 

@@ -17,21 +17,15 @@ public class Client{
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)) // prepare input stream from terminal
         ){
-            PingThread ping = new PingThread();
-            ping.ipAddressSet(server_ip);
-            ping.setPortNumber(server_port);
+            Thread readThread = new Thread(new ReadThread(in));
+            readThread.start();
+            PingThread ping = new PingThread(server_ip, server_port);
             ping.start();
             String writtenString;
             while((writtenString = stdIn.readLine()) != null){
                 Message msg = new Message(writtenString); // parse the string into message
                 out.writeObject(msg); // send Message object through output stream
                 out.flush(); // flush output stream
-                try {
-                    Message msg2 = (Message) in.readObject();
-                    System.out.println("Server says: " + msg2);
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + server_ip);

@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.Game;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ClientHandler implements Runnable{
 
@@ -14,12 +16,13 @@ public class ClientHandler implements Runnable{
     private final Socket clientSocket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
-
+    private final List<ClientHandler> clients;
     private Game game = null;
 
     CommandParser cmdParser = new CommandParser();
 
-    public ClientHandler (Socket clientSocket) {
+    public ClientHandler (Socket clientSocket, List<ClientHandler> clients) {
+        this.clients = clients;
         this.clientSocket= clientSocket;
         try {
             in = new ObjectInputStream(clientSocket.getInputStream());
@@ -76,13 +79,38 @@ public class ClientHandler implements Runnable{
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public Game getGame() {
         return game;
     }
+
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public ObjectInputStream getIn() {
+        return in;
+    }
+
+    public ObjectOutputStream getOut() {
+        return out;
+    }
+
+    public List<ClientHandler> getClients() {
+        return clients;
+    }
+
+    public boolean isAvailable(){
+        return game == null;
+    }
+
+    public List<ClientHandler> sameMatchPlayers(){
+        return clients.stream().filter(ClientHandler -> getGame()==game).collect(Collectors.toList());
+    }
+
+
 }
