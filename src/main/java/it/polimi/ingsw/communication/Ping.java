@@ -1,9 +1,6 @@
 package it.polimi.ingsw.communication;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -23,15 +20,19 @@ public class Ping {
     }
 
     public boolean ping2(String server_ip, int server_port) throws IOException {
-        try(Socket socket = new Socket(server_ip, server_port);
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))){
-            Message ping = new Message("PING");
-            while(true){
-                out.writeObject(ping);
-                out.flush();
-            }
-        }catch (IOException e){
+        try (Socket socket = new Socket(server_ip, server_port);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+
+            Message pingRequest = new Message("PING");
+            out.writeObject(pingRequest);
+            out.flush();
+
+            Message pingResponse = (Message) in.readObject();
+//           System.out.println("Server says: " + pingResponse);
+
+            return pingResponse.getCommand().equals(Command.PONG);
+        } catch (IOException | ClassNotFoundException e){
             return false;
         }
     }

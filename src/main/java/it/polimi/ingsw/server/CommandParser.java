@@ -52,6 +52,7 @@ public class CommandParser {
             }
 
             output.setStandard(true);
+            output.setArgString("Username already set");
 
         }
         else {

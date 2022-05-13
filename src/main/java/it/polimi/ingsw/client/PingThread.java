@@ -9,12 +9,15 @@ public class PingThread implements Runnable{
     private String threadName = "PingThread";
     private String ipAddress;
     private int portNumber;
+    private boolean isServerReachable;
+    Ping ping = new Ping();
+
 
     public PingThread(String ipAddress, int portNumber){
         this.ipAddress = ipAddress;
         this.portNumber = portNumber;
     }
-    Ping ping = new Ping();
+
 
 
     public void ipAddressSet (String ipAddress){
@@ -25,13 +28,13 @@ public class PingThread implements Runnable{
     }
 
     public void run(){
-        boolean isReachable = true;
+        isServerReachable = true;
         //System.out.println("Running " + threadName);
         try{
-            while (isReachable){
-                isReachable = ping.ping2(ipAddress, portNumber);
+            while (true){
+                isServerReachable = ping.ping2(ipAddress, portNumber);
                 Thread.sleep(5000);
-                // System.out.println("Server is reachable");
+                 //System.out.println("Server is reachable");
             }
         }catch (InterruptedException e){
             System.out.println("Thread " + threadName + " interrupted");
@@ -47,5 +50,8 @@ public class PingThread implements Runnable{
             pingThread = new Thread(this, threadName);
             pingThread.start();
         }
+    }
+    public boolean isServerReachable() {
+        return isServerReachable;
     }
 }
