@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class Player implements Comparable{
 
-    private final String player_id; // player's unique ID
+    private String player_id = "new player"; // player's unique ID
     private final ArrayList<Assistant> assistants; // list of not yet played assistant cards
     private Assistant face_up_assistant; // last played assistant card
     private final TowerColour team; // color of the player's towers, determines the team in 4 player mode
@@ -22,7 +22,6 @@ public class Player implements Comparable{
 
     // default constructor, creates the player and gives them 8 towers
     public Player(TowerColour team) {
-        player_id = UUID.randomUUID().toString();
         this.team = team;
         this.face_up_assistant = null;
         this.owned_professor = new ArrayList<>();
@@ -38,7 +37,6 @@ public class Player implements Comparable{
 
     // alternative constructor, creates the player and gives them nTowers number of tower
     public Player(TowerColour team, int nTowers) {
-        player_id = UUID.randomUUID().toString();
         this.team = team;
         this.face_up_assistant = null;
         this.owned_professor = new ArrayList<>();
@@ -130,6 +128,10 @@ public class Player implements Comparable{
 
     public boolean isTower_holder() {
         return tower_holder;
+    }
+
+    public void setPlayer_id(String player_id) {
+        this.player_id = player_id;
     }
 
     /**

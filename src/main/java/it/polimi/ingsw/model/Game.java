@@ -325,4 +325,22 @@ public class Game {
     public LinkedList<Player> getTurnOrder() {
         return turnOrder;
     }
+
+    /**
+     * @return Player instanced with 'username' parameter as player_id
+     */
+    public  Player getPlayer(String username){
+        for(Player player: this.players){
+            if(player.getPlayer_id().equals(username))
+                return player;
+        }
+        return null;
+    }
+
+    public void endTurn(){
+        for(Player player: players){
+            player.setFace_up_assistant(null);
+        }
+        setTurnOrder();
+    }
 }
