@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.Message;
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.GameSession;
+import it.polimi.ingsw.communication.ToTile;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.server.ClientHandler;
 
 import java.io.IOException;
@@ -59,24 +59,47 @@ public class GameController {
             }
         }
     }
-
-
-
-
-
-    public Message place(Message request, ClientHandler clientHandler) {
-
-        // TODO: implement
-        return null;
+    private Message processPlay(Message message, ClientHandler client){
+        Message output = new Message("string");
+        if(message.getArgNum1()>=client.getGame().getPlayer(client.getUsername()).getAssistants().size()){
+            output.setArgString("Non existing Assistant, retry");
+        } else {
+            Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(message.getArgNum1());
+            if(client.getGame().getPlayer(client.getUsername()).getAssistants().size()==1) {
+                try {
+                    client.getGame().getPlayer(client.getUsername()).playAssistant(played);
+                    output.setArgString("Assistant played");
+                } catch (Exception e) {
+                    output.setArgString("Can't play this Assistant, retry");
+                }
+            } else {
+                if(uniqueAssistant(client, played)){
+                    try {
+                        client.getGame().getPlayer(client.getUsername()).playAssistant(played);
+                        output.setArgString("Assistant played");
+                    } catch (Exception e) {
+                        output.setArgString("Can't play this Assistant, retry");
+                    }
+                } else {
+                    output.setArgString("Another player has already played this Assistant, try another");
+                }
+            }
+        }
+        return output;
     }
 
-    public Message move(Message request, ClientHandler clientHandler) {
-        Game game = GameSession.getCurrentGame();
-        // prima di fare la mossa dobbiamo validare se e' OK in questo momento del gioco
-        // step di validazione
-        // TODO
-        // se ok, faccio la mossa
-        // TODO: implement
-        return null;
+    /**
+     * @return true if no other player of the same game has already played the same Assistant
+     */
+    private boolean uniqueAssistant(ClientHandler client, Assistant assistant){
+        for(ClientHandler player: client.sameMatchPlayers()){
+            if(client.getGame().getPlayer(player.getUsername()).getFace_up_assistant()==assistant)
+                return false;
+        }
+        return true;
     }
+
+
+
+
 }

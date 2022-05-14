@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.server.controller.GameController;
 import it.polimi.ingsw.server.controller.GameResultsController;
 import it.polimi.ingsw.server.controller.LoginController;
+import it.polimi.ingsw.server.controller.MovementController;
 
 import java.io.*;
 import java.net.Socket;
@@ -41,7 +42,8 @@ public class ClientHandler implements Runnable{
         Message request;
         try {
             while(true) {
-                request = (Message) in.readObject(); // read object from input stream and cast it into Message
+                request = (Message) in.readObject();// read object from input stream and cast it into Message
+
                 while(request.getCommand() != Command.END) { // while the message is not an END type message
                     if(request.getCommand()!=Command.PING){ // if it's not a PING message
                         // parsing of not PING commands
@@ -59,13 +61,13 @@ public class ClientHandler implements Runnable{
                             case LOGIN -> response = new LoginController().processLogin(request, this);
                             case END -> response = new LoginController().processLogout(request, this);
                             case START -> response = new GameController().start(request, this);
-                            case PLACE -> response = new GameController().place(request, this);
-                            case MOVE -> response = new GameController().move(request, this);
+                            case PLACE -> response = new MovementController().place(request, this);
+                            case MOVE -> response = new MovementController().move(request, this);
                             case GAMESTATUS -> response = new GameResultsController().getStatus(request, this);
                             case NULL -> response = new Message("NULL");
                         }
 
-                        System.out.println("username:"+username);
+
 
                         out.writeObject(response); // send through output stream the msg in String form
                         out.flush(); // flush output stream
