@@ -2,6 +2,9 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.communication.Ping;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 
 public class PingThread implements Runnable{
@@ -11,6 +14,10 @@ public class PingThread implements Runnable{
     private int portNumber;
     private boolean isServerReachable;
     Ping ping = new Ping();
+
+    private ObjectOutputStream out;
+
+    private ObjectInputStream in;
 
 
     public PingThread(String ipAddress, int portNumber){
@@ -32,7 +39,7 @@ public class PingThread implements Runnable{
         //System.out.println("Running " + threadName);
         try{
             while (true){
-                isServerReachable = ping.ping2(ipAddress, portNumber);
+                isServerReachable = ping.ping(ipAddress, portNumber);
                 Thread.sleep(5000);
                  //System.out.println("Server is reachable");
             }

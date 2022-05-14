@@ -13,14 +13,53 @@ public class CommandParser {
 
         Message output = new Message("string");
         switch(message.getCommand()){
-            //case LOGIN -> { return processLogin(message, client);}
+            case LOGIN -> { return processLogin(message, client);}
             case START -> { return processStart(client);}
             case PLAY -> {return processPlay(message, client);}
-            //case PLACE ->{ return processPlace(message,client)}
         }
         return output;
     }
 
+    /**
+     * @param client whose state is checked
+     * @return true if the client is logged in, false if not
+     */
+    public Boolean isLoggedIn(ClientHandler client){
+        return !client.getUsername().equals("new client");
+    }
+
+    /**
+     * @param message message containing the command
+     * @param client client that received the message
+     * @return a new STRING message containing the result of the LOGIN command
+     */
+    private Message processLogin(Message message, ClientHandler client){
+        Message output = new Message("string");
+        if(client.getUsername().equals("new client")){
+            boolean unique = true;
+            for(ClientHandler client1: client.getClients()){
+                if (client1.getUsername().equals(message.getArgString())) {
+                    unique = false;
+                    break;
+                }
+            }
+            if(unique){
+                client.setUsername(message.getArgString());
+                output.setArgString("Username set");
+                client.getClients().add(client);
+            } else {
+                output.setArgString("Username already in use, try another");
+            }
+
+            output.setStandard(true);
+
+        }
+        else {
+            output.setArgString("Username already set");
+            output.setStandard(true);
+        }
+        return output;
+    }
 
     /**
      * @param client client that received the message

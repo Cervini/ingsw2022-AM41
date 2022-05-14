@@ -43,14 +43,13 @@ public class ClientHandler implements Runnable{
         try {
             while(true) {
                 request = (Message) in.readObject();// read object from input stream and cast it into Message
-
                 while(request.getCommand() != Command.END) { // while the message is not an END type message
+                    // flush output stream
                     if(request.getCommand()!=Command.PING){ // if it's not a PING message
                         // parsing of not PING commands
                         //System.out.println(username + " said: " + request); // print the received message
                         Message response = null;// flush output stream
                         if((username.equals("new client"))&&(request.getCommand()!=Command.LOGIN)){
-
                             response = new Message("string");
                             response.setArgString("Must log in before sending any other command\n" +
                                     "type LOGIN <username>");
@@ -63,26 +62,23 @@ public class ClientHandler implements Runnable{
                             case START -> response = new GameController().start(request, this);
                             case PLACE -> response = new MovementController().place(request, this);
                             case MOVE -> response = new MovementController().move(request, this);
-                            case GAMESTATUS -> response = new GameResultsController().getStatus(request, this);
+                            case STATUS -> response = new GameResultsController().getStatus(request, this);
                             case NULL -> response = new Message("NULL");
                         }
-
-
-
-                        out.writeObject(response); // send through output stream the msg in String form
-                        out.flush(); // flush output stream
+                        out.writeObject(response);
+                        out.flush();// send through output stream the msg in String form
                         // end of not PING commands
 
                     } else {
                         Message pongResponse = new Message("PONG");
-                        out.writeObject(pongResponse); // send through output stream the msg in String form
-                        out.flush(); // flush output stream
+                        out.writeObject(pongResponse);
+                        out.flush();// send through output stream the msg in String form
                     }
-//                    try {
-//                        msg = (Message) in.readObject(); // try reading another Message object from input stream
-//                    } catch (ClassNotFoundException e) {
-//                        System.out.println("Unknown object in input stream");
-//                    }
+                    try {// if this reading is removed the server keeps sending the last message to the clients, flooding the network
+                        request = (Message) in.readObject(); // try reading another Message object from input stream
+                    } catch (ClassNotFoundException e) {
+                        System.out.println("Unknown object in input stream");
+                    }
                 }
             }
         } catch (SocketException e) {
