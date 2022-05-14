@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class GameController {
-
+    
     public Message start(Message request, ClientHandler client) {
         Message output = new Message("string");
         int available = availableClients(client.getClients());//count available clients
@@ -59,9 +59,6 @@ public class GameController {
             }
         }
     }
-
-
-
 
 
 

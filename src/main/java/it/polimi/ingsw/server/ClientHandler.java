@@ -65,7 +65,7 @@ public class ClientHandler implements Runnable{
                             case NULL -> response = new Message("NULL");
                         }
 
-
+                        System.out.println("username:"+username);
 
                         out.writeObject(response); // send through output stream the msg in String form
                         out.flush(); // flush output stream
@@ -87,7 +87,7 @@ public class ClientHandler implements Runnable{
 
             try {
                 clientSocket.close();
-                System.out.println("Client disconnected, socket closed");
+                //System.out.println("Client disconnected, socket closed");
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

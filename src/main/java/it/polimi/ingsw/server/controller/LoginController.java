@@ -26,7 +26,6 @@ public class LoginController {
                 client.setUsername(message.getArgString());
                 output.setArgString("Username set");
                 client.getClients().add(client);
-
             } else {
                 output.setArgString("Username already in use, try another");
             }
