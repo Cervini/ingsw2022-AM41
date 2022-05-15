@@ -79,6 +79,9 @@ public class ClientHandler implements Runnable{
                     } catch (ClassNotFoundException e) {
                         System.out.println("Unknown object in input stream");
                     }
+                    catch (EOFException e){
+                        //System.out.println("Unknown object in input stream");
+                    }
                 }
             }
         } catch (SocketException e) {
