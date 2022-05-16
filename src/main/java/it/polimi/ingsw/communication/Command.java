@@ -1,5 +1,5 @@
 package it.polimi.ingsw.communication;
 
 public enum Command {
-    NULL, LOGIN, START, PLACE, MOVE, CHOOSE, PLAY, END, STRING, PING, PONG, STATUS
+    NULL, LOGIN, LOGOUT, END, START, PLACE, MOVE, CHOOSE, PLAY, STRING, PING, PONG, STATUS
 }

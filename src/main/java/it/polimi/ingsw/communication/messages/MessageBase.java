@@ -72,7 +72,7 @@ public class MessageBase implements Serializable {
                     System.out.println("Not enough arguments");
                 }
             }
-            case START, END -> {
+            case START, END, LOGOUT -> {
                 this.standard = true;
                 if(args.size()>1)
                     System.out.println("Excess arguments were ignored");
@@ -175,6 +175,5 @@ public class MessageBase implements Serializable {
             s=s+" "+argNum2;
         return s;
     }
-
 
 }

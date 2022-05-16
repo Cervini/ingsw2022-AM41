@@ -1,17 +1,23 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.Message;
-import it.polimi.ingsw.communication.ToTile;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.server.ClientHandler;
-
 import java.io.IOException;
 import java.util.List;
 
 public class GameController {
-    
-    public Message start(Message request, ClientHandler client) {
+
+    /**
+     * @param client client that sent the request to start the game
+     * @return a new STRING message containing the result of the START command
+     */
+    public static Message start(ClientHandler client) {
         Message output = new Message("string");
+        if(client.getGame()!=null){
+            output.setArgString("Already playing!");
+            return output;
+        }
         int available = availableClients(client.getClients());//count available clients
         if(available>=4){ // if there are at least 4 available players
             Game game = new Game(4);
@@ -28,7 +34,7 @@ public class GameController {
     /**
      * @return number of Clients not participating in a game
      */
-    private int availableClients(List<ClientHandler> clients){
+    private static int availableClients(List<ClientHandler> clients){
         return (int) clients.stream().filter(ClientHandler::isAvailable).count();
     }
 
@@ -39,7 +45,7 @@ public class GameController {
      * @param clients
      * Set the first 'NumberOfPlayers' available clients as playing the 'game' instance
      */
-    private void setAsPlaying(int numberOfPlayers, Game game, List<ClientHandler> clients){
+    private static void setAsPlaying(int numberOfPlayers, Game game, List<ClientHandler> clients){
         int count = 0;
         for(ClientHandler handler: clients){
             if(handler.isAvailable()){

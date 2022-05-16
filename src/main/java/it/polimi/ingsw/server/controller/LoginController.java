@@ -1,8 +1,9 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.Message;
 import it.polimi.ingsw.server.ClientHandler;
+
+import java.io.IOException;
 
 public class LoginController {
     /**
@@ -10,7 +11,7 @@ public class LoginController {
      * @param client client that received the message
      * @return a new STRING message containing the result of the LOGIN command
      */
-    public Message processLogin(Message message, ClientHandler client){
+    public static Message processLogin(Message message, ClientHandler client){
 
         Message output = new Message("string");
 
@@ -41,8 +42,27 @@ public class LoginController {
         return output;
     }
 
-    public Message processLogout(Message request, ClientHandler clientHandler) {
-        // TODO: implement
-        return null;
+    public static Message processLogout(ClientHandler client) {
+
+        Message output = new Message("string");
+
+        client.setUsername("new client");
+        client.getClients().remove(client);
+        output.setArgString("Logout successful");
+
+        if(!client.isAvailable()){
+            for(ClientHandler player: client.sameMatchPlayers()){
+                player.setGame(null);
+                Message alert = new Message("string");
+                alert.setArgString("Game ended because one player left");
+                try {
+                    player.getOut().writeObject(alert);
+                    player.getOut().flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return output;
     }
 }

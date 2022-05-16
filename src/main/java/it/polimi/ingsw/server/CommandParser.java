@@ -1,5 +1,4 @@
 package it.polimi.ingsw.server;
-import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.Message;
 import it.polimi.ingsw.model.Assistant;
 import it.polimi.ingsw.model.Game;
@@ -10,7 +9,6 @@ import java.util.List;
 public class CommandParser {
 
     public Message processCmd(Message message, ClientHandler client){
-
         Message output = new Message("string");
         switch(message.getCommand()){
             case LOGIN -> { return processLogin(message, client);}
@@ -33,7 +31,7 @@ public class CommandParser {
      * @param client client that received the message
      * @return a new STRING message containing the result of the LOGIN command
      */
-    private Message processLogin(Message message, ClientHandler client){
+    protected static Message processLogin(Message message, ClientHandler client){
         Message output = new Message("string");
         if(client.getUsername().equals("new client")){
             boolean unique = true;
@@ -65,7 +63,7 @@ public class CommandParser {
      * @param client client that received the message
      * @return a new STRING message containing the result of the START command
      */
-    private Message processStart(ClientHandler client){
+    protected static Message processStart(ClientHandler client){
         Message output = new Message("string");
         int available = availableClients(client.getClients());//count available clients
         if(available>=4){ // if there are at least 4 available players
@@ -83,7 +81,7 @@ public class CommandParser {
     /**
      * @return number of Clients not participating in a game
      */
-    private int availableClients(List<ClientHandler> clients){
+    private static int availableClients(List<ClientHandler> clients){
         return (int) clients.stream().filter(ClientHandler::isAvailable).count();
     }
 
@@ -93,7 +91,7 @@ public class CommandParser {
      * @param clients
      * Set the first 'NumberOfPlayers' available clients as playing the 'game' instance
      */
-    private void setAsPlaying(int numberOfPlayers, Game game, List<ClientHandler> clients){
+    private static void setAsPlaying(int numberOfPlayers, Game game, List<ClientHandler> clients){
         int count = 0;
         for(ClientHandler handler: clients){
             if(handler.isAvailable()){

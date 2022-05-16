@@ -4,6 +4,7 @@ import it.polimi.ingsw.communication.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.UnknownHostException;
 
 public class ReadThread implements Runnable{
 

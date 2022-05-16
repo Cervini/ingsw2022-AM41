@@ -49,26 +49,25 @@ public class ClientHandler implements Runnable{
                         // parsing of not PING commands
                         //System.out.println(username + " said: " + request); // print the received message
                         Message response = null;// flush output stream
+                        // send through output stream the msg in String form
                         if((username.equals("new client"))&&(request.getCommand()!=Command.LOGIN)){
                             response = new Message("string");
                             response.setArgString("Must log in before sending any other command\n" +
                                     "type LOGIN <username>");
-                            out.writeObject(response); // send through output stream the msg in String form
-                            out.flush();
+                        } else {
+                            switch(request.getCommand()){
+                                case LOGIN -> response = LoginController.processLogin(request, this);
+                                case LOGOUT -> response = LoginController.processLogout(this);
+                                case START -> response = GameController.start(this);
+                                case PLACE -> response = new MovementController().place(request, this);
+                                case MOVE -> response = new MovementController().move(request, this);
+                                case STATUS -> response = new GameResultsController().getStatus(request, this);
+                                case NULL -> response = new Message("NULL");
+                            }
+                            // end of not PING commands
                         }
-                        switch(request.getCommand()){
-                            case LOGIN -> response = new LoginController().processLogin(request, this);
-                            case END -> response = new LoginController().processLogout(request, this);
-                            case START -> response = new GameController().start(request, this);
-                            case PLACE -> response = new MovementController().place(request, this);
-                            case MOVE -> response = new MovementController().move(request, this);
-                            case STATUS -> response = new GameResultsController().getStatus(request, this);
-                            case NULL -> response = new Message("NULL");
-                        }
-                        out.writeObject(response);
-                        out.flush();// send through output stream the msg in String form
-                        // end of not PING commands
-
+                        out.writeObject(response); // send through output stream the msg in String form
+                        out.flush();
                     } else {
                         Message pongResponse = new Message("PONG");
                         out.writeObject(pongResponse);
