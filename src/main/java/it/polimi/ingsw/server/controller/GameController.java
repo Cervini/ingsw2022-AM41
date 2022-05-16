@@ -21,11 +21,17 @@ public class GameController {
         int available = availableClients(client.getClients());//count available clients
         if(available>=4){ // if there are at least 4 available players
             Game game = new Game(4);
+            client.setGame(game);
+            game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the player who sent START command as a player
+            output.setArgString("Game of " + 4 + " started");
             setAsPlaying(4, game, client.getClients());
         } else if (available<2) {
             output.setArgString("Not enough players, wait some time then retry.");
         } else {
             Game game = new Game(available);
+            client.setGame(game);
+            game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the player who sent START command as a player
+            output.setArgString("Game of " + available + " started");
             setAsPlaying(available, game, client.getClients());
         }
         return output;
@@ -46,26 +52,35 @@ public class GameController {
      * Set the first 'NumberOfPlayers' available clients as playing the 'game' instance
      */
     private static void setAsPlaying(int numberOfPlayers, Game game, List<ClientHandler> clients){
-        int count = 0;
+        int count = 1;
         for(ClientHandler handler: clients){
             if(handler.isAvailable()){
                 handler.setGame(game);
                 game.getPlayers().get(count).setPlayer_id(handler.getUsername());
-                Message alert = new Message("string");
-                alert.setArgString("Game of " + numberOfPlayers + " started");
-                try {
-                    handler.getOut().writeObject(alert);
-                    handler.getOut().flush();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                alert(handler, "Game of " + numberOfPlayers + " started");
                 count++;
                 if(count>=numberOfPlayers)
                     break;
             }
         }
     }
-    private Message processPlay(Message message, ClientHandler client){
+
+    /**
+     * sends a STRING message to client
+     * @param client recipient of the message
+     * @param message string displayed
+     */
+    private static void alert(ClientHandler client, String message){
+        Message alert = new Message("string");
+        alert.setArgString(message);
+        try {
+            client.getOut().writeObject(alert);
+            client.getOut().flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static Message processPlay(Message message, ClientHandler client){
         Message output = new Message("string");
         if(message.getArgNum1()>=client.getGame().getPlayer(client.getUsername()).getAssistants().size()){
             output.setArgString("Non existing Assistant, retry");
@@ -97,12 +112,29 @@ public class GameController {
     /**
      * @return true if no other player of the same game has already played the same Assistant
      */
-    private boolean uniqueAssistant(ClientHandler client, Assistant assistant){
+    private static boolean uniqueAssistant(ClientHandler client, Assistant assistant){
         for(ClientHandler player: client.sameMatchPlayers()){
             if(client.getGame().getPlayer(player.getUsername()).getFace_up_assistant()==assistant)
                 return false;
         }
         return true;
+    }
+
+    public static Message processChoose(Message message, ClientHandler client){
+        Message output = new Message("string");
+        Game game = client.getGame();
+        if(game.getClouds().get(message.getArgNum1()).getStudents().size()==0){
+            output.setArgString("Can't choose this cloud, it has been already chosen by another player");
+            return output;
+        } else {
+            try {
+                game.chooseCloud(game.getClouds().get(message.getArgNum1()), game.getPlayer(client.getUsername()));
+                output.setArgString("Students move to your School Board");
+            } catch (Exception e) {
+                output.setArgString("Impossible move, try another");
+            }
+        }
+        return output;
     }
 
 

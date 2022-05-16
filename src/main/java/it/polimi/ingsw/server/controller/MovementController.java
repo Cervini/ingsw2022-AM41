@@ -9,7 +9,7 @@ import it.polimi.ingsw.server.ClientHandler;
 
 public class MovementController {
 
-    public Message place(Message request, ClientHandler client) {
+    public static Message place(Message request, ClientHandler client) {
         Player current_player = client.getGame().getPlayer(client.getUsername());
         Message output = new Message("string");
 
@@ -37,7 +37,7 @@ public class MovementController {
         return output;
     }
 
-    public Message move(Message request, ClientHandler client) {
+    public static Message move(Message request, ClientHandler client) {
         Message output = new Message("string");
         Game current_game = client.getGame();
         Player current_player = client.getGame().getPlayer(client.getUsername());
@@ -47,7 +47,6 @@ public class MovementController {
         } catch (Exception e) {
             output.setArgString("Can't move Mother Nature this far, please retry");
         }
-
         return output;
     }
 

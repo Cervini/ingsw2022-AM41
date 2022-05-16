@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.controller.MovementController;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,8 +60,10 @@ public class ClientHandler implements Runnable{
                                 case LOGIN -> response = LoginController.processLogin(request, this);
                                 case LOGOUT -> response = LoginController.processLogout(this);
                                 case START -> response = GameController.start(this);
-                                case PLACE -> response = new MovementController().place(request, this);
-                                case MOVE -> response = new MovementController().move(request, this);
+                                case PLAY -> response = GameController.processPlay(request, this);
+                                case PLACE -> response = MovementController.place(request, this);
+                                case MOVE -> response = MovementController.move(request, this);
+                                case CHOOSE -> response = GameController.processChoose(request, this);
                                 case STATUS -> response = new GameResultsController().getStatus(request, this);
                                 case NULL -> response = new Message("NULL");
                             }
@@ -84,7 +87,6 @@ public class ClientHandler implements Runnable{
                 }
             }
         } catch (SocketException e) {
-
             try {
                 clientSocket.close();
                 //System.out.println("Client disconnected, socket closed");
@@ -127,7 +129,13 @@ public class ClientHandler implements Runnable{
     }
 
     public List<ClientHandler> sameMatchPlayers(){
-        return clients.stream().filter(ClientHandler -> getGame()==game).collect(Collectors.toList());
+        List<ClientHandler> same = new LinkedList<>();
+        for(ClientHandler client: clients){
+            if(client.getGame()==this.game){
+                same.add(client);
+            }
+        }
+        return same;
     }
 
 

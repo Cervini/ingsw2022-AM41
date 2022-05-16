@@ -257,14 +257,10 @@ public class Game {
      * @param cloud chosen cloud
      * @param player player whose entrance is going to be filled
      */
-    public void chooseCloud(Cloud cloud, Player player){
+    public void chooseCloud(Cloud cloud, Player player) throws Exception {
         for(Student s: cloud.getStudents()){
-            try {
-                player.getSchool().putStudent(s);
-                cloud.removeStudent(s);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            player.getSchool().putStudent(s);
+            cloud.removeStudent(s);
         }
     }
 
@@ -337,10 +333,21 @@ public class Game {
         return null;
     }
 
+    /**
+     * method to call when all the players have finished their turn
+     */
     public void endTurn(){
         for(Player player: players){
             player.setFace_up_assistant(null);
         }
-        setTurnOrder();
+    }
+
+    /**
+     * method to call when all the players have played their Assistant
+     */
+    public void startTurn(){
+        for(Cloud cloud: clouds){
+            fillCloud(cloud);
+        }
     }
 }
