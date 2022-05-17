@@ -68,12 +68,12 @@ public class Message implements Serializable {
                     System.out.println("Not enough arguments");
                 }
             }
-            case START, END, LOGOUT -> {
+            case END, LOGOUT -> {
                 this.standard = true;
                 if(args.size()>1)
                     System.out.println("Excess arguments were ignored");
             }
-            case CHOOSE, MOVE, PLAY -> {
+            case CHOOSE, MOVE, PLAY, START -> {
                 if(args.size()>1){
                     try{
                         this.argNum1 = Integer.parseInt(args.get(1));
@@ -81,7 +81,8 @@ public class Message implements Serializable {
                     } catch (NumberFormatException e){
                         System.out.println("Impossible argument");
                     }
-
+                } else {
+                    System.out.println("Not enough arguments");
                 }
             }
             case PLACE -> {

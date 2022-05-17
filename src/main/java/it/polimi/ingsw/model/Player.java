@@ -4,13 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class Player implements Comparable{
 
     private String player_id = "new player"; // player's unique ID
-    private final ArrayList<Assistant> assistants; // list of not yet played assistant cards
+    private final LinkedList<Assistant> assistants; // list of not yet played assistant cards
     private Assistant face_up_assistant; // last played assistant card
     private final TowerColour team; // color of the player's towers, determines the team in 4 player mode
     private boolean turn; // if true it's the player's turn
@@ -27,7 +28,7 @@ public class Player implements Comparable{
         this.owned_professor = new ArrayList<>();
         this.turn = false;
         this.coins = 1;
-        this.assistants = new ArrayList<>();
+        this.assistants = new LinkedList<>();
         //set up assistants deck
         deck_setup();
         this.school = new SchoolBoard();
@@ -42,7 +43,7 @@ public class Player implements Comparable{
         this.owned_professor = new ArrayList<>();
         this.turn = false;
         this.coins = 1;
-        this.assistants = new ArrayList<>();
+        this.assistants = new LinkedList<>();
         //set up assistants deck
         deck_setup();
         this.school = new SchoolBoard(nTowers);
@@ -94,7 +95,7 @@ public class Player implements Comparable{
         return player_id;
     }
 
-    public ArrayList<Assistant> getAssistants() {
+    public LinkedList<Assistant> getAssistants() {
         return assistants;
     }
 

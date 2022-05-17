@@ -9,30 +9,29 @@ import java.util.List;
 public class GameController {
 
     /**
-     * @param client client that sent the request to start the game
+     * @param message message containing the command
+     * @param client  client that sent the request to start the game
      * @return a new STRING message containing the result of the START command
      */
-    public static Message start(ClientHandler client) {
+    public static Message start(Message message, ClientHandler client) {
         Message output = new Message("string");
-        if(client.getGame()!=null){
+        if(client.getGame()!=null){ // if the player is already participating in a game
             output.setArgString("Already playing!");
             return output;
         }
+        if((message.getArgNum1()>4)||(message.getArgNum1()<2)){ // if the argument of the message is not an accepted value
+            output.setArgString("Impossible number of players.");
+            return output;
+        }
         int available = availableClients(client.getClients());//count available clients
-        if(available>=4){ // if there are at least 4 available players
-            Game game = new Game(4);
+        if(available>= message.getArgNum1()){ // if there are enough available players
+            Game game = new Game(message.getArgNum1()); // create the game
             client.setGame(game);
-            game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the player who sent START command as a player
-            output.setArgString("Game of " + 4 + " started");
-            setAsPlaying(4, game, client.getClients());
-        } else if (available<2) {
-            output.setArgString("Not enough players, wait some time then retry.");
-        } else {
-            Game game = new Game(available);
-            client.setGame(game);
-            game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the player who sent START command as a player
+            game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the client who sent START command as a player
             output.setArgString("Game of " + available + " started");
-            setAsPlaying(available, game, client.getClients());
+            setAsPlaying(message.getArgNum1(), game, client.getClients()); // set the other available client as players
+        } else {
+            output.setArgString("Not enough players, wait some time then retry.");
         }
         return output;
     }
@@ -80,29 +79,33 @@ public class GameController {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * @param message message containing the command
+     * @param client  client that sent the request to start the game
+     * @return a new STRING message containing the result of the PLAY command
+     */
     public static Message processPlay(Message message, ClientHandler client){
         Message output = new Message("string");
-        if(message.getArgNum1()>=client.getGame().getPlayer(client.getUsername()).getAssistants().size()){
+        int range = client.getGame().getPlayer(client.getUsername()).getAssistants().size();
+        // System.out.println("Size: " + range + " Arg: " + message.getArgNum1());
+        // TODO check condition
+        if((message.getArgNum1()-1>range)||(message.getArgNum1()-1<0)){
             output.setArgString("Non existing Assistant, retry");
+            return output;
         } else {
-            Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(message.getArgNum1());
+            Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(message.getArgNum1()-1);
             if(client.getGame().getPlayer(client.getUsername()).getAssistants().size()==1) {
-                try {
-                    client.getGame().getPlayer(client.getUsername()).playAssistant(played);
-                    output.setArgString("Assistant played");
-                } catch (Exception e) {
-                    output.setArgString("Can't play this Assistant, retry");
-                }
+                playAssistant(client, played, output); // if the player has only one assistant
             } else {
                 if(uniqueAssistant(client, played)){
-                    try {
-                        client.getGame().getPlayer(client.getUsername()).playAssistant(played);
-                        output.setArgString("Assistant played");
-                    } catch (Exception e) {
-                        output.setArgString("Can't play this Assistant, retry");
-                    }
+                    playAssistant(client, played, output);
                 } else {
-                    output.setArgString("Another player has already played this Assistant, try another");
+                    if(!checkAllUnique(client)){
+                        playAssistant(client, played, output);
+                    } else {
+                        output.setArgString("Another player has already played this Assistant, try another");
+                    }
                 }
             }
         }
@@ -110,14 +113,42 @@ public class GameController {
     }
 
     /**
+     * play Assistant
+     */
+    private static void playAssistant(ClientHandler client, Assistant played, Message output){
+        try {
+            client.getGame().getPlayer(client.getUsername()).playAssistant(played);
+            output.setArgString("Assistant played");
+        } catch (Exception e) {
+            output.setArgString("Can't play this Assistant, retry");
+        }
+    }
+
+    /**
      * @return true if no other player of the same game has already played the same Assistant
      */
     private static boolean uniqueAssistant(ClientHandler client, Assistant assistant){
         for(ClientHandler player: client.sameMatchPlayers()){
-            if(client.getGame().getPlayer(player.getUsername()).getFace_up_assistant()==assistant)
+            if(client.getGame().getPlayer(player.getUsername()).getFace_up_assistant()==assistant){
+                System.out.println("got one equal");
                 return false;
+            }
         }
         return true;
+    }
+
+    /**
+     * @param client player whose assistant are checked
+     * @return false if the player has no unique Assistants
+     */
+    private static boolean checkAllUnique(ClientHandler client){
+        Game game = client.getGame();
+        boolean check = false;
+        for(Assistant assistant: game.getPlayer(client.getUsername()).getAssistants()){
+            if(uniqueAssistant(client, assistant))
+                check = true;
+        }
+        return check;
     }
 
     public static Message processChoose(Message message, ClientHandler client){
@@ -136,8 +167,4 @@ public class GameController {
         }
         return output;
     }
-
-
-
-
 }

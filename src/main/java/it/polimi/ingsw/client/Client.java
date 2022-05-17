@@ -21,12 +21,13 @@ public class Client{
             PingThread ping = new PingThread(server_ip, server_port);
             ping.start();
             String writtenString;
-
             while ((writtenString = stdIn.readLine()) != null) {
                 if (ping.isServerReachable()) {
                     Message request = new Message(writtenString); // parse the string into message
-                    out.writeObject(request); // send Message object through output stream
-                    out.flush(); // flush output stream
+                    if(request.isStandard()){
+                        out.writeObject(request); // send Message object through output stream
+                        out.flush(); // flush output stream
+                    }
                 } else {
                     System.out.println("Server isn't reachable, please try again later.");
                 }

@@ -13,7 +13,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ClientHandler implements Runnable{
 
@@ -59,7 +58,7 @@ public class ClientHandler implements Runnable{
                             switch(request.getCommand()){
                                 case LOGIN -> response = LoginController.processLogin(request, this);
                                 case LOGOUT -> response = LoginController.processLogout(this);
-                                case START -> response = GameController.start(this);
+                                case START -> response = GameController.start(request, this);
                                 case PLAY -> response = GameController.processPlay(request, this);
                                 case PLACE -> response = MovementController.place(request, this);
                                 case MOVE -> response = MovementController.move(request, this);
@@ -89,6 +88,7 @@ public class ClientHandler implements Runnable{
         } catch (SocketException e) {
             try {
                 clientSocket.close();
+                clients.remove(this);
                 //System.out.println("Client disconnected, socket closed");
             } catch (IOException ex) {
                 ex.printStackTrace();
