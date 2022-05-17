@@ -157,4 +157,15 @@ public class Player implements Comparable{
             throw new Exception("Can't play this assistant");
         }
     }
+
+    public void playAssistant(int index) throws Exception {
+        if((assistants.size()>index)&&(index>=0)){
+            setFace_up_assistant(assistants.get(index));
+            assistants.remove(index);
+        } else {
+            throw new Exception("This assistant doesn't exist");
+        }
+
+
+    }
 }

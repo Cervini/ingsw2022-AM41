@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.model.Game;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +14,8 @@ public class Message implements Serializable {
     private FromTile from_tile = FromTile.NULL;
     private ToTile to_tile = ToTile.NULL;
     private boolean standard = false; // if true the message has a correct structure
+
+    private Game game = null;
 
     public Message(String string){
         String[] arguments = string.split("\\W+");
@@ -68,7 +71,7 @@ public class Message implements Serializable {
                     System.out.println("Not enough arguments");
                 }
             }
-            case END, LOGOUT -> {
+            case END, LOGOUT, PING, PONG, STRING  -> {
                 this.standard = true;
                 if(args.size()>1)
                     System.out.println("Excess arguments were ignored");
@@ -109,9 +112,6 @@ public class Message implements Serializable {
                     }
                     this.standard = true;
                 }
-            }
-            case PING,PONG, STRING -> {
-                this.standard = true;
             }
         } // switch end
     }

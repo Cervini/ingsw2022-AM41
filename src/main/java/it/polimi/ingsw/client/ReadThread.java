@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.Message;
 
 import java.io.IOException;
@@ -20,6 +21,9 @@ public class ReadThread implements Runnable{
             Message msg;
             try {
                 msg = (Message) in.readObject();
+                if(msg.getCommand() == Command.PONG){
+
+                }
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

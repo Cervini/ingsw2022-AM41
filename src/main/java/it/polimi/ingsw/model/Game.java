@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.*;
 
-public class Game {
+public class Game{
     private final LinkedList<Player> players; // list of all the active players
     private final int available_coins; // number of all the coins not owned by any player or placed on character cards
     private final LinkedList<Student> bag; // list of all the students

@@ -87,27 +87,24 @@ public class GameController {
      */
     public static Message processPlay(Message message, ClientHandler client){
         Message output = new Message("string");
-        int range = client.getGame().getPlayer(client.getUsername()).getAssistants().size();
-        // System.out.println("Size: " + range + " Arg: " + message.getArgNum1());
-        // TODO check condition
-        if((message.getArgNum1()-1>range)||(message.getArgNum1()-1<0)){
-            output.setArgString("Non existing Assistant, retry");
-            return output;
-        } else {
-            Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(message.getArgNum1()-1);
+        int index = message.getArgNum1();
+        try {
+            Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(index);
             if(client.getGame().getPlayer(client.getUsername()).getAssistants().size()==1) {
-                playAssistant(client, played, output); // if the player has only one assistant
+                playAssistant(client, index, output); // if the player has only one assistant
             } else {
                 if(uniqueAssistant(client, played)){
-                    playAssistant(client, played, output);
+                    playAssistant(client, index, output);
                 } else {
                     if(!checkAllUnique(client)){
-                        playAssistant(client, played, output);
+                        playAssistant(client, index, output);
                     } else {
                         output.setArgString("Another player has already played this Assistant, try another");
                     }
                 }
             }
+        } catch (IndexOutOfBoundsException e) {
+            output.setArgString("This Assistant doesn't exist.");
         }
         return output;
     }
@@ -115,12 +112,12 @@ public class GameController {
     /**
      * play Assistant
      */
-    private static void playAssistant(ClientHandler client, Assistant played, Message output){
+    private static void playAssistant(ClientHandler client, int index, Message output){
         try {
-            client.getGame().getPlayer(client.getUsername()).playAssistant(played);
+            client.getGame().getPlayer(client.getUsername()).playAssistant(index);
             output.setArgString("Assistant played");
         } catch (Exception e) {
-            output.setArgString("Can't play this Assistant, retry");
+            output.setArgString("Can't play this Assistant.");
         }
     }
 
@@ -129,7 +126,8 @@ public class GameController {
      */
     private static boolean uniqueAssistant(ClientHandler client, Assistant assistant){
         for(ClientHandler player: client.sameMatchPlayers()){
-            if(client.getGame().getPlayer(player.getUsername()).getFace_up_assistant()==assistant){
+            Assistant other = client.getGame().getPlayer(player.getUsername()).getFace_up_assistant();
+            if((other==null)||(other.equals(assistant))){
                 System.out.println("got one equal");
                 return false;
             }

@@ -30,6 +30,7 @@ public class Client{
                     }
                 } else {
                     System.out.println("Server isn't reachable, please try again later.");
+                    // TODO tentativo di riconnessione ogni X secondi
                 }
             }
         } catch (UnknownHostException e) {

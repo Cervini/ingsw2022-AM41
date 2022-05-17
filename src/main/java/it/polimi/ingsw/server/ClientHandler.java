@@ -55,6 +55,7 @@ public class ClientHandler implements Runnable{
                             response.setArgString("Must log in before sending any other command\n" +
                                     "type LOGIN <username>");
                         } else {
+
                             switch(request.getCommand()){
                                 case LOGIN -> response = LoginController.processLogin(request, this);
                                 case LOGOUT -> response = LoginController.processLogout(this);
@@ -88,6 +89,7 @@ public class ClientHandler implements Runnable{
         } catch (SocketException e) {
             try {
                 clientSocket.close();
+                LoginController.processLogout(this);
                 clients.remove(this);
                 //System.out.println("Client disconnected, socket closed");
             } catch (IOException ex) {
@@ -97,6 +99,9 @@ public class ClientHandler implements Runnable{
             e.printStackTrace();
         }
     }
+
+    //Message response = new Message("game");
+    //response.setGame(game);
 
     public String getUsername() {
         return username;
@@ -110,7 +115,6 @@ public class ClientHandler implements Runnable{
     public void setGame(Game game) {
         this.game = game;
     }
-
 
     public ObjectInputStream getIn() {
         return in;

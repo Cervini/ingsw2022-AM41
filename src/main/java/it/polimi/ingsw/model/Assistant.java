@@ -50,4 +50,12 @@ public class Assistant implements Comparable<Assistant>{
         else
             return false;
     }
+
+    public boolean equals(Assistant o){
+        Assistant a = o;
+        if((a.getMovement_points()==this.movement_points)&&(a.getValue()==this.value))
+            return true;
+        else
+            return false;
+    }
 }

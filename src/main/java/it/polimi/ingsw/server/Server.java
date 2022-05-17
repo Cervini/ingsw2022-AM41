@@ -50,7 +50,6 @@ public class Server {
                 System.out.println("cannot accept port " + portNumber);
                 break;
             }
-            //System.out.println("Accepted");
             ClientHandler clientThread = new ClientHandler(clientSocket, clients);
             pool.execute(clientThread);
             System.out.println("Number of connected players: " + clients.size());
