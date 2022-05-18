@@ -16,8 +16,8 @@ public class Client{
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream()); // prepare input stream
              BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in))) // prepare input stream from terminal
         {
-            Thread readThread = new Thread(new ReadThread(in));
-            readThread.start();
+            Thread readThread = new Thread(new ReadThread(in)); // create a new ReadThread thread with the input stream obtained during connection
+            readThread.start(); // start ReadThread thread
             PingThread ping = new PingThread(server_ip, server_port);
             ping.start();
             String writtenString;
