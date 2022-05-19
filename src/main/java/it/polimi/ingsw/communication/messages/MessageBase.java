@@ -1,9 +1,5 @@
 package it.polimi.ingsw.communication.messages;
 
-import it.polimi.ingsw.communication.Command;
-import it.polimi.ingsw.communication.FromTile;
-import it.polimi.ingsw.communication.ToTile;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;

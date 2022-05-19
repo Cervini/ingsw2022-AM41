@@ -6,11 +6,15 @@ public class SchoolBoard implements Tile{
     private final ArrayList<Student> entrance; // list of students at the entrance section of the School_board
     private final ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
     private int towers; // number of towers currently on the School_board
+    private String owner;
+    private TowerColour team;
+
+    private Assistant face_up_assistant;
 
     /**
      * default constructor sets up School_board with 8 towers
      */
-    public SchoolBoard(){
+    public SchoolBoard(Player owner){
         this.entrance = new ArrayList<>(9);
         this.dining_rooms = new ArrayList<>(5);
         /* initialize a dining_room for every color */
@@ -18,13 +22,15 @@ public class SchoolBoard implements Tile{
             dining_rooms.add(new DiningRoom(colour));
         }
         this.towers = 8;
+        this.owner = owner.getPlayer_id();
+        this.team = owner.getTeam();
     }
 
     /**
      *  alternative constructor sets up School_board with chosen number of towers
      *  @requires towers >= 0
      */
-    public SchoolBoard(int towers) {
+    public SchoolBoard(int towers, Player owner) {
         this.entrance = new ArrayList<>(9);
         this.dining_rooms = new ArrayList<>(5);
         /* initialize a dining_room for every color */
@@ -32,6 +38,8 @@ public class SchoolBoard implements Tile{
             dining_rooms.add(new DiningRoom(colour));
         }
         this.towers = towers;
+        this.owner = owner.getPlayer_id();
+        this.team = owner.getTeam();
     }
 
     public int getEntranceSize(){
@@ -111,5 +119,21 @@ public class SchoolBoard implements Tile{
 
     public ArrayList<Student> getEntrance() {
         return entrance;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public TowerColour getTeam() {
+        return team;
+    }
+
+    public Assistant getFace_up_assistant() {
+        return face_up_assistant;
+    }
+
+    public void setFace_up_assistant(Assistant face_up_assistant) {
+        this.face_up_assistant = face_up_assistant;
     }
 }

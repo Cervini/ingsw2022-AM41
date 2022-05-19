@@ -9,10 +9,10 @@
 |:-----------------|:--------------------------------------------------:|
 | Basic rules      | 🟢 |
 | Complete rules   | 🟡 |
-| Socket           | 🟡 |
+| Socket           | 🟢 |
 | GUI              | 🔴 |
-| CLI              | 🔴 |
-| Multiple games   | 🔴 |
+| CLI              | 🟡 |
+| Multiple games   | 🟡 |
 | Persistence      | 🔴 |
 
 🔴

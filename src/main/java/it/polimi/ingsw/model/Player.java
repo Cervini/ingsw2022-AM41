@@ -6,13 +6,11 @@ import java.util.ArrayList;
 
 import java.util.LinkedList;
 import java.util.Scanner;
-import java.util.UUID;
 
 public class Player implements Comparable{
 
     private String player_id = "new player"; // player's unique ID
     private final LinkedList<Assistant> assistants; // list of not yet played assistant cards
-    private Assistant face_up_assistant; // last played assistant card
     private final TowerColour team; // color of the player's towers, determines the team in 4 player mode
     private boolean turn; // if true it's the player's turn
     private final ArrayList<Professor> owned_professor; // list of all the currently owned professors
@@ -24,14 +22,13 @@ public class Player implements Comparable{
     // default constructor, creates the player and gives them 8 towers
     public Player(TowerColour team) {
         this.team = team;
-        this.face_up_assistant = null;
         this.owned_professor = new ArrayList<>();
         this.turn = false;
         this.coins = 1;
         this.assistants = new LinkedList<>();
         //set up assistants deck
         deck_setup();
-        this.school = new SchoolBoard();
+        this.school = new SchoolBoard(this);
         this.tower_holder = true;
         this.dining_coins = 0;
     }
@@ -39,14 +36,13 @@ public class Player implements Comparable{
     // alternative constructor, creates the player and gives them nTowers number of tower
     public Player(TowerColour team, int nTowers) {
         this.team = team;
-        this.face_up_assistant = null;
         this.owned_professor = new ArrayList<>();
         this.turn = false;
         this.coins = 1;
         this.assistants = new LinkedList<>();
         //set up assistants deck
         deck_setup();
-        this.school = new SchoolBoard(nTowers);
+        this.school = new SchoolBoard(nTowers, this);
         this.tower_holder = nTowers != 0;
         this.dining_coins = 0;
     }
@@ -100,11 +96,11 @@ public class Player implements Comparable{
     }
 
     public Assistant getFace_up_assistant() {
-        return face_up_assistant;
+        return school.getFace_up_assistant();
     }
 
     public void setFace_up_assistant(Assistant face_up_assistant) {
-        this.face_up_assistant = face_up_assistant;
+        school.setFace_up_assistant(face_up_assistant);
     }
 
     public TowerColour getTeam() {
@@ -145,7 +141,7 @@ public class Player implements Comparable{
     @Override
     public int compareTo(Object o) {
         Player p = (Player) o;
-        return Integer.compare(this.face_up_assistant.getValue(), p.getFace_up_assistant().getValue());
+        return Integer.compare(school.getFace_up_assistant().getValue(), p.getSchool().getFace_up_assistant().getValue());
     }
 
     public void playAssistant(Assistant assistant) throws Exception {

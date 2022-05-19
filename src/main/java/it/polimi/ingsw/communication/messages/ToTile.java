@@ -1,4 +1,4 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.messages;
 
 public enum ToTile {
     NULL, DINING, ISLAND

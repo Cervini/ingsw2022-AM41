@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.communication.Message;
+import it.polimi.ingsw.communication.messages.Message;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;

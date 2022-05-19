@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.communication.Command;
-import it.polimi.ingsw.communication.Message;
+import it.polimi.ingsw.communication.messages.Command;
+import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.server.controller.GameController;
 import it.polimi.ingsw.server.controller.GameResultsController;

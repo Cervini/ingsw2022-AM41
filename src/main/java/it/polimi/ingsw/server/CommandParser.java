@@ -1,5 +1,5 @@
 package it.polimi.ingsw.server;
-import it.polimi.ingsw.communication.Message;
+import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Assistant;
 import it.polimi.ingsw.model.Game;
 

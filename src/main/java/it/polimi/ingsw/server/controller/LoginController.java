@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.communication.Message;
+import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.server.ClientHandler;
 
 import java.io.IOException;

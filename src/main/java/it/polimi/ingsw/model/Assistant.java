@@ -6,7 +6,7 @@ public class Assistant implements Comparable<Assistant>{
     private final Player player; // player who played the card
 
     /**
-     *  @requires (value >= 1) && (movement_points >= 1)
+     *  @requirements (value >= 1) && (movement_points >= 1)
      */
     public Assistant(int value, int movement_points, Player player) {
         this.value = value;
@@ -45,17 +45,10 @@ public class Assistant implements Comparable<Assistant>{
     @Override
     public boolean equals(Object o){
         Assistant a = (Assistant) o;
-        if((a.getMovement_points()==this.movement_points)&&(a.getValue()==this.value))
-            return true;
-        else
-            return false;
+        return (a.getMovement_points() == this.movement_points) && (a.getValue() == this.value);
     }
 
     public boolean equals(Assistant o){
-        Assistant a = o;
-        if((a.getMovement_points()==this.movement_points)&&(a.getValue()==this.value))
-            return true;
-        else
-            return false;
+        return (o.getMovement_points() == this.movement_points) && (o.getValue() == this.value);
     }
 }

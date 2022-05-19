@@ -1,5 +1,9 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.communication.messages.Command;
+import it.polimi.ingsw.communication.messages.FromTile;
+import it.polimi.ingsw.communication.messages.Message;
+import it.polimi.ingsw.communication.messages.ToTile;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

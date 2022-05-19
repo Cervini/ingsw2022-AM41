@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.communication.Message;
+import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.GameSession;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.server.ClientHandler;

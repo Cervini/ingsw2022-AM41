@@ -1,5 +1,8 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.communication.messages.Command;
+import it.polimi.ingsw.communication.messages.Message;
+
 import java.io.*;
 import java.net.Socket;
 

@@ -11,7 +11,7 @@ public class SchoolBoardTest {
 
     @Test
     public void testConstructor(){
-        SchoolBoard s = new SchoolBoard();
+        SchoolBoard s = new SchoolBoard(new Player(TowerColour.BLACK));
         ArrayList<DiningRoom> m = new ArrayList<DiningRoom>();
         m.add(new DiningRoom(Colour.RED));
         m.add(new DiningRoom(Colour.GREEN));
@@ -27,7 +27,7 @@ public class SchoolBoardTest {
 
     @Test
     public void putStudentTest(){
-        SchoolBoard s = new SchoolBoard();
+        SchoolBoard s = new SchoolBoard(new Player(TowerColour.BLACK));
         Student student = new Student(Colour.YELLOW);
         try {
             s.putStudent(student);
@@ -39,7 +39,7 @@ public class SchoolBoardTest {
 
     @Test
     public void fullEntranceTest(){
-        SchoolBoard s = new SchoolBoard();
+        SchoolBoard s = new SchoolBoard(new Player(TowerColour.BLACK));
         Student student = new Student(Colour.YELLOW);
         int x=0;
         for(int i=0; i<10; i++){
