@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.communication.GamePack;
 import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
@@ -71,6 +72,9 @@ public class ClientHandler implements Runnable{
                         }
                         out.writeObject(response); // send through output stream the msg in String form
                         out.flush();
+                        if(game!=null){
+                            updateStatus();
+                        }
                     } else {
                         Message pongResponse = new Message("PONG");
                         out.writeObject(pongResponse);
@@ -140,6 +144,23 @@ public class ClientHandler implements Runnable{
             }
         }
         return same;
+    }
+
+    public void updateStatus(){
+        for(ClientHandler clientHandler: sameMatchPlayers()){
+            //Send Game status if the client is currently in a game
+            Message status = new Message("status");
+            GamePack gamePack = new GamePack(game, clientHandler);
+            status.setStatus(gamePack);
+            status.setStandard(true);
+            try {
+                clientHandler.getOut().writeObject(status);
+                clientHandler.getOut().flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
     }
 
 

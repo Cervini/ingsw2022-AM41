@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-public class DiningRoom implements Tile, Comparable{
+import java.io.Serializable;
+
+public class DiningRoom implements Tile, Comparable, Serializable {
     private final Colour colour; // color of the students stored in the Dining_room
     private int students; // number of students currently in the Dining_room
     private int given_coins; // number of coins already given to the player by this Dining_room

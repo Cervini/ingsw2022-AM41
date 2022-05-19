@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.messages;
 
-import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.communication.GamePack;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +15,7 @@ public class Message implements Serializable {
     private ToTile to_tile = ToTile.NULL;
     private boolean standard = false; // if true the message has a correct structure
 
-    private Game game = null;
+    private GamePack status = null;
 
     public Message(String string){
         String[] arguments = string.split("\\W+");
@@ -173,5 +173,11 @@ public class Message implements Serializable {
         return s;
     }
 
+    public void setStatus(GamePack gamePack){
+        this.status = gamePack;
+    }
 
+    public GamePack getStatus() {
+        return status;
+    }
 }

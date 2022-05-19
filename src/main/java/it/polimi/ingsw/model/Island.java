@@ -1,10 +1,11 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Island implements Tile {
+public class Island implements Tile, Serializable {
 
     private int island_size; // how many base Island form the island
     private boolean mother_nature; // true if Mother Nature is currently on the island

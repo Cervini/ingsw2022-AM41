@@ -1,8 +1,9 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SchoolBoard implements Tile{
+public class SchoolBoard implements Tile, Serializable {
     private final ArrayList<Student> entrance; // list of students at the entrance section of the School_board
     private final ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
     private int towers; // number of towers currently on the School_board
@@ -135,5 +136,9 @@ public class SchoolBoard implements Tile{
 
     public void setFace_up_assistant(Assistant face_up_assistant) {
         this.face_up_assistant = face_up_assistant;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

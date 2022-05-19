@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -75,9 +74,9 @@ class GameTest {
         Player p3 = game.getPlayers().get(2);
 
         try {
-            p1.playAssistant(new Assistant(7,4, p1));
-            p2.playAssistant(new Assistant(8,4, p2));
-            p3.playAssistant(new Assistant(2,1, p3));
+            p1.playAssistant(new Assistant(7,4));
+            p2.playAssistant(new Assistant(8,4));
+            p3.playAssistant(new Assistant(2,1));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -96,9 +95,9 @@ class GameTest {
         Player p3 = game.getPlayers().get(2);
 
         try {
-            p1.playAssistant(new Assistant(1,1, p1));
-            p2.playAssistant(new Assistant(8,4, p2));
-            p3.playAssistant(new Assistant(2,1, p3));
+            p1.playAssistant(new Assistant(1,1));
+            p2.playAssistant(new Assistant(8,4));
+            p3.playAssistant(new Assistant(2,1));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -427,7 +426,7 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10, game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10));
 
         try {
             game.moveMotherNature(3, game.getPlayers().getFirst());
@@ -446,7 +445,7 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10, game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10));
 
         try {
             game.moveMotherNature(1, game.getPlayers().getFirst());
@@ -465,7 +464,7 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10, game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10));
 
         try {
             game.moveMotherNature(3, game.getPlayers().getFirst());
@@ -489,7 +488,7 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 20, game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 20));
 
         try {
             game.moveMotherNature(11, game.getPlayers().getFirst());
@@ -513,7 +512,7 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 20, game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 20));
 
         try {
             game.moveMotherNature(11, game.getPlayers().getFirst());
@@ -537,7 +536,7 @@ class GameTest {
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
 
-        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10, game.getPlayers().getFirst()));
+        game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 10));
 
         game.merge(archipelagoTest.get(1), archipelagoTest.get(2));
         try {

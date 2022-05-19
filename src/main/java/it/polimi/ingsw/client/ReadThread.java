@@ -24,6 +24,9 @@ public class ReadThread implements Runnable{
             Message msg = null; // instantiate new message
             try {
                 msg = (Message) in.readObject(); // try reading a Message object from in
+                if(msg.getCommand() == Command.STATUS){
+                    msg.getStatus().printPack();
+                }
                 if(msg.getCommand() == Command.PONG){
                     // TODO reaction to PONG
                 }

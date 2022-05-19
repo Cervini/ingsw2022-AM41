@@ -54,7 +54,7 @@ public class Player implements Comparable{
         try {
             Scanner reader = new Scanner(new File("src/main/resources/it/polimi/ingsw/assistants_stats.txt"));
             while (reader.hasNextInt()) {
-                assistants.add(new Assistant(reader.nextInt(), reader.nextInt(), this));
+                assistants.add(new Assistant(reader.nextInt(), reader.nextInt()));
             }
         } catch (FileNotFoundException e) {
             System.out.println("Error: ");
@@ -128,6 +128,7 @@ public class Player implements Comparable{
     }
 
     public void setPlayer_id(String player_id) {
+        this.school.setOwner(player_id);
         this.player_id = player_id;
     }
 

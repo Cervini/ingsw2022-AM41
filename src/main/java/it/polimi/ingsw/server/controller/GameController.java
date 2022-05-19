@@ -128,7 +128,6 @@ public class GameController {
         for(ClientHandler player: client.sameMatchPlayers()){
             Assistant other = client.getGame().getPlayer(player.getUsername()).getFace_up_assistant();
             if((other==null)||(other.equals(assistant))){
-                System.out.println("got one equal");
                 return false;
             }
         }

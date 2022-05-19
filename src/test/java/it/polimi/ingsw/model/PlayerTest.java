@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 
-import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,8 +20,8 @@ public class PlayerTest {
     public void compareToGreater(){
         Player player1 = new Player(TowerColour.BLACK);
         Player player2 = new Player(TowerColour.WHITE);
-        player1.setFace_up_assistant(new Assistant(3,5, player1));
-        player2.setFace_up_assistant(new Assistant(6,10, player2));
+        player1.setFace_up_assistant(new Assistant(3,5));
+        player2.setFace_up_assistant(new Assistant(6,10));
         assertEquals(player1.compareTo(player2), -1);
     }
 
@@ -30,8 +29,8 @@ public class PlayerTest {
     public void compareToSmaller(){
         Player player1 = new Player(TowerColour.BLACK);
         Player player2 = new Player(TowerColour.WHITE);
-        player1.setFace_up_assistant(new Assistant(3,5, player1));
-        player2.setFace_up_assistant(new Assistant(2,4, player2));
+        player1.setFace_up_assistant(new Assistant(3,5));
+        player2.setFace_up_assistant(new Assistant(2,4));
         assertEquals(player1.compareTo(player2), 1);
     }
 
@@ -39,8 +38,8 @@ public class PlayerTest {
     public void compareToEqual(){
         Player player1 = new Player(TowerColour.BLACK);
         Player player2 = new Player(TowerColour.WHITE);
-        player1.setFace_up_assistant(new Assistant(3,5, player1));
-        player2.setFace_up_assistant(new Assistant(3,4, player2));
+        player1.setFace_up_assistant(new Assistant(3,5));
+        player2.setFace_up_assistant(new Assistant(3,4));
         assertEquals(player1.compareTo(player2), 0);
     }
 
@@ -138,7 +137,7 @@ public class PlayerTest {
     @Test
     public void playAssistantTest(){
         Player player = new Player(TowerColour.BLACK);
-        Assistant assistant = new Assistant(7, 4, player);
+        Assistant assistant = new Assistant(7, 4);
 
         try {
             player.playAssistant(assistant);
@@ -152,7 +151,7 @@ public class PlayerTest {
     @Test
     public void replayAssistantTest(){
         Player player = new Player(TowerColour.BLACK);
-        Assistant assistant = new Assistant(7, 4, player);
+        Assistant assistant = new Assistant(7, 4);
 
         try {
             player.playAssistant(assistant);
@@ -173,7 +172,7 @@ public class PlayerTest {
     @Test
     public void wrongAssistantTest(){
         Player player = new Player(TowerColour.BLACK);
-        Assistant assistant = new Assistant(1, 7, player);
+        Assistant assistant = new Assistant(1, 7);
 
         try {
             player.playAssistant(assistant);
