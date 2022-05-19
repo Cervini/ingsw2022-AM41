@@ -12,6 +12,8 @@ public class Game{
     private List<Cloud> clouds; // list of all the clouds
     // private ArrayList<SimpleCharacter> characters; // list of the three character playable in the current match
     private String status; // status of the game
+    private boolean planning_phase;
+    private boolean action_phase;
 
     // constants
     private static final int minimumNumberOfIslands = 3;
@@ -350,4 +352,12 @@ public class Game{
             fillCloud(cloud);
         }
     }
+    public void setPhase_planning(boolean phase_planning) {
+        this.planning_phase = phase_planning;
+    }
+
+    public void setPhase_action(boolean phase_action) {
+        this.action_phase = phase_action;
+    }
+
 }

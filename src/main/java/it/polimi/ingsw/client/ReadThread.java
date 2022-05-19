@@ -5,7 +5,6 @@ import it.polimi.ingsw.communication.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.UnknownHostException;
 
 public class ReadThread implements Runnable{
 
@@ -22,14 +21,19 @@ public class ReadThread implements Runnable{
     @Override
     public void run() {
         while(true){ // infinite cycle
-            Message msg; // instantiate new message
+            Message msg = null; // instantiate new message
             try {
                 msg = (Message) in.readObject(); // try reading a Message object from in
                 if(msg.getCommand() == Command.PONG){
                     // TODO reaction to PONG
                 }
             } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                //throw new RuntimeException(e);
             }
             if(msg!=null) // if the message is not null
                 System.out.println("Server says: " + msg); // print the content of the message

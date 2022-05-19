@@ -151,7 +151,8 @@ public class Player implements Comparable{
     public void playAssistant(Assistant assistant) throws Exception {
         if(assistants.contains(assistant)){
             setFace_up_assistant(assistant);
-            assistants.remove(assistant);
+            //assistants.remove(assistant);
+            assistants.set(assistants.indexOf(assistant),null);
         }
         else {
             throw new Exception("Can't play this assistant");

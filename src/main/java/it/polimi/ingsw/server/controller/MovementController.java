@@ -9,6 +9,12 @@ import it.polimi.ingsw.server.ClientHandler;
 
 public class MovementController {
 
+    /**
+     * @param request message containing the command
+     * @param client  client that sent the request to start the game
+     * @return a new STRING message containing the
+     */
+
     public static Message place(Message request, ClientHandler client) {
         Player current_player = client.getGame().getPlayer(client.getUsername());
         Message output = new Message("string");
@@ -49,6 +55,13 @@ public class MovementController {
         }
         return output;
     }
+
+
+    private Message ProcessChoose (Message message, ClientHandler client){
+        return null;
+    }
+
+
 
 
 
