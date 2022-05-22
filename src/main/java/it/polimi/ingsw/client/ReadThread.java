@@ -23,14 +23,17 @@ public class ReadThread implements Runnable{
         while(true){ // infinite cycle
             Message msg = null; // instantiate new message
             try {
+
                 msg = (Message) in.readObject(); // try reading a Message object from in
+                if(msg == null) System.out.println("Server says: "+ msg);
+
                 if(msg.getCommand() == Command.STATUS){
                     msg.getStatus().printPack();
                 }
                 if(msg.getCommand() == Command.PONG){
                     // TODO reaction to PONG
                 }
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException| NullPointerException e) {
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException ex) {
@@ -38,8 +41,8 @@ public class ReadThread implements Runnable{
                 }
                 //throw new RuntimeException(e);
             }
-            if(msg!=null) // if the message is not null
-                System.out.println("Server says: " + msg); // print the content of the message
+            if(msg.getArgString() != null) // if the message is not null
+                System.out.println("Server says: " + msg.getArgString()); // print the content of the message
         }
     }
 

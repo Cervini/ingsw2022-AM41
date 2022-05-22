@@ -21,8 +21,6 @@ public class Client {
         PingThread ping = new PingThread(server_ip, server_port);
         ping.start();
 
-
-
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         try {
             String writtenString;
@@ -62,7 +60,6 @@ public class Client {
         }
         readThread = new Thread(new ReadThread(in)); // create a new ReadThread thread with the input stream obtained during connection
         readThread.start(); // start ReadThread thread
-
         serverWasOffline = false;
     }
 }

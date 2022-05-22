@@ -14,21 +14,21 @@ public class MovementController {
      * @return a new STRING message containing the
      */
 
-    public static Message place(Message request, ClientHandler client) {
-        Player current_player = client.getGame().getPlayer(client.getUsername());
+    public static Message processPlace(Message request, ClientHandler client) {
+        Player currentPlayer = client.getGame().getPlayer(client.getUsername());
         Message output = new Message("string");
 
         try  {
             output = new Message("string");
-            if (request.getArgNum1() >= current_player.getSchool().getEntranceSize()) {
+            if (request.getArgNum1() >= currentPlayer.getSchool().getEntranceSize()) {
                 output.setArgString("Non existing student, please retry");
             } else {
 
-                Student played = current_player.getSchool().getEntrance().get(request.getArgNum1());
-                current_player.getSchool().removeStudent(played); //removes student from entrance
+                Student played = currentPlayer.getSchool().getEntrance().get(request.getArgNum1());
+                currentPlayer.getSchool().removeStudent(played); //removes student from entrance
 
                 switch (request.getTo_tile()){
-                    case DINING -> current_player.getSchool().getDining_rooms().get(request.getArgNum2()).putStudent(played);
+                    case DINING -> currentPlayer.getSchool().getDining_rooms().get(request.getArgNum2()).putStudent(played);
                     case ISLAND -> client.getGame().getArchipelago().get(request.getArgNum2()).putStudent(played);
                 }
                 output.setArgString("Student placed");
@@ -42,7 +42,7 @@ public class MovementController {
         return output;
     }
 
-    public static Message move(Message request, ClientHandler client) {
+    public static Message processMove(Message request, ClientHandler client) {
         Message output = new Message("string");
         Game current_game = client.getGame();
         Player current_player = client.getGame().getPlayer(client.getUsername());

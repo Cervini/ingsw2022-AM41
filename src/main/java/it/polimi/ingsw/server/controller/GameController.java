@@ -5,15 +5,18 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.server.ClientHandler;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
-public class GameController {
+import static java.util.Collections.swap;
+
+public class GameController extends BaseController {
 
     /**
      * @param message message containing the command
      * @param client  client that sent the request to start the game
      * @return a new STRING message containing the result of the START command
      */
-    public static Message start(Message message, ClientHandler client) {
+    public static Message start(Message message, ClientHandler client, List clients) {
         Message output = new Message("string");
         if(client.getGame()!=null){ // if the player is already participating in a game
             output.setArgString("Already playing!");
@@ -30,6 +33,23 @@ public class GameController {
             game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the client who sent START command as a player
             output.setArgString("Game of " + available + " started");
             setAsPlaying(message.getArgNum1(), game, client.getClients()); // set the other available client as players
+
+
+            Random random_player = new Random();
+            ClientHandler first_player = (ClientHandler) clients.get(random_player.nextInt(client.sameMatchPlayers().size()));//during the first round the first player is randomly chosen
+            first_player.isPlayerFirstMove = true;
+
+            List<ClientHandler> sameMatchPlayers = first_player.sameMatchPlayers();
+            GamePhase gamePhase = new PlanningPhase(game, sameMatchPlayers);
+            setGamePhaseForAllPlayers(sameMatchPlayers, gamePhase); //all players have the same GamePhase attribute
+
+            Player firstPlayer = game.getPlayer(first_player.getUsername());
+            swap(game.getPlayers(), game.getPlayers().indexOf(firstPlayer),0); //first_player is now in the first position
+
+            for(ClientHandler handler: first_player.sameMatchPlayers()){
+                alert(handler, "It's "+ first_player.getUsername()+ "'s turn");
+            }
+
         } else {
             output.setArgString("Not enough players, wait some time then retry.");
         }
@@ -78,74 +98,6 @@ public class GameController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * @param message message containing the command
-     * @param client  client that sent the request to start the game
-     * @return a new STRING message containing the result of the PLAY command
-     */
-    public static Message processPlay(Message message, ClientHandler client){
-        Message output = new Message("string");
-        int index = message.getArgNum1();
-        try {
-            Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(index);
-            if(client.getGame().getPlayer(client.getUsername()).getAssistants().size()==1) {
-                playAssistant(client, index, output); // if the player has only one assistant
-            } else {
-                if(uniqueAssistant(client, played)){
-                    playAssistant(client, index, output);
-                } else {
-                    if(!checkAllUnique(client)){
-                        playAssistant(client, index, output);
-                    } else {
-                        output.setArgString("Another player has already played this Assistant, try another");
-                    }
-                }
-            }
-        } catch (IndexOutOfBoundsException e) {
-            output.setArgString("This Assistant doesn't exist.");
-        }
-        return output;
-    }
-
-    /**
-     * play Assistant
-     */
-    private static void playAssistant(ClientHandler client, int index, Message output){
-        try {
-            client.getGame().getPlayer(client.getUsername()).playAssistant(index);
-            output.setArgString("Assistant played");
-        } catch (Exception e) {
-            output.setArgString("Can't play this Assistant.");
-        }
-    }
-
-    /**
-     * @return true if no other player of the same game has already played the same Assistant
-     */
-    private static boolean uniqueAssistant(ClientHandler client, Assistant assistant){
-        for(ClientHandler player: client.sameMatchPlayers()){
-            Assistant other = client.getGame().getPlayer(player.getUsername()).getFace_up_assistant();
-            if((other==null)||(other.equals(assistant))){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * @param client player whose assistant are checked
-     * @return false if the player has no unique Assistants
-     */
-    private static boolean checkAllUnique(ClientHandler client){
-        Game game = client.getGame();
-        boolean check = false;
-        for(Assistant assistant: game.getPlayer(client.getUsername()).getAssistants()){
-            if(uniqueAssistant(client, assistant))
-                check = true;
-        }
-        return check;
     }
 
     public static Message processChoose(Message message, ClientHandler client){

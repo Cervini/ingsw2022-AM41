@@ -96,5 +96,27 @@ public class GameSetup {
         }
         return professors;
     }
+    public void placeStudentEntranceSetUp(Game game) {
+
+            for (Player p : game.getPlayers()) {
+
+                switch (game.getPlayers().size()) {
+
+                    case 3 -> {
+                        for (int i = 0; i < 10; i++)  //9 students
+                            p.getSchool().putStudent(bag.get(i));
+                    }
+
+                    default -> {
+                        for (int i = 0; i < 7; i++)  //7 students
+                            p.getSchool().putStudent(bag.get(i));
+                    }
+
+                }
+            }
+    }
+
+
+
 }
 

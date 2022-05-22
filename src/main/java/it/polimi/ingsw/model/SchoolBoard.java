@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class SchoolBoard implements Tile, Serializable {
+
     private final ArrayList<Student> entrance; // list of students at the entrance section of the School_board
     private final ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
     private int towers; // number of towers currently on the School_board
     private String owner;
     private TowerColour team;
 
-    private Assistant face_up_assistant;
+    private Assistant face_up_assistant = null;
 
     /**
      * default constructor sets up School_board with 8 towers
@@ -105,12 +106,12 @@ public class SchoolBoard implements Tile, Serializable {
      * add a student to entrance
      */
     @Override
-    public void putStudent(Student student) throws Exception {
+    public void putStudent(Student student)  {
         if(entrance.size()<9)
             entrance.add(student);
-        else{
+        /*else{
             throw new Exception("Entrance board is already full"); // TODO define a better exception
-        }
+        }*/
     }
 
     @Override

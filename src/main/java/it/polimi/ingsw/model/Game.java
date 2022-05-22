@@ -30,6 +30,8 @@ public class Game{
         bag = gameSetup.bagSetup(starting_students); // generate the other 120 students, 24 for each color
         clouds = cloudsSetup(numberOfPlayers);
         professors = gameSetup.professorSetup();
+        gameSetup.placeStudentEntranceSetUp(this);
+
     }
 
     private List<Cloud> cloudsSetup(int numberOfPlayers){
@@ -105,7 +107,7 @@ public class Game{
             int from = archipelago.indexOf(fromIsland);
             archipelago.get((from + movement)% archipelago.size()).setMother_nature(true);
             // run influence check and change owner of the island if possible
-            //islandCheck(archipelago.get((from + movement)% archipelago.size()));
+            islandCheck(archipelago.get((from + movement)% archipelago.size()));
             archipelago.get(from).setMother_nature(false);
         } else {
             throw new Exception("Can't move Mother Nature this far!");

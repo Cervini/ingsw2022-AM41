@@ -4,16 +4,15 @@ import it.polimi.ingsw.communication.GamePack;
 import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.server.controller.GameController;
-import it.polimi.ingsw.server.controller.GameResultsController;
-import it.polimi.ingsw.server.controller.LoginController;
-import it.polimi.ingsw.server.controller.MovementController;
+import it.polimi.ingsw.server.controller.*;
+import it.polimi.ingsw.server.controller.PhaseController;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class ClientHandler implements Runnable{
 
@@ -23,6 +22,8 @@ public class ClientHandler implements Runnable{
     private ObjectOutputStream out;
     private final List<ClientHandler> clients;
     private Game game = null;
+    public boolean isPlayerFirstMove =false;
+    private GamePhase currentGamePhase;
 
     CommandParser cmdParser = new CommandParser();
 
@@ -60,11 +61,17 @@ public class ClientHandler implements Runnable{
                             switch(request.getCommand()){
                                 case LOGIN -> response = LoginController.processLogin(request, this);
                                 case LOGOUT -> response = LoginController.processLogout(this);
-                                case START -> response = GameController.start(request, this);
-                                case PLAY -> response = GameController.processPlay(request, this);
-                                case PLACE -> response = MovementController.place(request, this);
-                                case MOVE -> response = MovementController.move(request, this);
-                                case CHOOSE -> response = GameController.processChoose(request, this);
+                                case START -> response = GameController.start(request, this, clients);
+
+
+                                case PLAY -> response = PhaseController.play(request, this, currentGamePhase);
+
+
+                                case PLACE -> response = PhaseController.play(request, this,currentGamePhase);
+                                case MOVE -> response = PhaseController.play(request, this,currentGamePhase);
+                                case CHOOSE -> response = PhaseController.play(request, this,currentGamePhase);
+
+
                                 case STATUS -> response = new GameResultsController().getStatus(request, this);
                                 case NULL -> response = new Message("NULL");
                             }
@@ -163,5 +170,19 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    public boolean getPlayerFirstMove() {
+        return isPlayerFirstMove;
+    }
 
+    public void setPlayerFirstMove(boolean playerFirstMove) {
+        this.isPlayerFirstMove = playerFirstMove;
+    }
+
+    public void setCurrentGamePhase(GamePhase gamePhase) {
+        currentGamePhase = gamePhase;
+    }
+
+    public GamePhase getCurrentGamePhase() {
+        return currentGamePhase;
+    }
 }
