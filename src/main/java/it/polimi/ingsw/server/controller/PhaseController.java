@@ -17,7 +17,7 @@ public class PhaseController extends BaseController {
 
     public static Message play(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
 
-        Message response = new Message(Command.PLAY.toString());
+        Message response =  new Message("string");
 
         try {
 
@@ -37,7 +37,7 @@ public class PhaseController extends BaseController {
 
             if (canStartActionPhase) {
 
-                System.out.println("Planning phase ended");
+                System.out.println(" Planning phase ended ");
 
                 List<ClientHandler> sameMatchPlayers = clientHandler.sameMatchPlayers();
 
@@ -48,10 +48,15 @@ public class PhaseController extends BaseController {
                 actionPhase.setActionPhase(true);
                 setGamePhaseForAllPlayers(sameMatchPlayers, actionPhase);
 
+                //il giocatore random non ha più il primo turno
+                ClientHandler oldFirstTurn = (ClientHandler) sameMatchPlayers.stream().filter(ClientHandler::getPlayerFirstMove);
+                oldFirstTurn.setPlayerFirstMove(false);
+                sameMatchPlayers.get(0).setPlayerFirstMove(true);
+
 
             }
         } catch (PlanningPhase.WrongPhaseException e) {
-            response.setArgString("Wrong command for planning phase");
+            response.setArgString("Wrong command for this phase");
         } catch (PlanningPhase.WrongTurn  e) {
             response.setArgString("It is not your turn");
         }

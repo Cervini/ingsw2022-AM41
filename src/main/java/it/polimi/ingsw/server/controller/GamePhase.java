@@ -22,14 +22,15 @@ public class GamePhase {
 
     public void validatePlayAssistant(ClientHandler player, GamePhase currentState) throws PlanningPhase.WrongPhaseException, PlanningPhase.WrongTurn {
         if (this instanceof ActionPhase) {
-            throw new PlanningPhase.WrongPhaseException("You cannot call playAssistant during Action Phase");
+            throw new PlanningPhase.WrongPhaseException();
+
         }
-        throw new PlanningPhase.WrongPhaseException("Method playAssistant cannot be called from GamePhase parent class");
+        //throw new PlanningPhase.WrongPhaseException("Method playAssistant cannot be called from GamePhase parent class");
     }
 
     public void validatePlaceStudent(ClientHandler player, GamePhase currentState) throws ActionPhase.WrongPhaseException, ActionPhase.WrongTurn {
         if (this instanceof PlanningPhase) {
-            throw new ActionPhase.WrongPhaseException("You cannot call playAssistant during Action Phase");
+            throw new ActionPhase.WrongPhaseException();
         }
         throw new ActionPhase.WrongTurn("Method playAssistant cannot be called from GamePhase parent class");
     }
