@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 public class Assistant implements Comparable<Assistant>, Serializable {
     private final int value; //determines card's value used for turn order
-    private final int movement_points; //determines movements Mother Nature may perform with the use of this card
-
+    private int movement_points; //determines movements Mother Nature may perform with the use of this card
 
     /**
      *  @requirements (value >= 1) && (movement_points >= 1)
@@ -47,5 +46,10 @@ public class Assistant implements Comparable<Assistant>, Serializable {
 
     public boolean equals(Assistant o){
         return (o.getMovement_points() == this.movement_points) && (o.getValue() == this.value);
+    }
+
+    //Function to increase the max movement points by two when character 4 is played
+    public void add2MovementPoints(){
+        movement_points = movement_points + 2;
     }
 }

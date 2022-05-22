@@ -12,7 +12,10 @@ public class GameSetup {
     private static final int islandSetupStudentNumber = 10;
     private static final int numberOfIslands = 12;
     private static final int numberOfColours = 5;
+    private static final int numberOfCharacters = 3;
+    private static final int totalNumberOfCharacters = 12;
 
+    //Function to set up the players, depending on how many are them
     public LinkedList<Player> playerSetup(int numberOfPlayers){
         LinkedList<Player> players = new LinkedList<>();
         switch (numberOfPlayers) {
@@ -39,11 +42,13 @@ public class GameSetup {
         return players;
     }
 
+    //Function to set up coins
     public int coinSetup(int numberOfPlayers){
         // available coins is set to 20 minus one coin for each player
         return initialNumberOfCoins - numberOfPlayers;
     }
 
+    //Function to srt up the archipelago
     public List<Island> archipelagoSetup(){
         createIslands();
         // as per Eriantys' rule pick 2 students of each color to set up the islands
@@ -69,7 +74,7 @@ public class GameSetup {
      * @param numberOfStudents total number of students to put in the bag
      */
     public LinkedList<Student> bagSetup(int numberOfStudents){
-        bag = new LinkedList<Student>();
+        bag = new LinkedList<>();
         for(Colour color: Colour.values()){
             for(int i=0; i<numberOfStudents/numberOfColours; i++){
                 bag.add(new Student(color));
@@ -89,6 +94,7 @@ public class GameSetup {
         archipelago.get(0).setMother_nature(true);
     }
 
+    //Function to set up professors
     public List<Professor> professorSetup(){
         List<Professor> professors = new LinkedList<>();
         for(Colour colour: Colour.values()){
@@ -119,5 +125,19 @@ public class GameSetup {
 
 
 
+
+    //Function to set up characters
+    public LinkedList<Character> characterSetup() {
+        LinkedList<Character> characters = new LinkedList<>();
+        LinkedList<Character> selectedCharacters = new LinkedList<>();
+        for(int characterNumber = 0; characterNumber < totalNumberOfCharacters; characterNumber++){
+            characters.add(new Character(characterNumber));
+        }
+        Collections.shuffle(characters);
+        while(selectedCharacters.size() < numberOfCharacters){
+            selectedCharacters.add(characters.removeFirst());
+        }
+        return selectedCharacters;
+    }
 }
 

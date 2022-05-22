@@ -2,11 +2,12 @@ package it.polimi.ingsw.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class SchoolBoard implements Tile, Serializable {
 
-    private final ArrayList<Student> entrance; // list of students at the entrance section of the School_board
-    private final ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
+    private ArrayList<Student> entrance; // list of students at the entrance section of the School_board
+    private ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
     private int towers; // number of towers currently on the School_board
     private String owner;
     private TowerColour team;
@@ -119,6 +120,8 @@ public class SchoolBoard implements Tile, Serializable {
         entrance.remove(student);
     }
 
+    public void resetTowers(int newTowerNumber) {towers = newTowerNumber;}
+
     public ArrayList<Student> getEntrance() {
         return entrance;
     }
@@ -141,5 +144,13 @@ public class SchoolBoard implements Tile, Serializable {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public void removeStudents(LinkedList<Student> studentsToRemove) {
+        entrance.removeAll(studentsToRemove);
+    }
+
+    public void putStudents(LinkedList<Student> studentsToAdd) {
+        entrance.addAll(studentsToAdd);
     }
 }

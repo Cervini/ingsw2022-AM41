@@ -1,10 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -155,7 +153,7 @@ class GameSetupTest {
 
         bag = setup.bagSetup(numberOfStudents);
 
-        assertTrue(bag.size() == 120);
+        assertEquals(bag.size(), 120);
 
         System.out.println("bagSetupTest1 complete");
     }
@@ -168,7 +166,7 @@ class GameSetupTest {
 
         bag = setup.bagSetup(numberOfStudents);
 
-        assertTrue(bag.size() == 120);
+        assertEquals(bag.size(), 120);
 
         System.out.println("bagSetupTest2 complete");
     }
@@ -214,7 +212,7 @@ class GameSetupTest {
         bag1 = setup.bagSetup(numberOfStudents);
         bag2 = setup.bagSetup(numberOfStudents);
 
-        assertFalse(bag1.equals(bag2));
+        assertNotEquals(bag1, bag2);
 
         System.out.println("bagSetupTest4 complete");
     }
@@ -238,8 +236,44 @@ class GameSetupTest {
 
         professors = setup.professorSetup();
 
-        assertTrue(professors.size() == 5);
+        assertEquals(professors.size(), 5);
 
         System.out.println("professorSetupTest2 complete");
+    }
+
+    @Test
+    void characterSetupTest1() {
+        GameSetup gameSetup = new GameSetup();
+        LinkedList<Character> characters;
+
+        characters = gameSetup.characterSetup();
+
+        assertEquals(characters.size(), 3);
+
+        System.out.println("characterSetupTest1 complete");
+    }
+
+    @Test
+    void characterSetupTest2() {
+        GameSetup gameSetup = new GameSetup();
+        int numberOfCharacters = 3;
+        boolean areEquals = false;
+        LinkedList<Character> characters;
+
+        characters = gameSetup.characterSetup();
+
+        for(int i = 0; i < numberOfCharacters; i++){
+            for(int j = 0; j < numberOfCharacters; j++){
+                if(i!=j){
+                    if(characters.get(i).getCharacterNumber()==characters.get(j).getCharacterNumber()){
+                        areEquals = true;
+                    }
+                }
+            }
+        }
+
+        assertFalse(areEquals);
+
+        System.out.println("characterSetupTest2 complete");
     }
 }

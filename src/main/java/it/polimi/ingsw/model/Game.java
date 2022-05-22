@@ -3,14 +3,14 @@ package it.polimi.ingsw.model;
 import java.util.*;
 
 public class Game{
-    private final LinkedList<Player> players; // list of all the active players
-    private final int available_coins; // number of all the coins not owned by any player or placed on character cards
-    private final LinkedList<Student> bag; // list of all the students
-    private final List<Professor> professors; // list of all the professors
-    private final List<Island> archipelago; // list of all the islands
+    private LinkedList<Player> players; // list of all the active players
+    private int available_coins; // number of all the coins not owned by any player or placed on character cards
+    private LinkedList<Student> bag; // list of all the students
+    private List<Professor> professors; // list of all the professors
+    private List<Island> archipelago; // list of all the islands
     private LinkedList<Player> turnOrder; // playing order of the turn
     private List<Cloud> clouds; // list of all the clouds
-    // private ArrayList<SimpleCharacter> characters; // list of the three character playable in the current match
+    private LinkedList<Character> characters;
     private String status; // status of the game
 
     // constants
@@ -31,7 +31,7 @@ public class Game{
         clouds = cloudsSetup(numberOfPlayers);
         professors = gameSetup.professorSetup();
         gameSetup.placeStudentEntranceSetUp(this);
-
+        characters = gameSetup.characterSetup();
     }
 
     private List<Cloud> cloudsSetup(int numberOfPlayers){
@@ -118,7 +118,7 @@ public class Game{
      * finds and returns the island on which the attribute mother_nature is true
      * @return island on which the attribute mother_nature is true
      */
-    private Island motherNaturePosition(){
+    public Island motherNaturePosition(){
         for(Island islandToCheck : archipelago){
             if(islandToCheck.isMother_nature()){
                 return islandToCheck;
@@ -251,7 +251,6 @@ public class Game{
         } else {
             island.setNo_entry(false);
         }
-
     }
 
     /**
@@ -296,6 +295,35 @@ public class Game{
         return drawn;
     }
 
+    /**
+     * @return Player instanced with 'username' parameter as player_id
+     */
+    public  Player getPlayer(String username){
+        for(Player player: this.players){
+            if(player.getPlayer_id().equals(username))
+                return player;
+        }
+        return null;
+    }
+
+    /**
+     * method to call when all the players have finished their turn
+     */
+    public void endTurn(){
+        for(Player player: players){
+            player.setFace_up_assistant(null);
+        }
+    }
+
+    /**
+     * method to call when all the players have played their Assistant
+     */
+    public void startTurn(){
+        for(Cloud cloud: clouds){
+            fillCloud(cloud);
+        }
+    }
+
     public LinkedList<Player> getPlayers() {
         return players;
     }
@@ -324,32 +352,25 @@ public class Game{
         return turnOrder;
     }
 
-    /**
-     * @return Player instanced with 'username' parameter as player_id
-     */
-    public  Player getPlayer(String username){
-        for(Player player: this.players){
-            if(player.getPlayer_id().equals(username))
-                return player;
-        }
-        return null;
+    public LinkedList<Character> getCharacters() { return characters;}
+
+    public void setAvailable_coins(int available_coins) {
+        this.available_coins = available_coins;
     }
 
-    /**
-     * method to call when all the players have finished their turn
-     */
-    public void endTurn(){
-        for(Player player: players){
-            player.setFace_up_assistant(null);
-        }
+    public void setPlayers(LinkedList<Player> players) {
+        this.players = players;
     }
 
-    /**
-     * method to call when all the players have played their Assistant
-     */
-    public void startTurn(){
-        for(Cloud cloud: clouds){
-            fillCloud(cloud);
-        }
+    public void setBag(LinkedList<Student> bag) {
+        this.bag = bag;
+    }
+
+    public void setArchipelago(List<Island> archipelago) {
+        this.archipelago = archipelago;
+    }
+
+    public void setCharacters(LinkedList<Character> characters) {
+        this.characters = characters;
     }
 }

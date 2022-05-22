@@ -163,7 +163,20 @@ public class Player implements Comparable{
         } else {
             throw new Exception("This assistant doesn't exist");
         }
+    }
 
+    public Professor removeProfessor(Colour colour){
+        Professor professorRemoved = null;
+        for(Professor professorToCheck: owned_professor){
+            if(professorToCheck.getColour().equals(colour)){
+                owned_professor.remove(professorToCheck);
+                professorRemoved = professorToCheck;
+            }
+        }
+        return professorRemoved;
+    }
 
+    public void addProfessor(Professor professor){
+        owned_professor.add(professor);
     }
 }
