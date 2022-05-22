@@ -60,7 +60,7 @@ public class GamePhase {
     }
 
     public void setActionPhase(Boolean isActionPhase) {
-        this.action_phase = action_phase;
+        this.action_phase = isActionPhase;
     }
 
     public List<ClientHandler> getCurrentPlayers() {

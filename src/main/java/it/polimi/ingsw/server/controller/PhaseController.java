@@ -16,38 +16,44 @@ import static java.util.Collections.sort;
 public class PhaseController extends BaseController {
 
     public static Message play(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
+
         Message response = new Message(Command.PLAY.toString());
 
         try {
+
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
 
                     (ActionPhase) currentGamePhase :
                     (PlanningPhase) currentGamePhase;
 
             // validazione se la mossa consentita
-            gamePhase.validatePlayAssistant(clientHandler, currentGamePhase);
+            currentGamePhase.validatePlayAssistant(clientHandler, currentGamePhase);
             // mossa
             response = processPlay(request, clientHandler);
+
             // TODO: logica controllo cambiamento fase del gioco
 
-            /*boolean canStartActionPhase = allPlayersHavePlayedAnAssistant(clientHandler);
+            boolean canStartActionPhase = allPlayersHavePlayedAnAssistant(clientHandler);
 
             if (canStartActionPhase) {
+
+                System.out.println("Planning phase ended");
+
                 List<ClientHandler> sameMatchPlayers = clientHandler.sameMatchPlayers();
+
+                //ordino in base al valore dell'assistente
+
                 sort(sameMatchPlayers, (ClientHandler a1, ClientHandler a2) -> a1.getGame().getPlayer(a1.getUsername()).getFace_up_assistant().getValue() - a2.getGame().getPlayer(a1.getUsername()).getFace_up_assistant().getValue());
                 GamePhase actionPhase = new ActionPhase(clientHandler.getGame(), sameMatchPlayers);
+                actionPhase.setActionPhase(true);
                 setGamePhaseForAllPlayers(sameMatchPlayers, actionPhase);
 
-                // validazione
-                gamePhase.validatePlaceStudent(clientHandler,actionPhase);
-                // mossa
-                response = processPlace(request, clientHandler);
 
-            }*/
+            }
         } catch (PlanningPhase.WrongPhaseException e) {
-            response.setArgString("Wrong command for this game phase");
-        } catch (PlanningPhase.WrongTurn e) {
-            response.setArgString(e.getMessage());
+            response.setArgString("Wrong command for planning phase");
+        } catch (PlanningPhase.WrongTurn  e) {
+            response.setArgString("It is not your turn");
         }
 
         return response;
@@ -125,9 +131,10 @@ public class PhaseController extends BaseController {
 
     private static boolean allPlayersHavePlayedAnAssistant(ClientHandler client){
         for (ClientHandler c: client.sameMatchPlayers() ){
-            if(client.getGame().getPlayer(client.getUsername()).getFace_up_assistant()==null) return false;
+            if(c.getGame().getPlayer(c.getUsername()).getFace_up_assistant() == null) return false;
         }
         return true;
+
     }
 
 

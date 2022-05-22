@@ -113,6 +113,7 @@ public class GameSetup {
                     }
 
                 }
+                p.setFace_up_assistant(null);
             }
     }
 

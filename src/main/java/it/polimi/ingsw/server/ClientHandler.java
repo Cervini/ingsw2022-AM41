@@ -23,6 +23,7 @@ public class ClientHandler implements Runnable{
     private final List<ClientHandler> clients;
     private Game game = null;
     public boolean isPlayerFirstMove =false;
+
     private GamePhase currentGamePhase;
 
     CommandParser cmdParser = new CommandParser();
@@ -179,7 +180,7 @@ public class ClientHandler implements Runnable{
     }
 
     public void setCurrentGamePhase(GamePhase gamePhase) {
-        currentGamePhase = gamePhase;
+        this.currentGamePhase = gamePhase;
     }
 
     public GamePhase getCurrentGamePhase() {

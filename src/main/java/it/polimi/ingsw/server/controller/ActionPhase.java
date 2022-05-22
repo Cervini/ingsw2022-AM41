@@ -21,14 +21,6 @@ public class ActionPhase extends GamePhase {
 
 
 
-
-
-
-
-
-
-
-
     @Override
     public void validateMoveMotherNature(Message play_request, ClientHandler player, GamePhase current_state) {
     }
