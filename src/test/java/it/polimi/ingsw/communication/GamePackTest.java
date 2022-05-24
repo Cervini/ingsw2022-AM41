@@ -57,6 +57,12 @@ class GamePackTest {
             throw new RuntimeException(e);
         }
 
+        game.moveProfessor(Colour.RED, game.getPlayers().getFirst());
+        game.moveProfessor(Colour.BLUE, game.getPlayers().getFirst());
+
+        game.moveProfessor(Colour.GREEN, game.getPlayers().getLast());
+        game.moveProfessor(Colour.YELLOW, game.getPlayers().get(2));
+
         GamePack pack = new GamePack(game);
         pack.printPack();
     }

@@ -20,14 +20,10 @@ public class PlanningController extends BaseController {
         try {
 
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
-
                     (ActionPhase) currentGamePhase :
                     (PlanningPhase) currentGamePhase;
-
-            // validazione se la mossa consentita
-            gamePhase.validatePlayAssistant(clientHandler);
-            // mossa
-            response = processPlay(request, clientHandler);
+            gamePhase.validatePlayAssistant(clientHandler); // check if move is allowed
+            response = processPlay(request, clientHandler); // process move
 
             // TODO: logica controllo cambiamento fase del gioco
 
@@ -63,22 +59,20 @@ public class PlanningController extends BaseController {
      * @return a new STRING message containing the result of the PLAY command
      */
     private static Message processPlay(Message message, ClientHandler client) {
-        Message output = new Message("string");
-        int index = message.getArgNum1();
+        Message output = new Message("string"); // prepare the output message
+        int index = message.getArgNum1(); // get the argument from the client's message
         try {
-            Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(index);
+            Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(index); // get the Assistant that the player wants to play
             if (client.getGame().getPlayer(client.getUsername()).getAssistants().size() == 1) {
-                playAssistant(client, index, output); // if the player has only one assistant
+                playAssistant(client, index, output); // if the player has only one assistant play it (no need to make checks)
             } else {
-                if (uniqueAssistant(client, played)) {
-                    playAssistant(client, index, output);
-
-
+                if (uniqueAssistant(client, played)) { // if the assistant is unique between the already played
+                    playAssistant(client, index, output); // play the assistant
                 } else {
-                    if (!checkAllUnique(client)) {
-                        playAssistant(client, index, output);
+                    if (!checkAllUnique(client)) { // if it's not unique check if any of the other assistants is playable
+                        playAssistant(client, index, output); // if not still play the assistant
                     } else {
-                        output.setArgString("Another player has already played this Assistant, try another");
+                        output.setArgString("Another player has already played this Assistant, try another"); // layer can play one other assistant without trouble
                     }
                 }
             }
@@ -92,13 +86,15 @@ public class PlanningController extends BaseController {
      * @return true if no other player of the same game has already played the same Assistant
      */
     private static boolean uniqueAssistant(ClientHandler client, Assistant assistant) {
-        for (ClientHandler player : client.sameMatchPlayers()) {
-            Assistant other = client.getGame().getPlayer(player.getUsername()).getFace_up_assistant();
-            if ((other == null) || (other.equals(assistant))) {
-                return false;
+        for (ClientHandler player : client.sameMatchPlayers()) { // for each of the players of the game
+            Assistant other = client.getGame().getPlayer(player.getUsername()).getSchool().getFace_up_assistant(); // get the last played assistant
+            if(other == null)
+                break;
+            if (other.equals(assistant)){ // if the played assistant is equal to the one tha player wants to play
+                return false; // the assistant is not unique
             }
         }
-        return true;
+        return true; // the assistant is unique
     }
 
     /**
@@ -106,13 +102,12 @@ public class PlanningController extends BaseController {
      * @return false if the player has no unique Assistants
      */
     private static boolean checkAllUnique(ClientHandler client) {
-        Game game = client.getGame();
-        boolean check = false;
-        for (Assistant assistant : game.getPlayer(client.getUsername()).getAssistants()) {
-            if (uniqueAssistant(client, assistant))
-                check = true;
+        Game game = client.getGame(); // get the game from the client
+        for (Assistant assistant : game.getPlayer(client.getUsername()).getAssistants()) { // for all the assistant of the player
+            if (uniqueAssistant(client, assistant)) // if any of the assistant is unique
+                return true; // the player has a playable assistant
         }
-        return check;
+        return false; // none of the player assistants is playable
     }
 
     /**
@@ -132,7 +127,6 @@ public class PlanningController extends BaseController {
             if (c.getGame().getPlayer(c.getUsername()).getFace_up_assistant() == null) return false;
         }
         return true;
-
     }
 
 }

@@ -3,8 +3,7 @@ package it.polimi.ingsw.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
-
+import java.util.List;
 
 
 public class SchoolBoard implements Tile, Serializable {
@@ -15,6 +14,7 @@ public class SchoolBoard implements Tile, Serializable {
     private String owner;
     private TowerColour team;
     private Assistant face_up_assistant;
+    private List<Professor> owned_professor; // list of all the currently owned professors
 
     /**
      * default constructor sets up School_board with 8 towers
@@ -22,6 +22,7 @@ public class SchoolBoard implements Tile, Serializable {
     public SchoolBoard(Player owner){
         this.entrance = new LinkedList<>();
         this.dining_rooms = new ArrayList<>(5);
+        this.owned_professor = new ArrayList<>();
         /* initialize a dining_room for every color */
         for(Colour colour : Colour.values()){
             dining_rooms.add(new DiningRoom(colour));
@@ -38,6 +39,7 @@ public class SchoolBoard implements Tile, Serializable {
      */
     public SchoolBoard(int towers, Player owner) {
         this.entrance = new LinkedList<>();
+        this.owned_professor = new ArrayList<>();
         this.dining_rooms = new ArrayList<>(5);
         /* initialize a dining_room for every color */
         for(Colour colour : Colour.values()){
@@ -154,5 +156,17 @@ public class SchoolBoard implements Tile, Serializable {
 
     public void putStudents(LinkedList<Student> studentsToAdd) {
         entrance.addAll(studentsToAdd);
+    }
+
+    public List<Professor> getOwned_professor() {
+        return owned_professor;
+    }
+
+    public void setOwned_professor(List<Professor> owned_professor) {
+        this.owned_professor = owned_professor;
+    }
+
+    public void setOwned_professor(LinkedList<Professor> owned_professor) {
+        this.owned_professor = owned_professor;
     }
 }

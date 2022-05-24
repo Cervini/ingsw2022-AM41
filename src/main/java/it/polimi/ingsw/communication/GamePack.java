@@ -135,7 +135,17 @@ public class GamePack implements Serializable {
             printDiningStudents(diningRoom);
         }
         printSchoolBoardTowers(schoolBoard);
+        printProfessors(schoolBoard);
         printFaceUpAssistant(schoolBoard);
+    }
+
+    private void printProfessors(SchoolBoard schoolBoard){
+        System.out.print("Professors: ");
+        for(Professor professor: schoolBoard.getOwned_professor()){
+            System.out.print(changeColorStudent(professor.getColour()));
+            System.out.print(" P" + RESET);
+        }
+        System.out.println();
     }
 
     private void printEntranceStudents(SchoolBoard schoolBoard){
