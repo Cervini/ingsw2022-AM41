@@ -121,7 +121,7 @@ public class SchoolBoard implements Tile, Serializable {
 
     @Override
     public void removeStudent (Student student) {
-        entrance.set(entrance.indexOf(student), null );
+        entrance.remove(student);
     }
 
     public void resetTowers(int newTowerNumber) {towers = newTowerNumber;}

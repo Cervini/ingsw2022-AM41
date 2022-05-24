@@ -85,11 +85,9 @@ public class ActionPhase extends GamePhase {
     }
 
     public boolean alreadyMovedThreeStudents(ClientHandler player){
-        int entranceSize = 0;
-        Player currentPlayer = player.getGame().getPlayer(player.getUsername());
-        for (Student s: currentPlayer.getSchool().getEntrance()){
-            if (s != null ) entranceSize++;
-        }
+
+        int entranceSize = player.getGame().getPlayer(player.getUsername()).getSchool().getEntranceSize();
+
 
         switch (player.sameMatchPlayers().size()) {
 
