@@ -15,7 +15,7 @@ public class SchoolBoard implements Tile, Serializable {
     private TowerColour team;
     private Assistant face_up_assistant;
     private List<Professor> owned_professor; // list of all the currently owned professors
-
+    private final int entrance_max;
     /**
      * default constructor sets up School_board with 8 towers
      */
@@ -31,13 +31,15 @@ public class SchoolBoard implements Tile, Serializable {
         this.owner = owner.getPlayer_id();
         this.team = owner.getTeam();
         this.face_up_assistant = null;
+
+        this.entrance_max = 7;
     }
 
     /**
      *  alternative constructor sets up School_board with chosen number of towers
      *  @requires towers >= 0
      */
-    public SchoolBoard(int towers, Player owner) {
+    public SchoolBoard(int towers, Player owner, int entrance_max) {
         this.entrance = new LinkedList<>();
         this.owned_professor = new ArrayList<>();
         this.dining_rooms = new ArrayList<>(5);
@@ -49,6 +51,7 @@ public class SchoolBoard implements Tile, Serializable {
         this.owner = owner.getPlayer_id();
         this.team = owner.getTeam();
         this.face_up_assistant = null;
+        this.entrance_max = entrance_max;
     }
 
     public int getEntranceSize(){
@@ -114,7 +117,7 @@ public class SchoolBoard implements Tile, Serializable {
      */
     @Override
     public void putStudent(Student student) throws Exception {
-        if(entrance.size()<9)
+        if(entrance.size()<entrance_max)
             entrance.add(student);
         else throw new Exception("Entrance is full");
     }

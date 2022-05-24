@@ -263,8 +263,6 @@ public class Game{
         for(Student s: cloud.getStudents()){
             player.getSchool().putStudent(s);
             cloud.removeStudent(s);
-
-
         }
     }
 

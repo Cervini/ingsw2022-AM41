@@ -21,22 +21,22 @@ public class GameSetup {
         switch (numberOfPlayers) {
             case 2 -> {
                 // default Player constructor (each player will have 8 towers)
-                players.add(new Player(TowerColour.WHITE, twoOrFourPlayerGameTowers));
-                players.add(new Player(TowerColour.BLACK, twoOrFourPlayerGameTowers));
+                players.add(new Player(TowerColour.WHITE, twoOrFourPlayerGameTowers, 7));
+                players.add(new Player(TowerColour.BLACK, twoOrFourPlayerGameTowers, 7));
             }
             case 3 -> {
                 // alternative Player constructor (each player will have 6 towers)
-                players.add(new Player(TowerColour.WHITE, threePlayerGameTowers));
-                players.add(new Player(TowerColour.BLACK, threePlayerGameTowers));
-                players.add(new Player(TowerColour.GREY, threePlayerGameTowers));
+                players.add(new Player(TowerColour.WHITE, threePlayerGameTowers, 9));
+                players.add(new Player(TowerColour.BLACK, threePlayerGameTowers, 9));
+                players.add(new Player(TowerColour.GREY, threePlayerGameTowers, 9));
             }
             case 4 -> {
                 // alternative Player constructor (each team will have 8 towers,
                 // with one player holding all the team's towers)
-                players.add(new Player(TowerColour.WHITE, twoOrFourPlayerGameTowers));
-                players.add(new Player(TowerColour.BLACK, twoOrFourPlayerGameTowers));
-                players.add(new Player(TowerColour.WHITE, 0)); //0 because all the towers have already been added to the first player
-                players.add(new Player(TowerColour.BLACK, 0)); //0 because all the towers have already been added to the second player
+                players.add(new Player(TowerColour.WHITE, twoOrFourPlayerGameTowers, 7));
+                players.add(new Player(TowerColour.BLACK, twoOrFourPlayerGameTowers,7));
+                players.add(new Player(TowerColour.WHITE, 0, 7)); //0 because all the towers have already been added to the first player
+                players.add(new Player(TowerColour.BLACK, 0, 7)); //0 because all the towers have already been added to the second player
             }
         }
         return players;
@@ -109,14 +109,24 @@ public class GameSetup {
                 switch (game.getPlayers().size()) {
 
                     case 3 -> {
-                        for (int i = 0; i < 10; i++)  //9 students
-                            p.getSchool().getEntrance().add(bag.get(i));
+                        for (int i = 0; i < 9; i++)  //9 students
+                        {
+                            try {
+                                p.getSchool().putStudent(game.drawStudent());
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
 
                     }
 
                     default -> {
-                        for (int i = 0; i < 7; i++)  //7 students
-                            p.getSchool().getEntrance().add(bag.get(i));
+                        for (int i = 0; i < 6; i++)  //7 students
+                            try {
+                                p.getSchool().putStudent(game.drawStudent());
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                     }
 
                 }

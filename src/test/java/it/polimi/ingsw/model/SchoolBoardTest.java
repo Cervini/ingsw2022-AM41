@@ -50,8 +50,8 @@ public class SchoolBoardTest {
                 System.out.println(e);
             }
             x++;
-            if(x>9)
-                x=9;
+            if(x>7)
+                x=7;
             assertEquals(s.getEntranceSize(), x);
         }
     }

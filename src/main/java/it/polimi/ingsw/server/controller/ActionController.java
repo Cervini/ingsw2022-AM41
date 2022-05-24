@@ -104,18 +104,19 @@ public class ActionController {
      * @param client  client that sent the request to start the game
      * @return a new STRING message containing the
      */
-    public static Message processPlace(Message request, ClientHandler client) {
+    public static Message processPlace(Message request, ClientHandler client) throws ActionPhase.WrongAction {
         Player currentPlayer = client.getGame().getPlayer(client.getUsername()); // get the player who sent command PLACE
         Message output = new Message("string"); // set up output message
+
         if (request.getArgNum1() >= currentPlayer.getSchool().getEntranceSize()) { // if the argument refers to a non-existing student
-            output.setArgString("Non existing student, please retry"); //TODO: spostare fuori come eccezione
-            return output;
+            throw new ActionPhase.WrongAction("Non existing student, please retry");
         } else {
             Student played = currentPlayer.getSchool().getEntrance().get(request.getArgNum1()); // get
             currentPlayer.getSchool().removeStudent(played); //removes student from entrance
             switch (request.getTo_tile()){
                 case DINING -> {
                     try {
+                        client.getGame().moveStudent(currentPlayer.getSchool(), currentPlayer.getSchool().getDining_rooms().get(request.getArgNum2()), played);
                         currentPlayer.getSchool().getDining_rooms().get(request.getArgNum2()).putStudent(played);
                     } catch (Exception ex) {
                         output.setArgString("Can't move the student, please retry");

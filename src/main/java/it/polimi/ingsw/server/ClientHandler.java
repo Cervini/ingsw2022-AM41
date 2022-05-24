@@ -73,11 +73,11 @@ public class ClientHandler implements Runnable{
                             }
                             // end of not PING commands
                         }
-                        out.writeObject(response); // send through output stream the msg in String form
-                        out.flush();
                         if(game!=null){
                             updateStatus();
                         }
+                        out.writeObject(response); // send through output stream the msg in String form
+                        out.flush();
                     } else {
                         Message pongResponse = new Message("PONG");
                         out.writeObject(pongResponse);
@@ -143,12 +143,13 @@ public class ClientHandler implements Runnable{
     }
 
     public void updateStatus(){
+        Message status = new Message("status");
+        status.setStandard(true);
+        GamePack gamePack = new GamePack(game, this);
         for(ClientHandler clientHandler: sameMatchPlayers()){
             //Send Game status if the client is currently in a game
-            Message status = new Message("status");
-            GamePack gamePack = new GamePack(game, clientHandler);
+            gamePack.updateGamePack(game, clientHandler);
             status.setStatus(gamePack);
-            status.setStandard(true);
             try {
                 clientHandler.getOut().writeObject(status);
                 clientHandler.getOut().flush();

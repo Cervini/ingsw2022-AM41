@@ -33,14 +33,14 @@ public class Player implements Comparable{
     }
 
     // alternative constructor, creates the player and gives them nTowers number of tower
-    public Player(TowerColour team, int nTowers) {
+    public Player(TowerColour team, int nTowers, int max_entrance) {
         this.team = team;
         this.turn = false;
         this.coins = 1;
         this.assistants = new LinkedList<>();
         //set up assistants deck
         deck_setup();
-        this.school = new SchoolBoard(nTowers, this);
+        this.school = new SchoolBoard(nTowers, this, max_entrance);
         this.tower_holder = nTowers != 0;
         this.dining_coins = 0;
     }

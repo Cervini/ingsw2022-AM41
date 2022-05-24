@@ -554,6 +554,8 @@ class GameTest {
 
     }
 
+    /*
+
     @Test
     void moveStudentTest1() throws Exception {
         Game game = new Game(2);
@@ -601,6 +603,8 @@ class GameTest {
 
         assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getPlayers().getFirst().getSchool().getDining_room(Colour.BLUE).getStudents() == 1);
     }
+
+     */
 
     @Test
     @DisplayName("2 Players Game")

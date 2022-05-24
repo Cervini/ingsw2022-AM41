@@ -27,7 +27,7 @@ public class Client {
             while ((writtenString = stdIn.readLine()) != null) {
                 if (ping.isServerReachable()) {
                     if (serverWasOffline) {
-                        // serve solo quando avviamo il client ma il server non e' ancora raggiungibile
+                        // used when Client starts before Server
                         createClientServerSocket();
                     }
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.communication.GamePack;
 import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 
@@ -25,7 +26,8 @@ public class ReadThread implements Runnable{
             try {
                 msg = (Message) in.readObject(); // try reading a Message object from in
                 if(msg.getCommand() == Command.STATUS){
-                    msg.getStatus().printPack();
+                    GamePack gamePack = msg.getStatus();
+                    gamePack.printPack();
                 }
                 if(msg.getCommand() == Command.PONG){
                     // TODO reaction to PONG

@@ -145,7 +145,7 @@ public class PlayerTest {
             System.out.println(e);
         }
 
-        assertEquals(player.getFace_up_assistant(), assistant);
+        assertEquals(player.getSchool().getFace_up_assistant(), assistant);
     }
 
     @Test
@@ -182,5 +182,20 @@ public class PlayerTest {
         }
 
         assertNull(player.getFace_up_assistant());
+    }
+
+    @Test
+    void PlayAssistantIndexTest(){
+        Game game = new Game(2);
+
+        Assistant played = game.getPlayers().getFirst().getAssistants().get(4);
+
+        try {
+            game.getPlayers().getFirst().playAssistant(4);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(played, game.getPlayers().getFirst().getSchool().getFace_up_assistant());
     }
 }

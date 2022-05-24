@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class GamePack implements Serializable {
 
@@ -14,6 +15,7 @@ public class GamePack implements Serializable {
     private List<SchoolBoard> schoolBoards;
     private List<Assistant> assistants;
     private List<Cloud> clouds;
+    private int random;
 
 
     /**
@@ -22,15 +24,17 @@ public class GamePack implements Serializable {
      * @param client player whose view is being packed
      */
     public GamePack(Game game, ClientHandler client){
-        islands = game.getArchipelago();
-        schoolBoards = new ArrayList<>();
+        Random rand = new Random();
+        islands = game.getArchipelago(); // get islands from game
+        schoolBoards = new ArrayList<>(); // create empty list of school boards
         for(Player player: game.getPlayers()){
-            schoolBoards.add(player.getSchool());
+            schoolBoards.add(player.getSchool()); // for each player get the school board
         }
-        assistants = new LinkedList<>();
-        assistants.addAll(game.getPlayer(client.getUsername()).getAssistants());
-        clouds = new LinkedList<>();
-        clouds.addAll(game.getClouds());
+        assistants = new LinkedList<>(); // create empty list of Assistants
+        assistants.addAll(game.getPlayer(client.getUsername()).getAssistants()); // get the Assistants from the client player
+        clouds = new LinkedList<>(); // create empty list of clouds
+        clouds.addAll(game.getClouds()); // get the clouds from game
+        random = rand.nextInt(50);
     }
 
     public void updateGamePack(Game game, ClientHandler client){
@@ -91,9 +95,7 @@ public class GamePack implements Serializable {
         }
     }
     private void printIsland(Island island){
-        //System.out.print("Towers: ");
         printIslandTowers(island);
-        //System.out.print(" | Students: ");
         printIslandStudents(island);
         if(island.isMother_nature())
             System.out.print("| M |");
@@ -186,8 +188,10 @@ public class GamePack implements Serializable {
 
     void printFaceUpAssistant(SchoolBoard schoolBoard){
         System.out.print("Last played Assistant|-> ");
-        if(schoolBoard.getFace_up_assistant()!=null){
+        try {
             System.out.println("Value: " + schoolBoard.getFace_up_assistant().getValue() + " |Movement: " + schoolBoard.getFace_up_assistant().getMovement_points());
+        } catch (NullPointerException e) {
+            System.out.print("Not played yet");
         }
         System.out.println();
     }

@@ -39,24 +39,6 @@ class GamePackTest {
             throw new RuntimeException(e);
         }
 
-        try {
-            game.getPlayers().get(2).getSchool().putStudent(new Student(Colour.RED));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            game.getPlayers().get(2).getSchool().putStudent(new Student(Colour.GREEN));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            game.getPlayers().get(3).getSchool().putStudent(new Student(Colour.PINK));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
         game.moveProfessor(Colour.RED, game.getPlayers().getFirst());
         game.moveProfessor(Colour.BLUE, game.getPlayers().getFirst());
 
