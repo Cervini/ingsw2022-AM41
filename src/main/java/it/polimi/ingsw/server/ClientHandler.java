@@ -5,9 +5,11 @@ import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.server.controller.*;
-import it.polimi.ingsw.server.controller.PlanningController;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.LinkedList;
@@ -64,12 +66,8 @@ public class ClientHandler implements Runnable{
                                 case LOGOUT -> response = LoginController.processLogout(this);
                                 case START -> response = GameController.start(request, this, clients);
 
-                                case PLAY -> response = PlanningController.play(request, this, currentGamePhase);
 
-
-                                case PLACE -> response = ActionController.place(request, this, currentGamePhase);
-                                case MOVE -> response = ActionController.move(request, this,currentGamePhase);
-                                case CHOOSE -> response = ActionController.choose(request, this,currentGamePhase);
+                                case PLAY, CHOOSE, PLACE, MOVE -> response = PlanningController.play(request, this, currentGamePhase);
 
 
                                 case STATUS -> response = new GameResultsController().getStatus(request, this);
@@ -77,12 +75,8 @@ public class ClientHandler implements Runnable{
                             }
                             // end of not PING commands
                         }
-
-                       if ( this.getGame() == null || this.getGame().endGame() == null){ //o il gioco non è ancora inizato oppure non c'è ancoar un vincitore
-
-                           out.writeObject(response); // send through output stream the msg in String form
-                            out.flush(); }
-
+                        out.writeObject(response); // send through output stream the msg in String form
+                        out.flush();
                         if(game!=null){
                             updateStatus();
                         }
@@ -189,6 +183,4 @@ public class ClientHandler implements Runnable{
     public GamePhase getCurrentGamePhase() {
         return currentGamePhase;
     }
-
-
 }

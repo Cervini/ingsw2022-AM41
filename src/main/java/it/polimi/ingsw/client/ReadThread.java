@@ -38,7 +38,7 @@ public class ReadThread implements Runnable{
                 }
                 //throw new RuntimeException(e);
             }
-            if(msg!=null) // if the message is not null
+            if((msg!=null)&&(msg.getCommand()!=Command.STATUS)) // if the message is not null
                 System.out.println("Server says: " + msg); // print the content of the message
         }
     }

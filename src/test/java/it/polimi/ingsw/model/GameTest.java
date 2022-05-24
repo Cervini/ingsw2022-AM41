@@ -597,7 +597,7 @@ class GameTest {
     @Test
     void moveStudentTest1() throws Exception {
         Game game = new Game(2);
-        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
         List<Student> islandStudents = game.getArchipelago().get(0).getStudents();
         Student student = new Student(Colour.RED);
         game.getPlayers().getFirst().getSchool().putStudent(student);
@@ -612,7 +612,7 @@ class GameTest {
     @Test
     void moveStudentTest2() throws Exception {
         Game game = new Game(2);
-        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
         Student student = new Student(Colour.RED);
         game.getPlayers().getFirst().getSchool().putStudent(student);
         game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED), student);
@@ -625,7 +625,7 @@ class GameTest {
     @Test
     void moveStudentTest3() throws Exception {
         Game game = new Game(2);
-        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
         List<Student> islandStudents = game.getArchipelago().get(0).getStudents();
         Student student = new Student(Colour.BLUE);
         game.getPlayers().getFirst().getSchool().putStudent(student);
@@ -640,7 +640,7 @@ class GameTest {
     @Test
     void moveStudentTest4() throws Exception {
         Game game = new Game(2);
-        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
         Student student = new Student(Colour.BLUE);
         game.getPlayers().getFirst().getSchool().putStudent(student);
         game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getPlayers().getFirst().getSchool().getDining_room(Colour.BLUE), student);
