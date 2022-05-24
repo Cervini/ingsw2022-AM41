@@ -17,7 +17,6 @@ public class Game{
     // constants
     private static final int minimumNumberOfIslands = 3;
     private static final int starting_students = 120;
-    private static final int noEntryCharacterNumber = 4;
 
     /**
      * prepares the game
@@ -252,7 +251,6 @@ public class Game{
             }
         } else {
             island.setNo_entry(false);
-            characters.get(findNoEntryCharacter(characters));
         }
     }
 
@@ -327,15 +325,6 @@ public class Game{
         for(Cloud cloud: clouds){
             fillCloud(cloud);
         }
-    }
-
-    private int findNoEntryCharacter(LinkedList<Character> characters){
-        for(Character characterToCheck: characters){
-            if(characterToCheck.getCharacterNumber() == noEntryCharacterNumber){
-                return characters.indexOf(characterToCheck);
-            }
-        }
-        return -1;
     }
 
     public LinkedList<Player> getPlayers() {

@@ -117,9 +117,9 @@ public class Island implements Tile, Serializable {
                 }
             }
         }
-        //else {
-            //throw  new Exception("Player can't conquer the island"); // TODO define better exception
-        //}
+        else {
+            throw  new Exception("Player can't conquer the island"); // TODO define better exception
+        }
     }
 
     public int getIsland_size() {
@@ -234,9 +234,9 @@ public class Island implements Tile, Serializable {
                 }
             }
         }
-        //else {
-            //throw  new Exception("Player can't conquer the island"); // TODO define better exception
-        //}
+        else {
+            throw  new Exception("Player can't conquer the island"); // TODO define better exception
+        }
     }
 
     //Same function as above, but it gets called when the power of character 9 is active
