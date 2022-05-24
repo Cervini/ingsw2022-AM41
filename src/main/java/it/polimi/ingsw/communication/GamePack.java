@@ -10,9 +10,10 @@ import java.util.List;
 
 public class GamePack implements Serializable {
 
-    private final List<Island> islands;
-    private final List<SchoolBoard> schoolBoards;
-    private final List<Assistant> assistants;
+    private List<Island> islands;
+    private List<SchoolBoard> schoolBoards;
+    private List<Assistant> assistants;
+    private List<Cloud> clouds;
 
 
     /**
@@ -26,7 +27,22 @@ public class GamePack implements Serializable {
         for(Player player: game.getPlayers()){
             schoolBoards.add(player.getSchool());
         }
-        assistants = game.getPlayer(client.getUsername()).getAssistants();
+        assistants = new LinkedList<>();
+        assistants.addAll(game.getPlayer(client.getUsername()).getAssistants());
+        clouds = new LinkedList<>();
+        clouds.addAll(game.getClouds());
+    }
+
+    public void updateGamePack(Game game, ClientHandler client){
+        schoolBoards.clear();
+        assistants.clear();
+        clouds.clear();
+        islands = game.getArchipelago();
+        for(Player player: game.getPlayers()){
+            schoolBoards.add(player.getSchool());
+        }
+        assistants.addAll(game.getPlayer(client.getUsername()).getAssistants());
+        clouds.addAll(game.getClouds());
     }
 
     /**
@@ -39,12 +55,16 @@ public class GamePack implements Serializable {
         for(Player player: game.getPlayers()){
             schoolBoards.add(player.getSchool());
         }
-        assistants = game.getPlayers().getFirst().getAssistants();
+        assistants = new LinkedList<>();
+        assistants.addAll(game.getPlayers().getFirst().getAssistants());
+        clouds = new LinkedList<>();
+        clouds.addAll(game.getClouds());
     }
 
     public void printPack(){
-        System.out.println("---------------------------------");
+        System.out.println("\n---------------------------------");
         printArchipelago();
+        printClouds();
         System.out.println("---------------------------------");
         printSchoolBoards();
         System.out.println("---------------------------------");
@@ -59,6 +79,17 @@ public class GamePack implements Serializable {
         }
     }
 
+    private void printClouds(){
+        for(Cloud cloud: clouds){
+            System.out.print("|Cloud " + clouds.indexOf(cloud) + "| ->");
+            for(Student student: cloud.getStudents()){
+                System.out.print(changeColorStudent(student.getColour()));
+                System.out.print("S ");
+                System.out.print(RESET);
+            }
+            System.out.println();
+        }
+    }
     private void printIsland(Island island){
         //System.out.print("Towers: ");
         printIslandTowers(island);
@@ -104,35 +135,17 @@ public class GamePack implements Serializable {
             printDiningStudents(diningRoom);
         }
         printSchoolBoardTowers(schoolBoard);
+        printProfessors(schoolBoard);
         printFaceUpAssistant(schoolBoard);
     }
 
-    private String changeColorTower(TowerColour colour){
-        if(colour!=null){
-            switch(colour){
-                case WHITE -> {
-                    return WHITE;
-                }
-                case BLACK -> {
-                    return BLACK;
-                }
-                case GREY -> {
-                    return GREY;
-                }
-            }
+    private void printProfessors(SchoolBoard schoolBoard){
+        System.out.print("Professors: ");
+        for(Professor professor: schoolBoard.getOwned_professor()){
+            System.out.print(changeColorStudent(professor.getColour()));
+            System.out.print(" P" + RESET);
         }
-        return null;
-    }
-
-    private String changeColorStudent(Colour colour){
-        switch(colour){
-            case PINK -> {return PINK;}
-            case BLUE -> {return BLUE;}
-            case RED -> {return RED;}
-            case GREEN -> {return GREEN;}
-            case YELLOW -> {return YELLOW;}
-        }
-        return null;
+        System.out.println();
     }
 
     private void printEntranceStudents(SchoolBoard schoolBoard){
@@ -171,10 +184,49 @@ public class GamePack implements Serializable {
         System.out.println("Value: " + assistant.getValue() + " |Movement: " + assistant.getMovement_points());
     }
 
-    private void printFaceUpAssistant(SchoolBoard schoolBoard){
+    void printFaceUpAssistant(SchoolBoard schoolBoard){
+        System.out.print("Last played Assistant|-> ");
         if(schoolBoard.getFace_up_assistant()!=null){
-            System.out.println("Last played Assistant|-> Value: " + schoolBoard.getFace_up_assistant().getValue() + " |Movement: " + schoolBoard.getFace_up_assistant().getMovement_points());
+            System.out.println("Value: " + schoolBoard.getFace_up_assistant().getValue() + " |Movement: " + schoolBoard.getFace_up_assistant().getMovement_points());
         }
+        System.out.println();
+    }
+
+    public int countFaceUpAssistant(){
+        int count = 0;
+        for(SchoolBoard schoolBoard: schoolBoards){
+            if(schoolBoard.getFace_up_assistant()!=null)
+                count++;
+        }
+        return count;
+    }
+
+    private String changeColorTower(TowerColour colour){
+        if(colour!=null){
+            switch(colour){
+                case WHITE -> {
+                    return WHITE;
+                }
+                case BLACK -> {
+                    return BLACK;
+                }
+                case GREY -> {
+                    return GREY;
+                }
+            }
+        }
+        return null;
+    }
+
+    private String changeColorStudent(Colour colour){
+        switch(colour){
+            case PINK -> {return PINK;}
+            case BLUE -> {return BLUE;}
+            case RED -> {return RED;}
+            case GREEN -> {return GREEN;}
+            case YELLOW -> {return YELLOW;}
+        }
+        return null;
     }
 
     public static final String WHITE = "\033[1;97m";
@@ -186,4 +238,8 @@ public class GamePack implements Serializable {
     public static final String YELLOW = "\033[1;93m";
     public static final String BLUE = "\033[1;94m";
     public static final String PINK = "\033[1;95m";
+
+    public List<SchoolBoard> getSchoolBoards() {
+        return schoolBoards;
+    }
 }

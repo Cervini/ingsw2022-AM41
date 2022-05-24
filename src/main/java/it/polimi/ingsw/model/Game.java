@@ -13,6 +13,7 @@ public class Game{
     private LinkedList<Character> characters;
     private String status; // status of the game
 
+
     // constants
     private static final int minimumNumberOfIslands = 3;
     private static final int starting_students = 120;
@@ -264,6 +265,8 @@ public class Game{
         for(Student s: cloud.getStudents()){
             player.getSchool().putStudent(s);
             cloud.removeStudent(s);
+
+
         }
     }
 
@@ -384,4 +387,5 @@ public class Game{
     public void setCharacters(LinkedList<Character> characters) {
         this.characters = characters;
     }
+
 }

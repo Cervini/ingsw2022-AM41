@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cloud implements Tile {
+public class Cloud implements Tile, Serializable {
 
     private final List<Student> students;
     private final int maxStudents;

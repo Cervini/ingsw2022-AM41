@@ -15,8 +15,6 @@ class GameTest {
         game.fillCloud(game.getClouds().get(0));
 
         assertEquals(3, game.getClouds().get(0).getStudents().size());
-
-        System.out.println("fillCloudTest1 complete");
     }
 
     @Test
@@ -25,8 +23,6 @@ class GameTest {
         game.fillCloud(game.getClouds().get(0));
 
         assertEquals(4, game.getClouds().get(0).getStudents().size());
-
-        System.out.println("fillCloudTest2 complete");
     }
 
     @Test
@@ -35,8 +31,6 @@ class GameTest {
         game.fillCloud(game.getClouds().get(2));
 
         assertEquals(3, game.getClouds().get(2).getStudents().size());
-
-        System.out.println("fillCloudTest3 complete");
     }
 
     @Test
@@ -47,8 +41,6 @@ class GameTest {
         game.fillCloud(game.getClouds().get(2));
 
         assertEquals(3, game.getClouds().get(2).getStudents().size());
-
-        System.out.println("fillCloudTest4 complete");
     }
 
     @Test
@@ -61,8 +53,6 @@ class GameTest {
         game.fillCloud(game.getClouds().get(2));
 
         assertTrue(game.getBag().size() == bagSize - 3);
-
-        System.out.println("fillCloudTest5 complete");
     }
 
     @Test
@@ -135,8 +125,6 @@ class GameTest {
         game.getPlayers().getFirst().getSchool().takeTowers(8);
 
         assertEquals(game.endGame(), game.getPlayers().getFirst().getTeam());
-
-        System.out.println("endGameTest1 complete");
     }
 
     @Test
@@ -147,8 +135,6 @@ class GameTest {
         game.getPlayers().getLast().getSchool().takeTowers(6);
 
         assertEquals(game.endGame(), game.getPlayers().getLast().getTeam());
-
-        System.out.println("endGameTest2 complete");
     }
 
     @Test
@@ -161,8 +147,6 @@ class GameTest {
         game.getPlayers().get(0).getSchool().takeTowers(7);
 
         assertEquals(game.endGame(), game.getPlayers().getFirst().getTeam());
-
-        System.out.println("endGameTest3 complete");
     }
 
     @Test
@@ -191,8 +175,6 @@ class GameTest {
         game.getBag().clear();
 
         assertTrue(game.endGame() != null);
-
-        System.out.println("endGameTest7 complete");
     }
 
     @Test
@@ -228,8 +210,6 @@ class GameTest {
         assertFalse(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertFalse(island1.isMother_nature());
-
-        System.out.println("mergeTest1 complete");
     }
 
     @Test
@@ -266,8 +246,6 @@ class GameTest {
         assertTrue(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertFalse(island1.isMother_nature());
-
-        System.out.println("mergeTest2 complete");
     }
 
     @Test
@@ -301,8 +279,6 @@ class GameTest {
         assertTrue(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertTrue(island1.isMother_nature());
-
-        System.out.println("mergeTest3 complete");
     }
 
     @Test
@@ -354,8 +330,6 @@ class GameTest {
         assertFalse(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertTrue(island1.isMother_nature());
-
-        System.out.println("mergeTest4 complete");
     }
 
     @Test
@@ -416,8 +390,6 @@ class GameTest {
         assertTrue(island1.getNo_entry());
         assertEquals(island1.getStudents(), students);
         assertTrue(island1.isMother_nature());
-
-        System.out.println("mergeTest5 complete");
     }
 
     @Test
@@ -435,8 +407,6 @@ class GameTest {
         }
 
         assertTrue(archipelagoTest.get(3).isMother_nature());
-
-        System.out.println("moveMotherNatureTest1 complete");
     }
 
     @Test
@@ -454,8 +424,6 @@ class GameTest {
         }
 
         assertTrue(archipelagoTest.get(1).isMother_nature());
-
-        System.out.println("moveMotherNatureTest2 complete");
     }
 
     @Test
@@ -478,8 +446,6 @@ class GameTest {
         }
 
         assertTrue(archipelagoTest.get(6).isMother_nature());
-
-        System.out.println("moveMotherNatureTest3 complete");
     }
 
     @Test
@@ -502,8 +468,6 @@ class GameTest {
         }
 
         assertTrue(archipelagoTest.get(2).isMother_nature());
-
-        System.out.println("moveMotherNatureTest4 complete");
     }
 
     @Test
@@ -526,8 +490,6 @@ class GameTest {
         }
 
         assertTrue(archipelagoTest.get(2).isMother_nature());
-
-        System.out.println("moveMotherNatureTest5 complete");
     }
 
     @Test
@@ -546,8 +508,6 @@ class GameTest {
         }
 
         assertTrue(archipelagoTest.get(3).isMother_nature());
-
-        System.out.println("moveMotherNatureTest6 complete");
     }
 
     @Test
@@ -597,7 +557,7 @@ class GameTest {
     @Test
     void moveStudentTest1() throws Exception {
         Game game = new Game(2);
-        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
         List<Student> islandStudents = game.getArchipelago().get(0).getStudents();
         Student student = new Student(Colour.RED);
         game.getPlayers().getFirst().getSchool().putStudent(student);
@@ -605,27 +565,23 @@ class GameTest {
         islandStudents.add(student);
 
         assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getArchipelago().get(0).getStudents().equals(islandStudents));
-
-        System.out.println("moveStudentTest1 complete");
     }
 
     @Test
     void moveStudentTest2() throws Exception {
         Game game = new Game(2);
-        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
         Student student = new Student(Colour.RED);
         game.getPlayers().getFirst().getSchool().putStudent(student);
         game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED), student);
 
         assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).getStudents() == 1);
-
-        System.out.println("moveStudentTest2 complete");
     }
 
     @Test
     void moveStudentTest3() throws Exception {
         Game game = new Game(2);
-        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
         List<Student> islandStudents = game.getArchipelago().get(0).getStudents();
         Student student = new Student(Colour.BLUE);
         game.getPlayers().getFirst().getSchool().putStudent(student);
@@ -633,14 +589,12 @@ class GameTest {
         islandStudents.add(student);
 
         assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getArchipelago().get(0).getStudents().equals(islandStudents));
-
-        System.out.println("moveStudentTest3 complete");
     }
 
     @Test
     void moveStudentTest4() throws Exception {
         Game game = new Game(2);
-        ArrayList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
+        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
         Student student = new Student(Colour.BLUE);
         game.getPlayers().getFirst().getSchool().putStudent(student);
         game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getPlayers().getFirst().getSchool().getDining_room(Colour.BLUE), student);

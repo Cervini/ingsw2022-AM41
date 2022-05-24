@@ -5,9 +5,11 @@ import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.server.controller.*;
-import it.polimi.ingsw.server.controller.PhaseController;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.LinkedList;
@@ -50,7 +52,6 @@ public class ClientHandler implements Runnable{
                     // flush output stream
                     if(request.getCommand()!=Command.PING){ // if it's not a PING message
                         // parsing of not PING commands
-                        //System.out.println(username + " said: " + request); // print the received message
                         Message response = null;// flush output stream
                         // send through output stream the msg in String form
                         if((username.equals("new client"))&&(request.getCommand()!=Command.LOGIN)){
@@ -63,16 +64,10 @@ public class ClientHandler implements Runnable{
                                 case LOGIN -> response = LoginController.processLogin(request, this);
                                 case LOGOUT -> response = LoginController.processLogout(this);
                                 case START -> response = GameController.start(request, this, clients);
-
-
-                                case PLAY -> response = PhaseController.play(request, this, currentGamePhase);
-
-
-                                case PLACE -> response = PhaseController.play(request, this,currentGamePhase);
-                                case MOVE -> response = PhaseController.play(request, this,currentGamePhase);
-                                case CHOOSE -> response = PhaseController.play(request, this,currentGamePhase);
-
-
+                                case PLAY -> response = PlanningController.play(request, this, currentGamePhase);
+                                case MOVE -> response = ActionController.move(request, this, currentGamePhase);
+                                case PLACE -> response = ActionController.place(request, this, currentGamePhase);
+                                case CHOOSE -> response = ActionController.choose(request, this, currentGamePhase);
                                 case STATUS -> response = new GameResultsController().getStatus(request, this);
                                 case NULL -> response = new Message("NULL");
                             }
@@ -112,9 +107,6 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    //Message response = new Message("game");
-    //response.setGame(game);
-
     public String getUsername() {
         return username;
     }
@@ -127,19 +119,15 @@ public class ClientHandler implements Runnable{
     public void setGame(Game game) {
         this.game = game;
     }
-
     public ObjectInputStream getIn() {
         return in;
     }
-
     public ObjectOutputStream getOut() {
         return out;
     }
-
     public List<ClientHandler> getClients() {
         return clients;
     }
-
     public boolean isAvailable(){
         return game == null;
     }

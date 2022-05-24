@@ -100,20 +100,5 @@ public class GameController extends BaseController {
         }
     }
 
-    public static Message processChoose(Message message, ClientHandler client){
-        Message output = new Message("string");
-        Game game = client.getGame();
-        if(game.getClouds().get(message.getArgNum1()).getStudents().size()==0){
-            output.setArgString("Can't choose this cloud, it has been already chosen by another player");
-            return output;
-        } else {
-            try {
-                game.chooseCloud(game.getClouds().get(message.getArgNum1()), game.getPlayer(client.getUsername()));
-                output.setArgString("Students move to your School Board");
-            } catch (Exception e) {
-                output.setArgString("Impossible move, try another");
-            }
-        }
-        return output;
-    }
+
 }

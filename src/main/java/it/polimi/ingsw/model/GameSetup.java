@@ -110,12 +110,13 @@ public class GameSetup {
 
                     case 3 -> {
                         for (int i = 0; i < 10; i++)  //9 students
-                            p.getSchool().putStudent(bag.get(i));
+                            p.getSchool().getEntrance().add(bag.get(i));
+
                     }
 
                     default -> {
                         for (int i = 0; i < 7; i++)  //7 students
-                            p.getSchool().putStudent(bag.get(i));
+                            p.getSchool().getEntrance().add(bag.get(i));
                     }
 
                 }

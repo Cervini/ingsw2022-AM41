@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Player implements Comparable{
@@ -13,7 +14,6 @@ public class Player implements Comparable{
     private final LinkedList<Assistant> assistants; // list of not yet played assistant cards
     private final TowerColour team; // color of the player's towers, determines the team in 4 player mode
     private boolean turn; // if true it's the player's turn
-    private final ArrayList<Professor> owned_professor; // list of all the currently owned professors
     private int coins; // number of owned coins
     private final SchoolBoard school; // School_board associated with the player
     private final boolean tower_holder; // used to check winners and the end of the game is set true if the player hold the towers for the team
@@ -22,7 +22,6 @@ public class Player implements Comparable{
     // default constructor, creates the player and gives them 8 towers
     public Player(TowerColour team) {
         this.team = team;
-        this.owned_professor = new ArrayList<>();
         this.turn = false;
         this.coins = 1;
         this.assistants = new LinkedList<>();
@@ -36,7 +35,6 @@ public class Player implements Comparable{
     // alternative constructor, creates the player and gives them nTowers number of tower
     public Player(TowerColour team, int nTowers) {
         this.team = team;
-        this.owned_professor = new ArrayList<>();
         this.turn = false;
         this.coins = 1;
         this.assistants = new LinkedList<>();
@@ -111,8 +109,8 @@ public class Player implements Comparable{
         this.turn = turn;
     }
 
-    public ArrayList<Professor> getOwned_professor() {
-        return owned_professor;
+    public List<Professor> getOwned_professor() {
+        return school.getOwned_professor();
     }
 
     public int getCoins() {
@@ -167,9 +165,9 @@ public class Player implements Comparable{
 
     public Professor removeProfessor(Colour colour){
         Professor professorRemoved = null;
-        for(Professor professorToCheck: owned_professor){
+        for(Professor professorToCheck: school.getOwned_professor()){
             if(professorToCheck.getColour().equals(colour)){
-                owned_professor.remove(professorToCheck);
+                school.getOwned_professor().remove(professorToCheck);
                 professorRemoved = professorToCheck;
             }
         }
@@ -177,6 +175,6 @@ public class Player implements Comparable{
     }
 
     public void addProfessor(Professor professor){
-        owned_professor.add(professor);
+        school.getOwned_professor().add(professor);
     }
 }

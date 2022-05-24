@@ -3,23 +3,26 @@ package it.polimi.ingsw.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+
 
 public class SchoolBoard implements Tile, Serializable {
 
-    private ArrayList<Student> entrance; // list of students at the entrance section of the School_board
+    private LinkedList<Student> entrance; // list of students at the entrance section of the School_board
     private ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
     private int towers; // number of towers currently on the School_board
     private String owner;
     private TowerColour team;
-
-    private Assistant face_up_assistant = null;
+    private Assistant face_up_assistant;
+    private List<Professor> owned_professor; // list of all the currently owned professors
 
     /**
      * default constructor sets up School_board with 8 towers
      */
     public SchoolBoard(Player owner){
-        this.entrance = new ArrayList<>(9);
+        this.entrance = new LinkedList<>();
         this.dining_rooms = new ArrayList<>(5);
+        this.owned_professor = new ArrayList<>();
         /* initialize a dining_room for every color */
         for(Colour colour : Colour.values()){
             dining_rooms.add(new DiningRoom(colour));
@@ -27,6 +30,7 @@ public class SchoolBoard implements Tile, Serializable {
         this.towers = 8;
         this.owner = owner.getPlayer_id();
         this.team = owner.getTeam();
+        this.face_up_assistant = null;
     }
 
     /**
@@ -34,7 +38,8 @@ public class SchoolBoard implements Tile, Serializable {
      *  @requires towers >= 0
      */
     public SchoolBoard(int towers, Player owner) {
-        this.entrance = new ArrayList<>(9);
+        this.entrance = new LinkedList<>();
+        this.owned_professor = new ArrayList<>();
         this.dining_rooms = new ArrayList<>(5);
         /* initialize a dining_room for every color */
         for(Colour colour : Colour.values()){
@@ -43,6 +48,7 @@ public class SchoolBoard implements Tile, Serializable {
         this.towers = towers;
         this.owner = owner.getPlayer_id();
         this.team = owner.getTeam();
+        this.face_up_assistant = null;
     }
 
     public int getEntranceSize(){
@@ -107,22 +113,20 @@ public class SchoolBoard implements Tile, Serializable {
      * add a student to entrance
      */
     @Override
-    public void putStudent(Student student)  {
+    public void putStudent(Student student) throws Exception {
         if(entrance.size()<9)
             entrance.add(student);
-        /*else{
-            throw new Exception("Entrance board is already full"); // TODO define a better exception
-        }*/
+        else throw new Exception("Entrance is full");
     }
 
     @Override
-    public void removeStudent(Student student) {
+    public void removeStudent (Student student) {
         entrance.remove(student);
     }
 
     public void resetTowers(int newTowerNumber) {towers = newTowerNumber;}
 
-    public ArrayList<Student> getEntrance() {
+    public LinkedList<Student> getEntrance() {
         return entrance;
     }
 
@@ -152,5 +156,17 @@ public class SchoolBoard implements Tile, Serializable {
 
     public void putStudents(LinkedList<Student> studentsToAdd) {
         entrance.addAll(studentsToAdd);
+    }
+
+    public List<Professor> getOwned_professor() {
+        return owned_professor;
+    }
+
+    public void setOwned_professor(List<Professor> owned_professor) {
+        this.owned_professor = owned_professor;
+    }
+
+    public void setOwned_professor(LinkedList<Professor> owned_professor) {
+        this.owned_professor = owned_professor;
     }
 }
