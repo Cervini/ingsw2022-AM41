@@ -65,9 +65,9 @@ public class ClientHandler implements Runnable{
                                 case LOGOUT -> response = LoginController.processLogout(this);
                                 case START -> response = GameController.start(request, this, clients);
                                 case PLAY -> response = PlanningController.play(request, this, currentGamePhase);
-                                case MOVE -> response = PlanningController.play(request, this, currentGamePhase);
-                                case PLACE -> response = PlanningController.play(request, this, currentGamePhase);
-                                case CHOOSE -> response = PlanningController.play(request, this, currentGamePhase);
+                                case MOVE -> response = ActionController.move(request, this, currentGamePhase);
+                                case PLACE -> response = ActionController.place(request, this, currentGamePhase);
+                                case CHOOSE -> response = ActionController.choose(request, this, currentGamePhase);
                                 case STATUS -> response = new GameResultsController().getStatus(request, this);
                                 case NULL -> response = new Message("NULL");
                             }

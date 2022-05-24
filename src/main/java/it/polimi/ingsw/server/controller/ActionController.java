@@ -105,30 +105,26 @@ public class ActionController {
      * @return a new STRING message containing the
      */
     public static Message processPlace(Message request, ClientHandler client) {
-        Player currentPlayer = client.getGame().getPlayer(client.getUsername());
-        Message output = new Message("string");
-
-        try  {
-            output = new Message("string");
-            if (request.getArgNum1() >= currentPlayer.getSchool().getEntranceSize()) {
-                output.setArgString("Non existing student, please retry"); //TODO: spostare fuori come eccezione
-            } else {
-
-                Student played = currentPlayer.getSchool().getEntrance().get(request.getArgNum1());
-                currentPlayer.getSchool().removeStudent(played); //removes student from entrance
-
-                switch (request.getTo_tile()){
-                    case DINING -> currentPlayer.getSchool().getDining_rooms().get(request.getArgNum2()).putStudent(played);
-                    case ISLAND -> client.getGame().getArchipelago().get(request.getArgNum2()).putStudent(played);
+        Player currentPlayer = client.getGame().getPlayer(client.getUsername()); // get the player who sent command PLACE
+        Message output = new Message("string"); // set up output message
+        if (request.getArgNum1() >= currentPlayer.getSchool().getEntranceSize()) { // if the argument refers to a non-existing student
+            output.setArgString("Non existing student, please retry"); //TODO: spostare fuori come eccezione
+            return output;
+        } else {
+            Student played = currentPlayer.getSchool().getEntrance().get(request.getArgNum1()); // get
+            currentPlayer.getSchool().removeStudent(played); //removes student from entrance
+            switch (request.getTo_tile()){
+                case DINING -> {
+                    try {
+                        currentPlayer.getSchool().getDining_rooms().get(request.getArgNum2()).putStudent(played);
+                    } catch (Exception ex) {
+                        output.setArgString("Can't move the student, please retry");
+                    }
                 }
-                output.setArgString("Student placed");
-
+                case ISLAND -> client.getGame().getArchipelago().get(request.getArgNum2()).putStudent(played);
             }
-        } catch (Exception e) {
-            output.setArgString("There are no more seats in the dining room, please retry ");
+            output.setArgString("Student placed");
         }
-
-
         return output;
     }
 
