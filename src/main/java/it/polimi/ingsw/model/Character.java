@@ -130,7 +130,7 @@ public class Character{
         return modifiedGame;
     }
 
-    //Character 1 (case 0)
+    //Character 1 (case 0), play on call
     private Game effect1(Game game, Student selectedStudent, Island island){
         int indexOfIslandToEdit;
         if(needToSetStudent) {
@@ -146,19 +146,19 @@ public class Character{
         return game;
     }
 
-    //Character 2 (case 1)
+    //Character 2 (case 1), play at the end of the turn
     private Game effect2(Game game, Player player, Island island) {
         game = characterFunctions.checkInfluenceWithModifiedBoard(game, player, island);
         return game;
     }
 
-    //Character 3 (case 2)
+    //Character 3 (case 2), play on call
     private Game effect3(Game game, Island island){
         game = characterFunctions.checkInfluenceOnSpecificIsland(game, island);
         return game;
     }
 
-    //Character 4 (case 3)
+    //Character 4 (case 3), play on call
     private Game effect4(Game game, Assistant assistant){
         int playerIndex = -1;
         for(Player playerToCheck: game.getPlayers()){
@@ -170,7 +170,7 @@ public class Character{
         return game;
     }
 
-    //Character 5 (case 4)
+    //Character 5 (case 4), play on call
     private Game effect5(Game game, Island island){
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(island);
@@ -181,13 +181,13 @@ public class Character{
         return game;
     }
 
-    //Character 6 (case 5)
+    //Character 6 (case 5), play at the end of the turn
     private Game effect6(Game game){
         game = characterFunctions.checkInfluenceWithoutTowers(game);
         return game;
     }
 
-    //Character 7 (case 6)
+    //Character 7 (case 6), play on call
     private Game effect7(Game game, Player player, LinkedList<Student> studentsToAdd, LinkedList<Student> studentsToRemove){
         int playerIndex;
         if(needToSetStudent) {
@@ -204,19 +204,19 @@ public class Character{
         return game;
     }
 
-    //Character 8 (case 7)
+    //Character 8 (case 7), play at the end of the turn
     private Game effect8(Game game, Player player){
         game = characterFunctions.checkInfluenceWithBonus(game, player);
         return game;
     }
 
-    //Character 9 (case 8)
+    //Character 9 (case 8), play at the end of the turn
     private Game effect9(Game game, Colour colour){
         game = characterFunctions.checkInfluenceWithoutColour(game, colour);
         return game;
     }
 
-    //Character 10 (case 9)
+    //Character 10 (case 9), play on call
     private Game effect10(Game game, Player player, Student studentInEntrance1, Student studentInEntrance2, Student studentInDiningRoom1, Student studentInDiningRoom2) throws Exception{
         int playerIndex;
         playerIndex = game.getPlayers().indexOf(player);
@@ -233,7 +233,7 @@ public class Character{
         return game;
     }
 
-    //Character 11 (case 10)
+    //Character 11 (case 10), play on call
     private Game effect11(Game game, Player player, Student student) throws Exception{
         if(needToSetStudent) {
             for (int i = 0; i < set4Students; i++) {
@@ -247,7 +247,7 @@ public class Character{
         return game;
     }
 
-    //Character 12 (case 11)
+    //Character 12 (case 11), play on call
     private Game effect12(Game game, Colour colour) throws Exception{
         for(Player playerToCheck: game.getPlayers()) {
             for (int i = 0; i < numberOfStudentsToRemove; i++) {
