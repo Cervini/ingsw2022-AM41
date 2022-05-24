@@ -1,15 +1,12 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.server.ClientHandler;
 
 import java.util.List;
 
-import static java.util.Collections.sort;
-
 public class GamePhase {
-    private GamePhase current_state;
+
     private Game current_game;
     private Boolean planning_phase = false;
     private Boolean action_phase = false;
@@ -20,7 +17,7 @@ public class GamePhase {
         current_players = players;
     }
 
-    public void validatePlayAssistant(ClientHandler player, GamePhase currentState) throws PlanningPhase.WrongPhaseException, PlanningPhase.WrongTurn {
+    public void validatePlayAssistant(ClientHandler player) throws PlanningPhase.WrongPhaseException, PlanningPhase.WrongTurn {
         if (this instanceof ActionPhase) {
             throw new PlanningPhase.WrongPhaseException();
 
@@ -28,24 +25,23 @@ public class GamePhase {
         //throw new PlanningPhase.WrongPhaseException("Method playAssistant cannot be called from GamePhase parent class");
     }
 
-    public void validatePlaceStudent(ClientHandler player, GamePhase currentState) throws ActionPhase.WrongPhaseException, ActionPhase.WrongTurn {
-        if (this instanceof PlanningPhase) {
-            throw new ActionPhase.WrongPhaseException();
-        }
-        throw new ActionPhase.WrongTurn("Method playAssistant cannot be called from GamePhase parent class");
+    public void validatePlaceStudent(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction {
+        validateCorrectGamePhase("Method validatePlaceStudent cannot be called from GamePhase parent class");
     }
 
+    public void validateMoveMotherNature(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction {
+        validateCorrectGamePhase("Method validateMoveMotherNature cannot be called from GamePhase parent class");
+    }
 
-    public void moveStudents(Message play_request, ClientHandler player, GamePhase current_state){}
-    public void validateMoveMotherNature(Message play_request, ClientHandler player, GamePhase current_state){}
-    public void validateChooseCloud(Message play_request, ClientHandler player, GamePhase current_state){}
+    public void validateChooseCloud(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction {
+        validateCorrectGamePhase("Method validateChooseCloud cannot be called from GamePhase parent class");
+    }
 
-
-
-
-
-    public GamePhase getCurrent_state() {
-        return current_state;
+    private void validateCorrectGamePhase(String msg) throws WrongPhaseException, WrongTurn {
+        if (this instanceof PlanningPhase) {
+            throw new WrongPhaseException();
+        }
+        throw new WrongTurn(msg);
     }
 
     public Boolean isPlanningPhase() {
@@ -68,5 +64,20 @@ public class GamePhase {
         return current_players;
     }
 
+    public static class WrongPhaseException extends Exception {
 
+        public WrongPhaseException() {}
+
+        public WrongPhaseException(String msg) {
+            super(msg);
+        }
+    }
+
+    public static class WrongTurn extends Exception {
+        public WrongTurn() {}
+
+        public WrongTurn(String msg) {
+            super(msg);
+        }
+    }
 }

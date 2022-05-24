@@ -15,7 +15,7 @@ public class PlanningPhase extends GamePhase {
     }
 
     @Override
-    public void validatePlayAssistant(ClientHandler clientHandler, GamePhase currentState) throws PlanningPhase.WrongPhaseException, PlanningPhase.WrongTurn {
+    public void validatePlayAssistant(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn {
         // NEW
         // 1. devo capire se e' il primo player, se si, dobbiamo verificare se ha gia' giocato carta assistente o no
         // 1.1 se ha gia' giocato, ritorniamo un errore
@@ -70,24 +70,6 @@ public class PlanningPhase extends GamePhase {
 
 
 
-    }
-
-
-    public static class WrongPhaseException extends Exception {
-
-        public WrongPhaseException() {}
-
-        public WrongPhaseException(String msg) {
-            super(msg);
-        }
-    }
-
-    public static class WrongTurn extends Exception {
-        public WrongTurn() {}
-
-        public WrongTurn(String msg) {
-            super(msg);
-        }
     }
 
 }

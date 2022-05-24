@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+
+
+
 public class SchoolBoard implements Tile, Serializable {
 
     private ArrayList<Student> entrance; // list of students at the entrance section of the School_board
@@ -108,16 +111,15 @@ public class SchoolBoard implements Tile, Serializable {
      */
     @Override
     public void putStudent(Student student)  {
-        if(entrance.size()<9)
-            entrance.add(student);
-        /*else{
-            throw new Exception("Entrance board is already full"); // TODO define a better exception
-        }*/
+
+        int freeSpot = getEntrance().indexOf(null);
+        entrance.add(freeSpot,student);
+
     }
 
     @Override
-    public void removeStudent(Student student) {
-        entrance.remove(student);
+    public void removeStudent (Student student) {
+        entrance.set(entrance.indexOf(student), null );
     }
 
     public void resetTowers(int newTowerNumber) {towers = newTowerNumber;}

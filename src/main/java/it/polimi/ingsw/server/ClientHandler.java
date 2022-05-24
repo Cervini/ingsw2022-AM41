@@ -5,7 +5,7 @@ import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.server.controller.*;
-import it.polimi.ingsw.server.controller.PhaseController;
+import it.polimi.ingsw.server.controller.PlanningController;
 
 import java.io.*;
 import java.net.Socket;
@@ -64,13 +64,12 @@ public class ClientHandler implements Runnable{
                                 case LOGOUT -> response = LoginController.processLogout(this);
                                 case START -> response = GameController.start(request, this, clients);
 
+                                case PLAY -> response = PlanningController.play(request, this, currentGamePhase);
 
-                                case PLAY -> response = PhaseController.play(request, this, currentGamePhase);
 
-
-                                case PLACE -> response = PhaseController.play(request, this,currentGamePhase);
-                                case MOVE -> response = PhaseController.play(request, this,currentGamePhase);
-                                case CHOOSE -> response = PhaseController.play(request, this,currentGamePhase);
+                                case PLACE -> response = ActionController.place(request, this, currentGamePhase);
+                                case MOVE -> response = ActionController.move(request, this,currentGamePhase);
+                                case CHOOSE -> response = ActionController.choose(request, this,currentGamePhase);
 
 
                                 case STATUS -> response = new GameResultsController().getStatus(request, this);
@@ -78,8 +77,12 @@ public class ClientHandler implements Runnable{
                             }
                             // end of not PING commands
                         }
-                        out.writeObject(response); // send through output stream the msg in String form
-                        out.flush();
+
+                       if ( this.getGame() == null || this.getGame().endGame() == null){ //o il gioco non è ancora inizato oppure non c'è ancoar un vincitore
+
+                           out.writeObject(response); // send through output stream the msg in String form
+                            out.flush(); }
+
                         if(game!=null){
                             updateStatus();
                         }
@@ -186,4 +189,6 @@ public class ClientHandler implements Runnable{
     public GamePhase getCurrentGamePhase() {
         return currentGamePhase;
     }
+
+
 }

@@ -12,7 +12,7 @@ public class Game{
     private List<Cloud> clouds; // list of all the clouds
     private LinkedList<Character> characters;
     private String status; // status of the game
-    private Cloud chosenCloud = null;
+
 
     // constants
     private static final int minimumNumberOfIslands = 3;
@@ -263,7 +263,7 @@ public class Game{
         for(Student s: cloud.getStudents()){
             player.getSchool().putStudent(s);
             cloud.removeStudent(s);
-            chosenCloud = cloud;
+
 
         }
     }
@@ -377,7 +377,4 @@ public class Game{
         this.characters = characters;
     }
 
-    public Cloud getChosenCloud() {
-        return chosenCloud;
-    }
 }
