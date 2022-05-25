@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-public interface Tile {
+import java.io.Serializable;
+
+public interface Tile extends Serializable {
 
     void putStudent(Student student) throws Exception;
 

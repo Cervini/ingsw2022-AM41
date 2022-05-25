@@ -37,10 +37,15 @@ public class GamePack implements Serializable {
         random = rand.nextInt(50);
     }
 
+    /**
+     * updates the information of the same GamePack given a new game status
+     */
     public void updateGamePack(Game game, ClientHandler client){
+        //clear all the lists containing data
         schoolBoards.clear();
         assistants.clear();
         clouds.clear();
+        //refill the lists as done in constructor
         islands = game.getArchipelago();
         for(Player player: game.getPlayers()){
             schoolBoards.add(player.getSchool());
@@ -65,6 +70,9 @@ public class GamePack implements Serializable {
         clouds.addAll(game.getClouds());
     }
 
+    /**
+     * prints the state of the game saved by the GamePack
+     */
     public void printPack(){
         System.out.println("\n---------------------------------");
         printArchipelago();
@@ -205,6 +213,10 @@ public class GamePack implements Serializable {
         return count;
     }
 
+    /**
+     * @param colour
+     * @return string that changes the color of the next printed strings based on colour param
+     */
     private String changeColorTower(TowerColour colour){
         if(colour!=null){
             switch(colour){
@@ -222,6 +234,10 @@ public class GamePack implements Serializable {
         return null;
     }
 
+    /**
+     * @param colour
+     * @return string that changes the color of the next printed strings based on colour param
+     */
     private String changeColorStudent(Colour colour){
         switch(colour){
             case PINK -> {return PINK;}
@@ -242,8 +258,4 @@ public class GamePack implements Serializable {
     public static final String YELLOW = "\033[1;93m";
     public static final String BLUE = "\033[1;94m";
     public static final String PINK = "\033[1;95m";
-
-    public List<SchoolBoard> getSchoolBoards() {
-        return schoolBoards;
-    }
 }

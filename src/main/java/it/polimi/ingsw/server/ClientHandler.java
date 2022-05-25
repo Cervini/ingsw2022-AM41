@@ -153,6 +153,7 @@ public class ClientHandler implements Runnable{
             try {
                 clientHandler.getOut().writeObject(status);
                 clientHandler.getOut().flush();
+                clientHandler.getOut().reset();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
