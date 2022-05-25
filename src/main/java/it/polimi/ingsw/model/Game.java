@@ -103,7 +103,7 @@ public class Game{
 
     //This function moves mother nature from an island to another by finding the island where it is standing now, changing its boolean value of motherNature to false and setting it to true to another island that is exactly after a number of islands equals to "movement"
     public void moveMotherNature(int movement, Player player) throws Exception {
-        if(player.getFace_up_assistant().getMovement_points()>=movement){
+        try { if(player.getFace_up_assistant().getMovement_points()>=movement){
             Island fromIsland = motherNaturePosition();
             int from = archipelago.indexOf(fromIsland);
             archipelago.get((from + movement)% archipelago.size()).setMother_nature(true);
@@ -111,7 +111,10 @@ public class Game{
             islandCheck(archipelago.get((from + movement)% archipelago.size()));
             archipelago.get(from).setMother_nature(false);
         } else {
-            throw new Exception("Can't move Mother Nature this far!");
+            throw new DistanceMotherNatureException("Can't move Mother Nature this far!");
+        }
+        } catch (Exception e){
+            throw new Exception("Player can't conquer the island");
         }
     }
 
@@ -240,13 +243,13 @@ public class Game{
      * checks if any player can conquer the island, to be called when an island is subject to change
      * @param island island to be checked
      */
-    public void islandCheck(Island island){
+    public void islandCheck(Island island) throws Exception {
         if(!island.getNo_entry()){
             for(Player player: players){
                 try {
                     island.conquer(player, players);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    throw new Exception("Player can't conquer the island");
                 }
             }
         } else {
@@ -259,10 +262,15 @@ public class Game{
      * @param cloud chosen cloud
      * @param player player whose entrance is going to be filled
      */
-    public void chooseCloud(Cloud cloud, Player player) throws Exception {
-        for(Student s: cloud.getStudents()){
+    public void chooseCloud(Cloud cloud, Player player)  {
+        /*for(Student s: cloud.getStudents()){
             player.getSchool().putStudent(s);
-            cloud.removeStudent(s);
+            cloud.removeStudent(s); }*/
+        Iterator<Student> students = cloud.getStudents().iterator();
+        while(students.hasNext()){
+            Student student = students.next();
+            player.getSchool().putStudent(student);
+            students.remove();
         }
     }
 
@@ -373,6 +381,13 @@ public class Game{
 
     public void setCharacters(LinkedList<Character> characters) {
         this.characters = characters;
+    }
+
+    public static class DistanceMotherNatureException extends Exception{
+        public DistanceMotherNatureException(){}
+        public DistanceMotherNatureException(String msg){
+            super(msg);
+        }
     }
 
 }

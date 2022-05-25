@@ -61,6 +61,7 @@ public class ClientHandler implements Runnable{
                         } else {
 
                             switch(request.getCommand()){
+
                                 case LOGIN -> response = LoginController.processLogin(request, this);
                                 case LOGOUT -> response = LoginController.processLogout(this);
                                 case START -> response = GameController.start(request, this, clients);

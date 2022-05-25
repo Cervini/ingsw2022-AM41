@@ -204,7 +204,7 @@ public class GamePack implements Serializable {
         System.out.println();
     }
 
-    public int countFaceUpAssistant(){
+    public int countFaceUpAssistant() {
         int count = 0;
         for(SchoolBoard schoolBoard: schoolBoards){
             if(schoolBoard.getFace_up_assistant()!=null)

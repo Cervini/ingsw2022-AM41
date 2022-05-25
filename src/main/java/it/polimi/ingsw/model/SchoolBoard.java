@@ -116,10 +116,10 @@ public class SchoolBoard implements Tile, Serializable {
      * add a student to entrance
      */
     @Override
-    public void putStudent(Student student) throws Exception {
+    public void putStudent(Student student) {
         if(entrance.size()<entrance_max)
             entrance.add(student);
-        else throw new Exception("Entrance is full");
+        //else throw new Exception("Entrance is full");
     }
 
     @Override

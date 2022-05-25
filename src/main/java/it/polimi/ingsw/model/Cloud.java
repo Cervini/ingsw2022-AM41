@@ -20,13 +20,13 @@ public class Cloud implements Tile, Serializable {
     }
 
     @Override
-    public void putStudent(Student student) throws Exception {
+    public void putStudent(Student student) {
         if (student != null) {
             if (students.size() < maxStudents)
                 students.add(student);
-            else {
+            /*else {
                 throw new Exception("Cloud is already full!");
-            }
+            }*/
         }
     }
 

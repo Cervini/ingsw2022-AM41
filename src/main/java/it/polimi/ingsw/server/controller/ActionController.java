@@ -6,6 +6,13 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.server.ClientHandler;
 
+import static it.polimi.ingsw.server.controller.BaseController.setGamePhaseForAllPlayers;
+import static java.util.Collections.sort;
+import java.util.Comparator;
+
+
+
+
 public class ActionController {
 
     public static Message place(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
@@ -82,7 +89,15 @@ public class ActionController {
                     gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1;
 
             if (isLastPlayer) {
-                // TODO: implementare lo scatto del prossimo round
+                sort(currentGamePhase.getCurrentPlayers(),
+                        Comparator.comparingInt((ClientHandler a)->a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue()));
+                ClientHandler firstPlayer = currentGamePhase.getCurrentPlayers().get(0);
+                firstPlayer.isPlayerFirstMove = true;
+
+                GamePhase planningPhase = new PlanningPhase(clientHandler.getGame(), currentGamePhase.getCurrentPlayers());
+                setGamePhaseForAllPlayers(currentGamePhase.getCurrentPlayers(),planningPhase);
+                planningPhase.getCurrentPlayers().forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null));
+
             } else {
                 // aggiornamento fase del gioco, con la prima action del prossimo giocatore
                 ActionPhase actionPhase = (ActionPhase) gamePhase;
@@ -136,8 +151,12 @@ public class ActionController {
         int mother_nature_movements = request.getArgNum1();
         try {
             current_game.moveMotherNature(mother_nature_movements,current_player);
-        } catch (Exception e) {
+            output.setArgString("Mother nature moved, you have conquered this island!");
+        } catch (Game.DistanceMotherNatureException e) {
             output.setArgString("Can't move Mother Nature this far, please retry");
+        }
+        catch (Exception e ){
+            output.setArgString("Mother nature moved, you can't conquer the island");
         }
         return output;
     }
@@ -149,12 +168,10 @@ public class ActionController {
             output.setArgString("Can't choose this cloud, it has been already chosen by another player");
             return output;
         } else {
-            try {
+
                 game.chooseCloud(game.getClouds().get(message.getArgNum1()), game.getPlayer(client.getUsername()));
                 output.setArgString("Students moved to your School Board");
-            } catch (Exception e) {
-                output.setArgString("Impossible move, try another");
-            }
+
         }
         return output;
     }

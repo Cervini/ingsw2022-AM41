@@ -121,7 +121,7 @@ public class GameSetup {
                     }
 
                     default -> {
-                        for (int i = 0; i < 6; i++)  //7 students
+                        for (int i = 0; i < 7; i++)  //7 students
                             try {
                                 p.getSchool().putStudent(game.drawStudent());
                             } catch (Exception e) {
