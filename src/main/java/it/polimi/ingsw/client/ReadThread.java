@@ -9,7 +9,7 @@ import java.io.ObjectInputStream;
 
 public class ReadThread implements Runnable{
 
-    private ObjectInputStream in; // stream from where the thread reads the objects
+    private final ObjectInputStream in; // stream from where the thread reads the objects
 
     /**
      * @param in inherited stream from where the thread reads the objects
@@ -25,12 +25,8 @@ public class ReadThread implements Runnable{
             Message msg = null; // instantiate new message
             try {
                 msg = (Message) in.readObject(); // try reading a Message object from in
-                if(msg.getCommand() == Command.STATUS){
-                    GamePack gamePack = msg.getStatus();
-                    gamePack.printPack();
-                }
-                if(msg.getCommand() == Command.PONG){
-                    // TODO reaction to PONG
+                if(msg.getCommand() == Command.STATUS){ // if incoming message is a STATUS message
+                    msg.getStatus().printPack(); // print the packed game
                 }
             } catch (IOException | ClassNotFoundException e) {
                 try {
@@ -38,7 +34,6 @@ public class ReadThread implements Runnable{
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
-                //throw new RuntimeException(e);
             }
             if((msg!=null)&&(msg.getCommand()!=Command.STATUS)) // if the message is not null
                 System.out.println("Server says: " + msg); // print the content of the message

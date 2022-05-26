@@ -7,15 +7,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class GamePack implements Serializable {
 
     private List<Island> islands;
-    private List<SchoolBoard> schoolBoards;
-    private List<Assistant> assistants;
-    private List<Cloud> clouds;
-    private int random;
+    private final List<SchoolBoard> schoolBoards;
+    private final List<Assistant> assistants;
+    private final List<Cloud> clouds;
 
 
     /**
@@ -24,7 +22,6 @@ public class GamePack implements Serializable {
      * @param client player whose view is being packed
      */
     public GamePack(Game game, ClientHandler client){
-        Random rand = new Random();
         islands = game.getArchipelago(); // get islands from game
         schoolBoards = new ArrayList<>(); // create empty list of school boards
         for(Player player: game.getPlayers()){
@@ -34,7 +31,6 @@ public class GamePack implements Serializable {
         assistants.addAll(game.getPlayer(client.getUsername()).getAssistants()); // get the Assistants from the client player
         clouds = new LinkedList<>(); // create empty list of clouds
         clouds.addAll(game.getClouds()); // get the clouds from game
-        random = rand.nextInt(50);
     }
 
     /**
@@ -204,17 +200,8 @@ public class GamePack implements Serializable {
         System.out.println();
     }
 
-    public int countFaceUpAssistant() {
-        int count = 0;
-        for(SchoolBoard schoolBoard: schoolBoards){
-            if(schoolBoard.getFace_up_assistant()!=null)
-                count++;
-        }
-        return count;
-    }
-
     /**
-     * @param colour
+     * @param colour color defining the print color change
      * @return string that changes the color of the next printed strings based on colour param
      */
     private String changeColorTower(TowerColour colour){
@@ -235,7 +222,7 @@ public class GamePack implements Serializable {
     }
 
     /**
-     * @param colour
+     * @param colour color defining the print color change
      * @return string that changes the color of the next printed strings based on colour param
      */
     private String changeColorStudent(Colour colour){

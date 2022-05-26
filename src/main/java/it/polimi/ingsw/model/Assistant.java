@@ -6,9 +6,6 @@ public class Assistant implements Comparable<Assistant>, Serializable {
     private final int value; //determines card's value used for turn order
     private int movement_points; //determines movements Mother Nature may perform with the use of this card
 
-    /**
-     *  @requirements (value >= 1) && (movement_points >= 1)
-     */
     public Assistant(int value, int movement_points) {
         this.value = value;
         this.movement_points = movement_points;

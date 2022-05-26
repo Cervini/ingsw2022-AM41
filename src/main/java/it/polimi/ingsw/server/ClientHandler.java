@@ -28,8 +28,6 @@ public class ClientHandler implements Runnable{
 
     private GamePhase currentGamePhase;
 
-    CommandParser cmdParser = new CommandParser();
-
     public ClientHandler (Socket clientSocket, List<ClientHandler> clients) {
         this.clients = clients;
         this.clientSocket= clientSocket;
@@ -61,7 +59,6 @@ public class ClientHandler implements Runnable{
                         } else {
 
                             switch(request.getCommand()){
-
                                 case LOGIN -> response = LoginController.processLogin(request, this);
                                 case LOGOUT -> response = LoginController.processLogout(this);
                                 case START -> response = GameController.start(request, this, clients);

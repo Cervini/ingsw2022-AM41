@@ -59,9 +59,7 @@ public class Message implements Serializable {
 
     private void checkNextArgument(Command command, List<String> args){
         switch (command){
-            case NULL -> {
-                this.standard = false;
-            }
+            case NULL -> this.standard = false;
             case LOGIN -> {
                 if(args.size()>1) {
                     this.argString = args.get(1);
@@ -89,7 +87,7 @@ public class Message implements Serializable {
                 }
             }
             case PLACE -> {
-                if(args.size()<5){
+                if(args.size()<4){
                     System.out.println("Not enough arguments");
                 } else {
                     this.from_tile = toFromTileEnum(args.get(1));
@@ -104,6 +102,15 @@ public class Message implements Serializable {
                     this.to_tile = toToTileEnum(args.get(3));
                     if(this.to_tile == ToTile.NULL)
                         break;
+                    if(this.to_tile == ToTile.DINING){
+                        this.standard = true;
+                        if(args.size()>4)
+                            System.out.println("Excess arguments were ignored");
+                        break;
+                    } else {
+                        if(args.size()<5)
+                            System.out.println("Not enough arguments");
+                    }
                     try{
                         this.argNum2 = Integer.parseInt(args.get(4));
                     } catch (NumberFormatException e){

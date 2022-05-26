@@ -293,6 +293,7 @@ public class Game{
         } catch (Exception e) {
             System.out.println(e);
         }
+        checkOwnership();
     }
 
     /**

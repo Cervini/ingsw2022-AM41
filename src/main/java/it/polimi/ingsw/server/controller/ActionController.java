@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.messages.Message;
+import it.polimi.ingsw.communication.messages.ToTile;
+import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Student;
@@ -25,7 +27,6 @@ public class ActionController {
             gamePhase.validatePlaceStudent(clientHandler); // check if action is allowed
             response = processPlace(request, clientHandler); // action
             ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the same player
-
             if (actionPhase.alreadyMovedThreeStudents(clientHandler)) {
                 actionPhase.setNextActionForCurrentPlayer();
             }
@@ -110,29 +111,28 @@ public class ActionController {
     public static Message processPlace(Message request, ClientHandler client) throws ActionPhase.WrongAction {
         Player currentPlayer = client.getGame().getPlayer(client.getUsername()); // get the player who sent command PLACE
         Message output = new Message("string"); // set up output message
+        placeArgumentCheck(request, client); // if the arguments are not ok exceptions are thrown
 
-        if (request.getArgNum1() >= currentPlayer.getSchool().getEntranceSize()) { // if the argument refers to a non-existing student
-            throw new ActionPhase.WrongAction("Non existing student, please retry");
-        } else {
-            Student played = currentPlayer.getSchool().getEntrance().get(request.getArgNum1()); // get
-            switch (request.getTo_tile()){
-                case DINING -> {
-                    try { // try moving the student from entrance to the selected dining room
-                        client.getGame().moveStudent(currentPlayer.getSchool(), currentPlayer.getSchool().getDining_rooms().get(request.getArgNum2()), played);
-                    } catch (Exception ex) {
-                        throw new ActionPhase.WrongAction("Can't move the student in the dining room, please retry");
-                    }
-                }
-                case ISLAND -> {
-                    if(request.getArgNum2()<=client.getGame().getArchipelago().size())
-                        client.getGame().moveStudent(currentPlayer.getSchool(),client.getGame().getArchipelago().get(request.getArgNum2()), played);
-                    else {
-                        throw new ActionPhase.WrongAction("Not existing island, please retry");
-                    }
+        Student played = currentPlayer.getSchool().getEntrance().get(request.getArgNum1()); // get the placed student
+        switch (request.getTo_tile()){
+            case DINING -> {
+                try { // try moving the student from entrance to the selected dining room
+                    Colour colour = played.getColour();
+                    client.getGame().moveStudent(currentPlayer.getSchool(), currentPlayer.getSchool().getDining_room(colour), played);
+                } catch (Exception ex) {
+                    throw new ActionPhase.WrongAction("Can't move the student in the dining room, please retry");
                 }
             }
-            output.setArgString("Student placed");
+            case ISLAND -> {
+                if(request.getArgNum2()<=client.getGame().getArchipelago().size())
+                    client.getGame().moveStudent(currentPlayer.getSchool(),client.getGame().getArchipelago().get(request.getArgNum2()), played);
+                else {
+                    throw new ActionPhase.WrongAction("Not existing island, please retry");
+                }
+            }
         }
+        output.setArgString("Student placed");
+
         return output;
     }
 
@@ -167,5 +167,21 @@ public class ActionController {
         return output;
     }
 
+    /**
+     * @param request command to check
+     * @param client client who sent the command
+     * @return true if the arguments are ok
+     */
+    private static void placeArgumentCheck(Message request, ClientHandler client) throws ActionPhase.WrongAction {
+        // check if students exists
+        if (request.getArgNum1() >= client.getGame().getPlayer(client.getUsername()).getSchool().getEntranceSize()) {
+            throw new ActionPhase.WrongAction("Non existing student, please retry");
+        }
+        if(request.getTo_tile() == ToTile.ISLAND){
+            // check if island exists
+            if(request.getArgNum2() >= client.getGame().getArchipelago().size())
+                throw new ActionPhase.WrongAction("Not existing island, please retry");
+        }
+    }
 
 }

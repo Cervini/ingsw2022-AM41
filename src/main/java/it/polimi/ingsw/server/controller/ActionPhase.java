@@ -22,28 +22,24 @@ public class ActionPhase extends GamePhase {
 
     @Override
     public void validatePlaceStudent(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction {
+        //The player has to: PLACE 3 students -> MOVE mother nature -> CHOOSE the cloud
+        //place 3 students = school board's entrance with 3 students less
 
-        //Il giocatore deve: spostare 3 studenti -> muovere madre natura -> scegliere la nuvola
-        //spostare tre studenti = entrance school board con 3 studenti in meno
-
-        // 1. controllo che è il suo turno
-
+        // 1. check turn
         //if (clientHandler.isPlayerFirstMove) throw new WrongTurn();
         validatePlayerTurn(clientHandler);
 
-        // 2. controllo se ha già mosso tre studenti
+        // 2. check if 3 students have been already moved
         if (alreadyMovedThreeStudents(clientHandler)) {
+            //2.1 if true -> "have to move mother nature"
             throw new WrongAction("You already moved all students, move Mother Nature now");
         }
-
-        // 2.1 se ne ha già mossi 3 eccezione= devi muovere madre natura
-        //2.2 se ne ha mossi meno di tre processPlace
+        // 2.2 if moved less than 3 processPlace
     }
 
     @Override
-    public void validateMoveMotherNature(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction {
-        validatePlayerTurn(clientHandler);
-
+    public void validateMoveMotherNature(ClientHandler clientHandler) throws WrongTurn, WrongAction {
+        validatePlayerTurn(clientHandler); //check turn
         boolean isExpectedAction = currentPlayerNextAction.getAction() == PlayerAction.ActionType.MOVE_MOTHER_NATURE;
         if (!isExpectedAction) {
             if (currentPlayerNextAction.getAction() == PlayerAction.ActionType.CHOOSE_CLOUD) {
@@ -59,7 +55,6 @@ public class ActionPhase extends GamePhase {
     @Override
     public void validateChooseCloud(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction {
         validatePlayerTurn(clientHandler);
-
         boolean isExpectedAction = currentPlayerNextAction.getAction() == PlayerAction.ActionType.CHOOSE_CLOUD;
         if (!isExpectedAction) {
             throw new WrongAction("Before choose cloud you have to complete students and mother nature movements");
@@ -87,16 +82,10 @@ public class ActionPhase extends GamePhase {
     public boolean alreadyMovedThreeStudents(ClientHandler player){
 
         int entranceSize = player.getGame().getPlayer(player.getUsername()).getSchool().getEntranceSize();
-
-
         switch (player.sameMatchPlayers().size()) {
-
             case 2 -> { if(entranceSize == 4)  return true ;}
-
             case 3 -> { if(entranceSize == 6)  return true ;}
-
         }
-
         return false;
     }
 

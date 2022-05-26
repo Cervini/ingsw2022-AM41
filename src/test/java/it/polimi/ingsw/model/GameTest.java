@@ -553,58 +553,6 @@ class GameTest {
 
     }
 
-    /*
-
-    @Test
-    void moveStudentTest1() throws Exception {
-        Game game = new Game(2);
-        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
-        List<Student> islandStudents = game.getArchipelago().get(0).getStudents();
-        Student student = new Student(Colour.RED);
-        game.getPlayers().getFirst().getSchool().putStudent(student);
-        game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getArchipelago().get(0), student);
-        islandStudents.add(student);
-
-        assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getArchipelago().get(0).getStudents().equals(islandStudents));
-    }
-
-    @Test
-    void moveStudentTest2() throws Exception {
-        Game game = new Game(2);
-        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
-        Student student = new Student(Colour.RED);
-        game.getPlayers().getFirst().getSchool().putStudent(student);
-        game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED), student);
-
-        assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).getStudents() == 1);
-    }
-
-    @Test
-    void moveStudentTest3() throws Exception {
-        Game game = new Game(2);
-        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
-        List<Student> islandStudents = game.getArchipelago().get(0).getStudents();
-        Student student = new Student(Colour.BLUE);
-        game.getPlayers().getFirst().getSchool().putStudent(student);
-        game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getArchipelago().get(0), student);
-        islandStudents.add(student);
-
-        assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getArchipelago().get(0).getStudents().equals(islandStudents));
-    }
-
-    @Test
-    void moveStudentTest4() throws Exception {
-        Game game = new Game(2);
-        LinkedList<Student> entrance = game.getPlayers().getFirst().getSchool().getEntrance();
-        Student student = new Student(Colour.BLUE);
-        game.getPlayers().getFirst().getSchool().putStudent(student);
-        game.moveStudent(game.getPlayers().getFirst().getSchool(), game.getPlayers().getFirst().getSchool().getDining_room(Colour.BLUE), student);
-
-        assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().equals(entrance) && game.getPlayers().getFirst().getSchool().getDining_room(Colour.BLUE).getStudents() == 1);
-    }
-
-     */
-
     @Test
     @DisplayName("2 Players Game")
     void constructorTest01() {
@@ -1151,5 +1099,33 @@ class GameTest {
         game.checkOwnership();
 
         assertEquals(game.getProfessors().size(), 5);
+    }
+
+    @Test
+    void moveStudent1(){
+        Game game = new Game(2);
+        Player player = game.getPlayers().getFirst();
+        Student student = player.getSchool().getEntrance().getFirst();
+        player.getSchool().removeStudent(student);
+
+        student = new Student(Colour.RED);
+
+        player.getSchool().putStudent(student);
+
+        game.moveStudent(player.getSchool(), player.getSchool().getDining_room(Colour.RED),student);
+    }
+
+    @Test
+    void moveStudent2(){
+        Game game = new Game(2);
+        Player player = game.getPlayers().getFirst();
+        Student student = player.getSchool().getEntrance().getFirst();
+        player.getSchool().removeStudent(student);
+
+        student = new Student(Colour.RED);
+
+        player.getSchool().putStudent(student);
+
+        game.moveStudent(player.getSchool(), player.getSchool().getDining_room(Colour.BLUE),student);
     }
 }
