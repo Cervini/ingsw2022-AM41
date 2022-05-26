@@ -453,7 +453,6 @@ class GameTest {
         Game game = new Game(4);
         List<Island> archipelagoTest;
         archipelagoTest = game.getArchipelago();
-
         game.getPlayers().getFirst().setFace_up_assistant(new Assistant(1, 20));
 
         try {

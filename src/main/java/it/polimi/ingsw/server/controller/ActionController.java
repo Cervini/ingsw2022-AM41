@@ -18,19 +18,13 @@ public class ActionController {
     public static Message place(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
 
         Message response = new Message("string");
-
         try {
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
                     (ActionPhase) currentGamePhase :
                     (PlanningPhase) currentGamePhase;
-
-            // validazione se la mossa consentita
-            gamePhase.validatePlaceStudent(clientHandler);
-            // mossa
-            response = processPlace(request, clientHandler);
-
-            // aggiornamento fase del gioco, con la prossima action attesa dello stesso giocatore
-            ActionPhase actionPhase = (ActionPhase) gamePhase;
+            gamePhase.validatePlaceStudent(clientHandler); // check if action is allowed
+            response = processPlace(request, clientHandler); // action
+            ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the same player
 
             if (actionPhase.alreadyMovedThreeStudents(clientHandler)) {
                 actionPhase.setNextActionForCurrentPlayer();
@@ -53,12 +47,9 @@ public class ActionController {
                     (ActionPhase) currentGamePhase :
                     (PlanningPhase) currentGamePhase;
 
-            // validazione se la mossa consentita
-            gamePhase.validateMoveMotherNature(clientHandler);
-            // mossa
-            response = processMove(request, clientHandler);
-            // aggiornamento fase del gioco, con la prossima action attesa dello stesso giocatore
-            ActionPhase actionPhase = (ActionPhase) gamePhase;
+            gamePhase.validateMoveMotherNature(clientHandler); // check if action is allowed
+            response = processMove(request, clientHandler); // action
+            ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the same player
             actionPhase.setNextActionForCurrentPlayer();
         } catch (GamePhase.WrongTurn e) {
             response.setArgString("Wrong turn");
@@ -78,10 +69,8 @@ public class ActionController {
                     (ActionPhase) currentGamePhase :
                     (PlanningPhase) currentGamePhase;
 
-            // validazione se la mossa consentita
-            gamePhase.validateChooseCloud(clientHandler);
-            // mossa
-            response = processChoose(request, clientHandler);
+            gamePhase.validateChooseCloud(clientHandler); // check if action is allowed
+            response = processChoose(request, clientHandler); // action
 
             // TODO: logica scatto prossimo round?
 
@@ -99,8 +88,7 @@ public class ActionController {
                 planningPhase.getCurrentPlayers().forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null));
 
             } else {
-                // aggiornamento fase del gioco, con la prima action del prossimo giocatore
-                ActionPhase actionPhase = (ActionPhase) gamePhase;
+                ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the next player
                 actionPhase.setNextPlayerAndFirstAction(clientHandler);
             }
 
@@ -127,24 +115,28 @@ public class ActionController {
             throw new ActionPhase.WrongAction("Non existing student, please retry");
         } else {
             Student played = currentPlayer.getSchool().getEntrance().get(request.getArgNum1()); // get
-            currentPlayer.getSchool().removeStudent(played); //removes student from entrance
             switch (request.getTo_tile()){
                 case DINING -> {
-                    try {
+                    try { // try moving the student from entrance to the selected dining room
                         client.getGame().moveStudent(currentPlayer.getSchool(), currentPlayer.getSchool().getDining_rooms().get(request.getArgNum2()), played);
-                        currentPlayer.getSchool().getDining_rooms().get(request.getArgNum2()).putStudent(played);
                     } catch (Exception ex) {
-                        output.setArgString("Can't move the student, please retry");
+                        throw new ActionPhase.WrongAction("Can't move the student in the dining room, please retry");
                     }
                 }
-                case ISLAND -> client.getGame().getArchipelago().get(request.getArgNum2()).putStudent(played);
+                case ISLAND -> {
+                    if(request.getArgNum2()<=client.getGame().getArchipelago().size())
+                        client.getGame().moveStudent(currentPlayer.getSchool(),client.getGame().getArchipelago().get(request.getArgNum2()), played);
+                    else {
+                        throw new ActionPhase.WrongAction("Not existing island, please retry");
+                    }
+                }
             }
             output.setArgString("Student placed");
         }
         return output;
     }
 
-    public static Message processMove(Message request, ClientHandler client) {
+    public static Message processMove(Message request, ClientHandler client) throws ActionPhase.WrongAction {
         Message output = new Message("string");
         Game current_game = client.getGame();
         Player current_player = client.getGame().getPlayer(client.getUsername());
@@ -153,20 +145,19 @@ public class ActionController {
             current_game.moveMotherNature(mother_nature_movements,current_player);
             output.setArgString("Mother nature moved, you have conquered this island!");
         } catch (Game.DistanceMotherNatureException e) {
-            output.setArgString("Can't move Mother Nature this far, please retry");
+            throw new ActionPhase.WrongAction("Can't move Mother Nature this far, please retry");
         }
         catch (Exception e ){
-            output.setArgString("Mother nature moved, you can't conquer the island");
+            throw new ActionPhase.WrongAction("Mother nature moved, you can't conquer the island");
         }
         return output;
     }
 
-    private static Message processChoose(Message message, ClientHandler client){
+    private static Message processChoose(Message message, ClientHandler client) throws ActionPhase.WrongAction {
         Message output = new Message("string");
         Game game = client.getGame();
         if(game.getClouds().get(message.getArgNum1()).getStudents().size()==0){
-            output.setArgString("Can't choose this cloud, it has been already chosen by another player");
-            return output;
+            throw new ActionPhase.WrongAction("Can't choose this cloud, it has been already chosen by another player");
         } else {
 
                 game.chooseCloud(game.getClouds().get(message.getArgNum1()), game.getPlayer(client.getUsername()));

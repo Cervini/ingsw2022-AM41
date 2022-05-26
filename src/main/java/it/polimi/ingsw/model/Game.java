@@ -101,20 +101,22 @@ public class Game{
         }
     }
 
-    //This function moves mother nature from an island to another by finding the island where it is standing now, changing its boolean value of motherNature to false and setting it to true to another island that is exactly after a number of islands equals to "movement"
+    /**
+     * Moves mother nature of 'movement' position
+     * @param movement how much mother nature moves
+     * @param player player who tries to move mother nature
+     * @throws Exception checking the player's played assistant throws exception if movement is greater than the movement points of the assistant
+     */
     public void moveMotherNature(int movement, Player player) throws Exception {
-        try { if(player.getFace_up_assistant().getMovement_points()>=movement){
+        if (player.getFace_up_assistant().getMovement_points() >= movement) {
             Island fromIsland = motherNaturePosition();
             int from = archipelago.indexOf(fromIsland);
-            archipelago.get((from + movement)% archipelago.size()).setMother_nature(true);
+            fromIsland.setMother_nature(false);
+            archipelago.get((from + movement)%archipelago.size()).setMother_nature(true);
             // run influence check and change owner of the island if possible
-            islandCheck(archipelago.get((from + movement)% archipelago.size()));
-            archipelago.get(from).setMother_nature(false);
+            islandCheck(archipelago.get((from + movement) % archipelago.size()));
         } else {
             throw new DistanceMotherNatureException("Can't move Mother Nature this far!");
-        }
-        } catch (Exception e){
-            throw new Exception("Player can't conquer the island");
         }
     }
 
@@ -282,12 +284,12 @@ public class Game{
      */
     public void moveStudent(Tile fromTile, Tile toTile, Student student){
         try {
-            fromTile.removeStudent(student);
+            toTile.putStudent(student);
         } catch (Exception e) {
             System.out.println(e);
         }
         try {
-            toTile.putStudent(student);
+            fromTile.removeStudent(student);
         } catch (Exception e) {
             System.out.println(e);
         }
