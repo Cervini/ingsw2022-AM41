@@ -163,6 +163,16 @@ public class Player implements Comparable{
         }
     }
 
+    //Returns true if this player has a professor with a specific colour, otherwise returns false
+    public boolean hasProfessor(Colour colour){
+        for(Professor professorToCheck: school.getOwned_professor()){
+            if(professorToCheck.getColour().equals(colour)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Professor removeProfessor(Colour colour){
         Professor professorRemoved = null;
         for(Professor professorToCheck: school.getOwned_professor()){

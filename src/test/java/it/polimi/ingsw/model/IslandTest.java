@@ -134,144 +134,82 @@ class IslandTest {
         assertEquals(island.influence(player), 0);
     }
 
+    //TODO improve conquerCheck testing
+
     @Test
-    void canConquerFalse() {
-        Island island = new Island();
-        LinkedList<Player> players = new LinkedList<>();
-        Player player1 = new Player(TowerColour.BLACK);
-        Player player2 = new Player(TowerColour.WHITE);
-        players.add(player1);
-        players.add(player2);
+    void conquerCheckTest1() throws Exception{
+        Game game = new Game(2);
 
-        player1.getOwned_professor().add(new Professor(Colour.GREEN));
-        player1.getOwned_professor().add(new Professor(Colour.RED));
-        player2.getOwned_professor().add(new Professor(Colour.PINK));
+        game.getPlayers().getFirst().addProfessor(new Professor(Colour.BLUE));
+        game.getPlayers().getFirst().addProfessor(new Professor(Colour.RED));
+        game.getPlayers().getLast().addProfessor(new Professor(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.BLUE));
 
-        for(int i=0; i<3; i++)
-            island.putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).conquerCheck(game.getPlayers());
 
-        for(int i=0; i<2; i++)
-            island.putStudent(new Student(Colour.PINK));
+        assertEquals(game.getPlayers().getFirst().getTeam(), game.getArchipelago().get(0).getColour());
 
-        island.putStudent(new Student(Colour.RED));
-
-        island.setTower(TowerColour.WHITE);
-
-        assertFalse(island.canConquer(player2, players));
+        System.out.println("conquerCheckTest1 complete");
     }
 
     @Test
-    void canConquerTrue() {
-        Island island = new Island();
-        LinkedList<Player> players = new LinkedList<>();
-        Player player1 = new Player(TowerColour.BLACK);
-        Player player2 = new Player(TowerColour.WHITE);
-        players.add(player1);
-        players.add(player2);
+    void conquerCheckTest2() throws Exception{
+        Game game = new Game(3);
 
-        player1.getOwned_professor().add(new Professor(Colour.GREEN));
-        player1.getOwned_professor().add(new Professor(Colour.RED));
-        player2.getOwned_professor().add(new Professor(Colour.PINK));
+        game.getPlayers().getFirst().addProfessor(new Professor(Colour.BLUE));
+        game.getPlayers().getFirst().addProfessor(new Professor(Colour.RED));
+        game.getPlayers().get(1).addProfessor(new Professor(Colour.GREEN));
+        game.getPlayers().getLast().addProfessor(new Professor(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.GREEN));
 
-        for(int i=0; i<3; i++)
-            island.putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).conquerCheck(game.getPlayers());
 
-        for(int i=0; i<2; i++)
-            island.putStudent(new Student(Colour.PINK));
+        assertEquals(game.getPlayers().get(1).getTeam(), game.getArchipelago().get(0).getColour());
 
-        island.putStudent(new Student(Colour.RED));
-
-        island.setTower(TowerColour.WHITE);
-
-        assertTrue(island.canConquer(player1, players));
+        System.out.println("conquerCheckTest2 complete");
     }
 
     @Test
-    void canConquerTied() {
-        Island island = new Island();
-        LinkedList<Player> players = new LinkedList<Player>();
-        Player player1 = new Player(TowerColour.BLACK);
-        Player player2 = new Player(TowerColour.WHITE);
-        players.add(player1);
-        players.add(player2);
+    void conquerCheckTest3() throws Exception{
+        Game game = new Game(3);
 
-        player1.getOwned_professor().add(new Professor(Colour.GREEN));
-        player1.getOwned_professor().add(new Professor(Colour.RED));
-        player2.getOwned_professor().add(new Professor(Colour.PINK));
+        game.getPlayers().getFirst().addProfessor(new Professor(Colour.BLUE));
+        game.getPlayers().getFirst().addProfessor(new Professor(Colour.RED));
+        game.getPlayers().get(1).addProfessor(new Professor(Colour.GREEN));
+        game.getPlayers().getLast().addProfessor(new Professor(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(0).putStudent(new Student(Colour.BLUE));
 
-        for(int i=0; i<3; i++)
-            island.putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(0).conquerCheck(game.getPlayers());
 
-        for(int i=0; i<3; i++)
-            island.putStudent(new Student(Colour.PINK));
+        assertNull(game.getArchipelago().get(0).getColour());
 
-        island.putStudent(new Student(Colour.RED));
-
-        island.setTower(TowerColour.WHITE);
-
-        assertFalse(island.canConquer(player1, players));
-        assertFalse(island.canConquer(player2, players));
-    }
-
-    @Test
-    void conquer() {
-        Island island = new Island();
-        LinkedList<Player> players = new LinkedList<>();
-        Player player1 = new Player(TowerColour.BLACK);
-        Player player2 = new Player(TowerColour.WHITE);
-        players.add(player1);
-        players.add(player2);
-
-        player1.getOwned_professor().add(new Professor(Colour.GREEN));
-        player1.getOwned_professor().add(new Professor(Colour.RED));
-        player2.getOwned_professor().add(new Professor(Colour.PINK));
-
-        for(int i=0; i<3; i++)
-            island.putStudent(new Student(Colour.GREEN));
-
-        for(int i=0; i<2; i++)
-            island.putStudent(new Student(Colour.PINK));
-
-        island.putStudent(new Student(Colour.RED));
-
-        island.setTower(TowerColour.WHITE);
-
-        try {
-            island.conquer(player1, players);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        assertEquals(island.getTower(), TowerColour.BLACK);
-    }
-
-    @Test
-    void conquerTie() {
-        Island island = new Island();
-        LinkedList<Player> players = new LinkedList<>();
-        Player player1 = new Player(TowerColour.BLACK);
-        Player player2 = new Player(TowerColour.WHITE);
-        players.add(player1);
-        players.add(player2);
-
-        player1.getOwned_professor().add(new Professor(Colour.GREEN));
-        player1.getOwned_professor().add(new Professor(Colour.RED));
-        player2.getOwned_professor().add(new Professor(Colour.PINK));
-
-        for(int i=0; i<3; i++)
-            island.putStudent(new Student(Colour.GREEN));
-
-        for(int i=0; i<4; i++)
-            island.putStudent(new Student(Colour.PINK));
-
-        island.putStudent(new Student(Colour.RED));
-
-        try {
-            island.conquer(player1, players);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        assertNull(island.getTower());
+        System.out.println("conquerCheckTest3 complete");
     }
 }

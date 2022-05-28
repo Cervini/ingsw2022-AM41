@@ -13,10 +13,10 @@ public class Game{
     private LinkedList<Character> characters;
     private String status; // status of the game
 
-
     // constants
     private static final int minimumNumberOfIslands = 3;
     private static final int starting_students = 120;
+    private static final int noEntryCharacterNumber = 4;
 
     /**
      * prepares the game
@@ -114,7 +114,8 @@ public class Game{
             fromIsland.setMother_nature(false);
             archipelago.get((from + movement)%archipelago.size()).setMother_nature(true);
             // run influence check and change owner of the island if possible
-            islandCheck(archipelago.get((from + movement) % archipelago.size()));
+            islandCheck(archipelago.get((from + movement) % archipelago.size())); //TODO not sure of call timing
+            archipelago.get(from).setMother_nature(false);
         } else {
             throw new DistanceMotherNatureException("Can't move Mother Nature this far!");
         }
@@ -245,17 +246,12 @@ public class Game{
      * checks if any player can conquer the island, to be called when an island is subject to change
      * @param island island to be checked
      */
-    public void islandCheck(Island island) throws Exception {
+    public void islandCheck(Island island) throws Exception{
         if(!island.getNo_entry()){
-            for(Player player: players){
-                try {
-                    island.conquer(player, players);
-                } catch (Exception e) {
-                    throw new Exception("Player can't conquer the island");
-                }
-            }
+            island.conquerCheck(players);
         } else {
             island.setNo_entry(false);
+            getCharacters().get(findNoEntryCharacter(getCharacters())).returnNoEntry();
         }
     }
 
@@ -284,12 +280,12 @@ public class Game{
      */
     public void moveStudent(Tile fromTile, Tile toTile, Student student){
         try {
-            toTile.putStudent(student);
+            fromTile.removeStudent(student);
         } catch (Exception e) {
             System.out.println(e);
         }
         try {
-            fromTile.removeStudent(student);
+            toTile.putStudent(student);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -334,6 +330,16 @@ public class Game{
         for(Cloud cloud: clouds){
             fillCloud(cloud);
         }
+    }
+
+    //Used to find the character that holds the "NoEntry" cards, it works only if there's one
+    private int findNoEntryCharacter(LinkedList<Character> characters){
+        for(Character characterToCheck: characters){
+            if(characterToCheck.getCharacterNumber() == noEntryCharacterNumber){
+                return characters.indexOf(characterToCheck);
+            }
+        }
+        return -1;
     }
 
     public LinkedList<Player> getPlayers() {

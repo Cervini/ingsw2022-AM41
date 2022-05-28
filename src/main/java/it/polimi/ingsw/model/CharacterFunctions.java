@@ -9,17 +9,11 @@ public class CharacterFunctions {
     private static final int noEntryCharacterNumber = 4;
 
     //Function of character 3
-    public Game checkInfluenceOnSpecificIsland(Game game, Island island){
+    public Game checkInfluenceOnSpecificIsland(Game game, Island island) throws Exception{
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(island);
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
-            for(Player player: game.getPlayers()){
-                try {
-                    game.getArchipelago().get(islandIndex).conquer(player, game.getPlayers());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
             game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
@@ -28,31 +22,29 @@ public class CharacterFunctions {
     }
 
     //Function of character 2
-    public Game checkInfluenceWithModifiedBoard(Game game, Player player, Island island) {
-        LinkedList<Player> originalPlayerList = game.getPlayers();
+    //TODO fix
+    public Game checkInfluenceWithModifiedBoard(Game game, Player player) throws Exception{
+        LinkedList<Player> originalPlayers = new LinkedList<>();
         int islandIndex;
-        islandIndex = game.getArchipelago().indexOf(island);
-        game = modifyBoard(game, player);
+        originalPlayers.addAll(game.getPlayers());
+        game = changeOwnership(game, player);
+        islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
-            for(Player playerToCheck: game.getPlayers()){
-                try {
-                    game.getArchipelago().get(islandIndex).conquer(playerToCheck, game.getPlayers());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
+            game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
         }
-        for(int playerIndex = 0; playerIndex < game.getPlayers().size(); playerIndex++){
-            originalPlayerList.get(playerIndex).getSchool().resetTowers(game.getPlayers().get(playerIndex).getSchool().getTowers());
+        for(Player playerToCheck: originalPlayers){
+            playerToCheck.getSchool().resetTowers(game.getPlayers().get(game.getPlayers().indexOf(playerToCheck)).getSchool().getTowers());
         }
-        game.setPlayers(originalPlayerList);
+        game.setPlayers(originalPlayers);
         return game;
     }
 
     //Function of character 6
-    public Game checkInfluenceWithoutTowers(Game game){
+    //TODO fix
+    public Game checkInfluenceWithoutTowers(Game game) throws Exception{
         int islandIndex;
         List<Island> originalArchipelago = game.getArchipelago();
         for(Island islandToCheck: game.getArchipelago()){
@@ -60,13 +52,7 @@ public class CharacterFunctions {
         }
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
-            for(Player player: game.getPlayers()){
-                try {
-                    game.getArchipelago().get(islandIndex).conquer(player, game.getPlayers());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
             game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
@@ -76,23 +62,11 @@ public class CharacterFunctions {
     }
 
     //Function of character 8
-    public Game checkInfluenceWithBonus(Game game, Player player){
+    public Game checkInfluenceWithBonus(Game game, Player player) throws Exception{
         int islandIndex;
-        int influenceToAdd;
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
-            for(Player playerToCheck: game.getPlayers()){
-                try {
-                    if(playerToCheck.equals(player)){
-                        influenceToAdd = additionalInfluence;
-                    }else{
-                        influenceToAdd = 0;
-                    }
-                    game.getArchipelago().get(islandIndex).conquer(playerToCheck, game.getPlayers(), influenceToAdd);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers(), player, additionalInfluence);
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
             game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
@@ -101,17 +75,11 @@ public class CharacterFunctions {
     }
 
     //Function of character 9
-    public Game checkInfluenceWithoutColour(Game game, Colour colour){
+    public Game checkInfluenceWithoutColour(Game game, Colour colourToExclude) throws Exception{
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
-            for(Player playerToCheck: game.getPlayers()){
-                try {
-                    game.getArchipelago().get(islandIndex).conquer(playerToCheck, game.getPlayers(), colour);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers(), colourToExclude);
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
             game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
@@ -119,18 +87,25 @@ public class CharacterFunctions {
         return game;
     }
 
-    private Game modifyBoard(Game game, Player player) {
-        for(Colour colour: Colour.values()){
-            for(Player playerToCheck: game.getPlayers()){
-                if(!player.equals(playerToCheck) && playerToCheck.getSchool().getDining_room(colour).getStudents()==player.getSchool().getDining_room(colour).getStudents()){
-                    playerToCheck.getOwned_professor().remove(new Professor(colour));
-                    player.getOwned_professor().add(new Professor(colour));
+    //Used by checkInfluenceWithModifiedBoard to edit the SchoolBoards as Character 2 requires
+    private Game changeOwnership(Game game, Player cardPlayer){
+        int cardPlayerIndex;
+        Professor professorToRemove;
+        cardPlayerIndex = game.getPlayers().indexOf(cardPlayer);
+        for(Player playerToCheck: game.getPlayers()){
+            if(!playerToCheck.equals(cardPlayer)){
+                for(Colour colour: Colour.values()){
+                    if(playerToCheck.hasProfessor(colour) && !game.getPlayers().get(cardPlayerIndex).hasProfessor(colour) && playerToCheck.getSchool().getDining_room(colour).getStudents() <= cardPlayer.getSchool().getDining_room(colour).getStudents()){
+                        professorToRemove = playerToCheck.getSchool().takeProfessor(colour);
+                        game.getPlayers().get(cardPlayerIndex).addProfessor(professorToRemove);
+                    }
                 }
             }
         }
         return game;
     }
 
+    //Used to find the character that holds the "NoEntry" cards, it works only if there's one
     private int findNoEntryCharacter(LinkedList<Character> characters){
         for(Character characterToCheck: characters){
             if(characterToCheck.getCharacterNumber() == noEntryCharacterNumber){

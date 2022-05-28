@@ -165,11 +165,17 @@ public class SchoolBoard implements Tile, Serializable {
         return owned_professor;
     }
 
-    public void setOwned_professor(List<Professor> owned_professor) {
-        this.owned_professor = owned_professor;
+    public Professor takeProfessor(Colour colour) {
+        for(Professor professorToCheck: owned_professor){
+            if(professorToCheck.getColour().equals(colour)){
+                owned_professor.remove(professorToCheck);
+                return professorToCheck;
+            }
+        }
+        return null;
     }
 
-    public void setOwned_professor(LinkedList<Professor> owned_professor) {
+    public void setOwned_professor(List<Professor> owned_professor) {
         this.owned_professor = owned_professor;
     }
 }

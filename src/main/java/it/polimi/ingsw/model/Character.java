@@ -94,7 +94,7 @@ public class Character{
                 modifiedGame = effect1(game, studentList1.getFirst(), island);
             }
             case 1 -> {
-                modifiedGame = effect2(game, player, island);
+                modifiedGame = effect2(game, player);
             }
             case 2 -> {
                 modifiedGame = effect3(game, island);
@@ -147,13 +147,13 @@ public class Character{
     }
 
     //Character 2 (case 1)
-    private Game effect2(Game game, Player player, Island island) {
-        game = characterFunctions.checkInfluenceWithModifiedBoard(game, player, island);
+    private Game effect2(Game game, Player player) throws Exception{
+        game = characterFunctions.checkInfluenceWithModifiedBoard(game, player);
         return game;
     }
 
     //Character 3 (case 2)
-    private Game effect3(Game game, Island island){
+    private Game effect3(Game game, Island island) throws Exception{
         game = characterFunctions.checkInfluenceOnSpecificIsland(game, island);
         return game;
     }
@@ -182,7 +182,7 @@ public class Character{
     }
 
     //Character 6 (case 5)
-    private Game effect6(Game game){
+    private Game effect6(Game game) throws Exception{
         game = characterFunctions.checkInfluenceWithoutTowers(game);
         return game;
     }
@@ -205,13 +205,13 @@ public class Character{
     }
 
     //Character 8 (case 7)
-    private Game effect8(Game game, Player player){
+    private Game effect8(Game game, Player player) throws Exception{
         game = characterFunctions.checkInfluenceWithBonus(game, player);
         return game;
     }
 
     //Character 9 (case 8)
-    private Game effect9(Game game, Colour colour){
+    private Game effect9(Game game, Colour colour) throws Exception{
         game = characterFunctions.checkInfluenceWithoutColour(game, colour);
         return game;
     }
