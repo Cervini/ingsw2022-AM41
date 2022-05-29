@@ -89,7 +89,7 @@ public class GameController extends BaseController {
      * @param client recipient of the message
      * @param message string displayed
      */
-    private static void alert(ClientHandler client, String message){
+    public static void alert(ClientHandler client, String message){
         Message alert = new Message("string");
         alert.setArgString(message);
         try {

@@ -67,12 +67,12 @@ public class SchoolBoard implements Tile, Serializable {
      * @param towers number of towers to be removed
      * @throws Exception thrown when tha players has fewer towers than 'towers' param
      */
-    public void takeTowers(int towers) throws Exception {
+    public void takeTowers(int towers)  {
         if(this.towers >= towers)
             this.towers -= towers;
-        else {
+        /*else {
             throw new Exception("Player has not enough towers"); // TODO define better exception
-        }
+        }*/
     }
 
     /**

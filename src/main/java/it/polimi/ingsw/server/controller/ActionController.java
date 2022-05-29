@@ -2,10 +2,7 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.communication.messages.ToTile;
-import it.polimi.ingsw.model.Colour;
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Student;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.server.ClientHandler;
 
 import static it.polimi.ingsw.server.controller.BaseController.setGamePhaseForAllPlayers;
@@ -81,6 +78,12 @@ public class ActionController {
             if (isLastPlayer) {
                 sort(currentGamePhase.getCurrentPlayers(),
                         Comparator.comparingInt((ClientHandler a)->a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue()));
+
+                ClientHandler oldFirstPlayer = (ClientHandler) currentGamePhase.getCurrentPlayers()
+                                                                .stream()
+                                                                .filter(p-> (p.isPlayerFirstMove))
+                                                                .findAny().orElse(null);
+                oldFirstPlayer.setPlayerFirstMove(false);
                 ClientHandler firstPlayer = currentGamePhase.getCurrentPlayers().get(0);
                 firstPlayer.isPlayerFirstMove = true;
 
@@ -141,15 +144,20 @@ public class ActionController {
         Game current_game = client.getGame();
         Player current_player = client.getGame().getPlayer(client.getUsername());
         int mother_nature_movements = request.getArgNum1();
+        TowerColour playerTeam = current_player.getTeam();
+
         try {
             current_game.moveMotherNature(mother_nature_movements,current_player);
-            output.setArgString("Mother nature moved, you have conquered this island!");
+
+            if (current_game.getArchipelago().get(request.getArgNum1()).getTower() == playerTeam){
+                output.setArgString("Mother nature moved, you have conquered this island!");
+            }
+            output.setArgString("Mother nature moved but you can't conquer this island");
+
         } catch (Game.DistanceMotherNatureException e) {
             throw new ActionPhase.WrongAction("Can't move Mother Nature this far, please retry");
         }
-        catch (Exception e ){
-            throw new ActionPhase.WrongAction("Mother nature moved, you can't conquer the island");
-        }
+        //GameResultsController.getWinner(current_game,client,current_game.getPlayers());
         return output;
     }
 

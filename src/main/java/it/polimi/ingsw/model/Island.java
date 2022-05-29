@@ -35,7 +35,7 @@ public class Island implements Tile, Serializable {
      * removing towers from the conquering team and giving towers back to the conquered team
      * @param players list of all the players
      */
-    public void conquerCheck(LinkedList<Player> players) throws Exception{
+    public void conquerCheck(LinkedList<Player> players) {
         int[] influenceArray = new int[players.size()];
         int maxIndex = 0;
         influenceArray[0] = influence(players.get(0));
@@ -84,7 +84,7 @@ public class Island implements Tile, Serializable {
         return player_influence;
     }
 
-    private void conquer(Player player, LinkedList<Player> players) throws Exception{
+    private void conquer(Player player, LinkedList<Player> players) {
         TowerColour old_team = tower;
         this.tower = player.getTeam();
         // take the towers needed by the tower_holder of the team

@@ -107,7 +107,7 @@ public class Game{
      * @param player player who tries to move mother nature
      * @throws Exception checking the player's played assistant throws exception if movement is greater than the movement points of the assistant
      */
-    public void moveMotherNature(int movement, Player player) throws Exception {
+    public void moveMotherNature(int movement, Player player) throws DistanceMotherNatureException{
         if (player.getFace_up_assistant().getMovement_points() >= movement) {
             Island fromIsland = motherNaturePosition();
             int from = archipelago.indexOf(fromIsland);
@@ -119,6 +119,7 @@ public class Game{
         } else {
             throw new DistanceMotherNatureException("Can't move Mother Nature this far!");
         }
+
     }
 
     /**
@@ -246,7 +247,7 @@ public class Game{
      * checks if any player can conquer the island, to be called when an island is subject to change
      * @param island island to be checked
      */
-    public void islandCheck(Island island) throws Exception{
+    public void islandCheck(Island island) {
         if(!island.getNo_entry()){
             island.conquerCheck(players);
         } else {

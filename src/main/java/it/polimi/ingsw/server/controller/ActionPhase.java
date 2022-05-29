@@ -1,9 +1,11 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.GameConclusionChecks;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Student;
 import it.polimi.ingsw.server.ClientHandler;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +36,10 @@ public class ActionPhase extends GamePhase {
             //2.1 if true -> "have to move mother nature"
             throw new WrongAction("You already moved all students, move Mother Nature now");
         }
+
         // 2.2 if moved less than 3 processPlace
+        // controllo se è l'ultima torre che costruisce
+
     }
 
     @Override
