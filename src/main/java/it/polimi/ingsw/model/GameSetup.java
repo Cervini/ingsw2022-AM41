@@ -134,13 +134,11 @@ public class GameSetup {
             }
     }
 
-
-
-
     //Function to set up characters
     public LinkedList<Character> characterSetup() {
         LinkedList<Character> characters = new LinkedList<>();
         LinkedList<Character> selectedCharacters = new LinkedList<>();
+        CharacterFunctions characterFunctions = new CharacterFunctions();
         for(int characterNumber = 0; characterNumber < totalNumberOfCharacters; characterNumber++){
             characters.add(new Character(characterNumber));
         }

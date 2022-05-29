@@ -17,6 +17,11 @@ public class Game{
     private static final int minimumNumberOfIslands = 3;
     private static final int starting_students = 120;
     private static final int noEntryCharacterNumber = 4;
+    private static final int set4Students = 4;
+    private static final int set6Students = 6;
+    private static final int characterNeeds4Students1 = 0;
+    private static final int characterNeeds6Students = 6;
+    private static final int characterNeeds4Students2 = 10;
 
     /**
      * prepares the game
@@ -33,6 +38,7 @@ public class Game{
         professors = gameSetup.professorSetup();
         gameSetup.placeStudentEntranceSetUp(this);
         characters = gameSetup.characterSetup();
+        characterSetupStudents(characters);
     }
 
     private List<Cloud> cloudsSetup(int numberOfPlayers){
@@ -60,6 +66,21 @@ public class Game{
                     cloud.putStudent(drawStudent());
                 } catch (Exception e) {
                     System.out.println(e);
+                }
+            }
+        }
+    }
+
+    //Sets up the students on the character card if necessary
+    private void characterSetupStudents(LinkedList<Character> characters){
+        for(Character characterToCheck: characters){
+            if(characterToCheck.getCharacterNumber() == characterNeeds4Students1 || characterToCheck.getCharacterNumber() == characterNeeds4Students2){
+                for (int i = 0; i < set4Students; i++) {
+                    characterToCheck.addStudent(bag.removeFirst());
+                }
+            }else if(characterToCheck.getCharacterNumber() == characterNeeds6Students) {
+                for (int i = 0; i < set6Students; i++) {
+                    characterToCheck.addStudent(bag.removeFirst());
                 }
             }
         }
