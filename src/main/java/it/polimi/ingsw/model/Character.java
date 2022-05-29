@@ -9,14 +9,12 @@ public class Character{
     private int cost;
     private int noEntry;
     private boolean increasedCost;
-    private boolean needToSetStudent;
 
     private CharacterFunctions characterFunctions = new CharacterFunctions();
-    private LinkedList<Student> students;
+    private LinkedList<Student> students = new LinkedList<>();
 
     private static final int numberOfStudentsToRemove = 3;
-    private static final int set4Students = 4;
-    private static final int set6Students = 6;
+    private static final int maxNoEntry = 4;
 
     public Character(int characterNumber){
         this.characterNumber = characterNumber;
@@ -25,7 +23,6 @@ public class Character{
         switch (characterNumber){
             case 0 -> {
                 cost = 1;
-                needToSetStudent = true;
             }
             case 1 -> {
                 cost = 2;
@@ -38,14 +35,13 @@ public class Character{
             }
             case 4 -> {
                 cost = 2;
-                noEntry = 4;
+                noEntry = maxNoEntry;
             }
             case 5 -> {
                 cost = 3;
             }
             case 6 -> {
                 cost = 1;
-                needToSetStudent = true;
             }
             case 7 -> {
                 cost = 2;
@@ -58,7 +54,6 @@ public class Character{
             }
             case 10 -> {
                 cost = 2;
-                needToSetStudent = true;
             }
             case 11 -> {
                 cost = 3;
@@ -71,14 +66,23 @@ public class Character{
     }
 
     public void returnNoEntry(){
-        noEntry++;
+
+        if(noEntry < maxNoEntry) {
+            noEntry++;
+        }
     }
 
     public int getCost() {return cost; }
 
-    private void getNoEntry() {
+    public LinkedList<Student> getStudents() {return students;}
+
+    public void addStudent(Student student) {students.add(student);}
+
+    private void getNoEntry() throws Exception {
         if(noEntry > 0){
             noEntry--;
+        }else{
+            throw new Exception("All the No Entry cards are already returned");
         }
     }
 
@@ -133,12 +137,6 @@ public class Character{
     //Character 1 (case 0)
     private Game effect1(Game game, Student selectedStudent, Island island){
         int indexOfIslandToEdit;
-        if(needToSetStudent) {
-            for (int i = 0; i < set4Students; i++) {
-                students.add(game.getBag().removeFirst());
-            }
-            needToSetStudent = false;
-        }
         students.remove(selectedStudent);
         indexOfIslandToEdit = game.getArchipelago().indexOf(island);
         game.getArchipelago().get(indexOfIslandToEdit).putStudent(selectedStudent);
@@ -171,7 +169,7 @@ public class Character{
     }
 
     //Character 5 (case 4)
-    private Game effect5(Game game, Island island){
+    private Game effect5(Game game, Island island) throws Exception{
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(island);
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
@@ -190,12 +188,6 @@ public class Character{
     //Character 7 (case 6)
     private Game effect7(Game game, Player player, LinkedList<Student> studentsToAdd, LinkedList<Student> studentsToRemove){
         int playerIndex;
-        if(needToSetStudent) {
-            for (int i = 0; i < set6Students; i++) {
-                students.add(game.getBag().removeFirst());
-            }
-            needToSetStudent = false;
-        }
         playerIndex = game.getPlayers().indexOf(player);
         game.getPlayers().get(playerIndex).getSchool().removeStudents(studentsToAdd);
         game.getPlayers().get(playerIndex).getSchool().putStudents(studentsToRemove);
@@ -235,12 +227,6 @@ public class Character{
 
     //Character 11 (case 10)
     private Game effect11(Game game, Player player, Student student) throws Exception{
-        if(needToSetStudent) {
-            for (int i = 0; i < set4Students; i++) {
-                students.add(game.getBag().removeFirst());
-            }
-            needToSetStudent = false;
-        }
         students.remove(student);
         player.getSchool().getDining_room(student.getColour()).putStudent(student);
         students.add(game.getBag().removeFirst());

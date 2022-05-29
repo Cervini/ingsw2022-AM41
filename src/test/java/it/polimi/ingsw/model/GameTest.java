@@ -510,50 +510,6 @@ class GameTest {
     }
 
     @Test
-    void chooseCloudTest1() {
-        Game game = new Game(3);
-        Cloud cloud = new Cloud();
-        Player player = new Player(TowerColour.WHITE);
-        Student student1 = new Student(Colour.RED);
-        Student student2 = new Student(Colour.BLUE);
-        Student student3 = new Student(Colour.GREEN);
-        Student student4 = new Student(Colour.PINK);
-        LinkedList<Student> students = new LinkedList<Student>();
-        LinkedList<Student> outputStudents = new LinkedList<Student>();
-
-        try {
-            cloud.putStudent(student1);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        try {
-            cloud.putStudent(student2);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        try {
-            cloud.putStudent(student3);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        // putting a 4th student on the cloud should throw an exception
-        try {
-            cloud.putStudent(student4);
-        } catch (Exception e) {
-            System.out.println(e);;
-        }
-
-        outputStudents.add(student1);
-        outputStudents.add(student2);
-        outputStudents.add(student3);
-        outputStudents.add(student4);
-
-
-        //TODO work in progress
-
-    }
-
-    @Test
     @DisplayName("2 Players Game")
     void constructorTest01() {
         Game game = new Game(2);
