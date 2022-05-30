@@ -56,7 +56,7 @@ public class GameConclusionChecks {
      * method used in endGame
      * @return the player who meets the winning conditions
      */
-    private Player checkWinner(List<Player> players, List<Island> archipelago){
+    public Player checkWinner(List<Player> players, List<Island> archipelago){
         Player winner = null;
         int towers = 0;
         int tmp;

@@ -25,7 +25,6 @@ public class PlanningController extends BaseController {
             gamePhase.validatePlayAssistant(clientHandler); // check if move is allowed
             response = processPlay(request, clientHandler); // process move
 
-            // TODO: logica controllo cambiamento fase del gioco
 
             boolean canStartActionPhase = allPlayersHavePlayedAnAssistant(clientHandler);
 

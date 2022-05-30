@@ -42,7 +42,6 @@ public class ActionController  {
 
     public static Message move(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
         Message response = new Message("string");
-
         try {
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
                     (ActionPhase) currentGamePhase :
@@ -52,9 +51,6 @@ public class ActionController  {
             response = processMove(request, clientHandler); // action
             ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the same player
             actionPhase.setNextActionForCurrentPlayer();
-
-
-
 
         } catch (GamePhase.WrongTurn e) {
             response.setArgString("Wrong turn");
@@ -76,36 +72,27 @@ public class ActionController  {
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
                     (ActionPhase) currentGamePhase :
                     (PlanningPhase) currentGamePhase;
-
             gamePhase.validateChooseCloud(clientHandler); // check if action is allowed
             response = processChoose(request, clientHandler); // action
-
-
             boolean isLastPlayer =
-                    gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1;
-
+                    gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1; // checks if all players have already played this phase
             if (isLastPlayer) {
 
                 sort(currentGamePhase.getCurrentPlayers(),
-                        Comparator.comparingInt((ClientHandler a)->a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue()));
+                        Comparator.comparingInt((ClientHandler a)->a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue())); //players sorted by previous assistant value
 
                 ClientHandler oldFirstPlayer = (ClientHandler) currentGamePhase.getCurrentPlayers()
                                                                 .stream()
                                                                 .filter(p-> (p.isPlayerFirstMove))
                                                                 .findAny().orElse(null);
-                oldFirstPlayer.setPlayerFirstMove(false);
+                oldFirstPlayer.setPlayerFirstMove(false); //sets the
                 ClientHandler firstPlayer = currentGamePhase.getCurrentPlayers().get(0);
                 firstPlayer.isPlayerFirstMove = true;
 
-                GamePhase planningPhase = new PlanningPhase(clientHandler.getGame(), currentGamePhase.getCurrentPlayers());
+                GamePhase planningPhase = new PlanningPhase(clientHandler.getGame(), currentGamePhase.getCurrentPlayers()); // new game phase
                 setGamePhaseForAllPlayers(currentGamePhase.getCurrentPlayers(),planningPhase);
                 planningPhase.getCurrentPlayers().forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null));
                 firstPlayer.getGame().startTurn(); //clouds filled
-
-
-
-
-
             } else {
                 ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the next player
                 actionPhase.setNextPlayerAndFirstAction(clientHandler);
@@ -122,11 +109,10 @@ public class ActionController  {
         }
         return response;
     }
-
     /**
      * @param request message containing the command
      * @param client  client that sent the request to start the game
-     * @return a new STRING message containing the
+     * @return a new STRING message containing the action result
      */
     public static Message processPlace(Message request, ClientHandler client) throws ActionPhase.WrongAction {
         Player currentPlayer = client.getGame().getPlayer(client.getUsername()); // get the player who sent command PLACE
@@ -155,7 +141,12 @@ public class ActionController  {
 
         return output;
     }
-
+    /**
+     * processes the command and checks if there are valid conditions to end the game
+     * @param request message containing the command
+     * @param client  client that sent the request to start the game
+     * @return a new STRING message containing the action result
+     */
     public static Message processMove(Message request, ClientHandler client) throws ActionPhase.WrongAction {
         Message output = new Message("string");
         Game current_game = client.getGame();
@@ -175,12 +166,12 @@ public class ActionController  {
         } catch (Game.DistanceMotherNatureException e) {
             throw new ActionPhase.WrongAction("Can't move Mother Nature this far, please retry");
         }
-        
+
         boolean isLastPlayer =
                 client.getCurrentGamePhase().getCurrentPlayers().indexOf(client) == client.getCurrentGamePhase().getCurrentPlayers().size() - 1;
 
-        Message firstEndingCondition = towersEnded(current_game, current_game.getPlayers(),currentGamePhase);
-        Message secondEndingCondition = minNumberOfIslands(current_game, current_game.getPlayers(), currentGamePhase);
+        Message firstEndingCondition = towersEnded(current_game, current_game.getPlayers(),currentGamePhase); //game ends if all towers have been placed by one players
+        Message secondEndingCondition = minNumberOfIslands(current_game, current_game.getPlayers(), currentGamePhase);//game ends if only three groups of islands are left
 
             if (firstEndingCondition != null ) {
                     output = firstEndingCondition;
@@ -189,37 +180,37 @@ public class ActionController  {
                 output = secondEndingCondition;
             }
 
-           else if(isLastPlayer && current_game.getBag().size() == 0 ) {
-
-                if (firstEndingCondition != null ){
-                    output = firstEndingCondition;
-                }
-                else if ( secondEndingCondition != null){
-                    output = secondEndingCondition;
+           else if( isLastPlayer && current_game.getBag().size() == 0 ) { //game ends if no students are left
+                Player winner = current_game.getConclusionChecks().checkWinner(current_game.getPlayers(),current_game.getArchipelago());
+                if (winner != null ){
+                    output.setArgString("The winner is: " + winner.getPlayer_id());
                 }
             }
 
-           else if(isLastPlayer && current_player.getAssistants().size() == 0) {
-
-                if (firstEndingCondition != null ){
-                    output = firstEndingCondition;
-                }
-                else if ( secondEndingCondition != null){
-                    output = secondEndingCondition;
+           else if( isLastPlayer && current_player.getAssistants().size() == 0 ) { //game ends if no assistants are left
+                Player winner = current_game.getConclusionChecks().checkWinner(current_game.getPlayers(),current_game.getArchipelago());
+                if (winner != null ){
+                    output.setArgString("The winner is: " + winner.getPlayer_id());
                 }
             }
 
         return output;
     }
 
-    private static Message processChoose(Message message, ClientHandler client) throws ActionPhase.WrongAction {
+    /**
+     * @param request message containing the command
+     * @param client  client that sent the request to start the game
+     * @return a new STRING message containing the action result
+     */
+
+    private static Message processChoose(Message request, ClientHandler client) throws ActionPhase.WrongAction {
         Message output = new Message("string");
         Game game = client.getGame();
-        if(game.getClouds().get(message.getArgNum1()).getStudents().size()==0){
+        if(game.getClouds().get(request.getArgNum1()).getStudents().size()==0){
             throw new ActionPhase.WrongAction("Can't choose this cloud, it has been already chosen by another player");
         } else {
 
-                game.chooseCloud(game.getClouds().get(message.getArgNum1()), game.getPlayer(client.getUsername()));
+                game.chooseCloud(game.getClouds().get(request.getArgNum1()), game.getPlayer(client.getUsername()));
                 output.setArgString("Students moved to your School Board");
 
         }
@@ -243,35 +234,44 @@ public class ActionController  {
         }
     }
 
-
+    /**
+     * @param game reference to the current game
+     * @param players reference to the players
+     * @return a new STRING message containing the winner (winner is set null if there is no winner)
+     */
     private static Message towersEnded(Game game, LinkedList<Player> players, GamePhase currentGamePhase) {
         TowerColour winnerTeam = game.getConclusionChecks().endBecauseAvailableTowersFinished(players, null);
         String winner = null;
         Message winningTeam = null;
-        if (winnerTeam != null) {
+        if (winnerTeam != null) { //checks if there is a winner
 
             for (Player p : players) {
                 if (p.getTeam() == winnerTeam)
                     winner = p.getPlayer_id();
             }
-            currentGamePhase.setGameEnded(true);
+            currentGamePhase.setGameEnded(true); //gameEnded attribute is set false
             winningTeam = new Message("The winner is: " + winner);
             return winningTeam;
         }
         return null;
     }
-
+    /**
+     * @param game reference to the current game
+     * @param players reference to the players
+     * @param currentGamePhase reference to the the current gamePhase
+     * @return a new STRING message containing the winner (winner is set null if there is no winner)
+     */
 
     private static Message  minNumberOfIslands(Game game, List<Player> players, GamePhase currentGamePhase){
         TowerColour winnerTeam = game.getConclusionChecks().endBecauseOfArchipelagoSize(3,game.getArchipelago(),players);
         String winner = null;
         Message winningTeam = null;
-         if(winnerTeam != null) {
+         if(winnerTeam != null) { //checks if there is a winner
              for (Player p : players) {
                  if (p.getTeam() == winnerTeam)
                      winner = p.getPlayer_id();
              }
-             currentGamePhase.setGameEnded(true);
+             currentGamePhase.setGameEnded(true); //gameEnded attribute is set false
              winningTeam = new Message("The winner is: " + winner);
              return winningTeam;
         }

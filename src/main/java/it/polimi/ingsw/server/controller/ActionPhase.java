@@ -25,7 +25,6 @@ public class ActionPhase extends GamePhase {
     @Override
     public void validatePlaceStudent(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction {
         //The player has to: PLACE 3 students -> MOVE mother nature -> CHOOSE the cloud
-        //place 3 students = school board's entrance with 3 students less
 
         // 1. check turn
         //if (clientHandler.isPlayerFirstMove) throw new WrongTurn();
@@ -33,12 +32,10 @@ public class ActionPhase extends GamePhase {
 
         // 2. check if 3 students have been already moved
         if (alreadyMovedThreeStudents(clientHandler)) {
-            //2.1 if true -> "have to move mother nature"
+            //2.1 if true -> player has to move mother nature
             throw new WrongAction("You already moved all students, move Mother Nature now");
         }
 
-        // 2.2 if moved less than 3 processPlace
-        // controllo se è l'ultima torre che costruisce
 
     }
 
