@@ -15,7 +15,6 @@ import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class ClientHandler implements Runnable{
 
     private String username = "new client";
@@ -24,8 +23,7 @@ public class ClientHandler implements Runnable{
     private ObjectOutputStream out;
     private final List<ClientHandler> clients;
     private Game game = null;
-    public boolean isPlayerFirstMove =false;
-
+    public boolean isPlayerFirstMove = false;
     private GamePhase currentGamePhase;
 
     public ClientHandler (Socket clientSocket, List<ClientHandler> clients) {
@@ -61,7 +59,9 @@ public class ClientHandler implements Runnable{
                             switch(request.getCommand()){
                                 case LOGIN -> response = LoginController.processLogin(request, this);
                                 case LOGOUT -> response = LoginController.processLogout(this);
-                                case START -> response = GameController.start(request, this, clients);
+                                case START -> {
+                                    response = GameController.start(request, this, clients);
+                                }
                                 case PLAY -> response = PlanningController.play(request, this, currentGamePhase);
                                 case MOVE -> response = ActionController.move(request, this, currentGamePhase);
                                 case PLACE -> response = ActionController.place(request, this, currentGamePhase);

@@ -71,9 +71,9 @@ class CharacterFunctionsTest {
         game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
         game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
         game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
-        game.getArchipelago().get(7).putStudent(new Student(Colour.BLUE));
-        game.getArchipelago().get(7).putStudent(new Student(Colour.BLUE));
-        game.getArchipelago().get(7).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(1).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(1).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(1).putStudent(new Student(Colour.BLUE));
         game.merge(game.getArchipelago().get(0), game.getArchipelago().get(1));
         game.getArchipelago().get(0).putStudent(new Student(Colour.RED));
         game.getArchipelago().get(0).putStudent(new Student(Colour.RED));

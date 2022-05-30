@@ -58,6 +58,7 @@ public class Client {
         if (readThread != null) {
             readThread.interrupt();
         }
+
         readThread = new Thread(new ReadThread(in)); // create a new ReadThread thread with the input stream obtained during connection
         readThread.start(); // start ReadThread thread
         serverWasOffline = false;
