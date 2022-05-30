@@ -66,7 +66,6 @@ public class ClientHandler implements Runnable{
                                 case MOVE -> response = ActionController.move(request, this, currentGamePhase);
                                 case PLACE -> response = ActionController.place(request, this, currentGamePhase);
                                 case CHOOSE -> response = ActionController.choose(request, this, currentGamePhase);
-                                case STATUS -> response = new GameResultsController().getStatus(request, this);
                                 case NULL -> response = new Message("NULL");
                             }
                             // end of not PING commands

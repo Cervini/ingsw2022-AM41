@@ -8,11 +8,11 @@ import it.polimi.ingsw.server.ClientHandler;
 import static it.polimi.ingsw.server.controller.BaseController.setGamePhaseForAllPlayers;
 import static java.util.Collections.sort;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 
-
-
-public class ActionController {
+public class ActionController  {
 
     public static Message place(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
 
@@ -34,6 +34,9 @@ public class ActionController {
         } catch (ActionPhase.WrongAction e) {
             response.setArgString(e.getMessage());
         }
+        catch (GamePhase.GameEndedException e) {
+            response.setArgString("Game already ended");
+        }
         return response;
     }
 
@@ -49,12 +52,19 @@ public class ActionController {
             response = processMove(request, clientHandler); // action
             ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the same player
             actionPhase.setNextActionForCurrentPlayer();
+
+
+
+
         } catch (GamePhase.WrongTurn e) {
             response.setArgString("Wrong turn");
         } catch (GamePhase.WrongPhaseException e) {
             response.setArgString("Wrong command for this phase");
         } catch (ActionPhase.WrongAction e) {
             response.setArgString(e.getMessage());
+        }
+        catch (GamePhase.GameEndedException e) {
+            response.setArgString("Game already ended");
         }
         return response;
     }
@@ -70,12 +80,12 @@ public class ActionController {
             gamePhase.validateChooseCloud(clientHandler); // check if action is allowed
             response = processChoose(request, clientHandler); // action
 
-            // TODO: logica scatto prossimo round?
 
             boolean isLastPlayer =
                     gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1;
 
             if (isLastPlayer) {
+
                 sort(currentGamePhase.getCurrentPlayers(),
                         Comparator.comparingInt((ClientHandler a)->a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue()));
 
@@ -90,6 +100,11 @@ public class ActionController {
                 GamePhase planningPhase = new PlanningPhase(clientHandler.getGame(), currentGamePhase.getCurrentPlayers());
                 setGamePhaseForAllPlayers(currentGamePhase.getCurrentPlayers(),planningPhase);
                 planningPhase.getCurrentPlayers().forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null));
+                firstPlayer.getGame().startTurn(); //clouds filled
+
+
+
+
 
             } else {
                 ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the next player
@@ -102,6 +117,8 @@ public class ActionController {
             response.setArgString("Wrong command for this phase");
         } catch (ActionPhase.WrongAction e) {
             response.setArgString(e.getMessage());
+        } catch (GamePhase.GameEndedException e) {
+            response.setArgString("Game already ended");
         }
         return response;
     }
@@ -143,6 +160,7 @@ public class ActionController {
         Message output = new Message("string");
         Game current_game = client.getGame();
         Player current_player = client.getGame().getPlayer(client.getUsername());
+        GamePhase currentGamePhase = client.getCurrentGamePhase();
         int mother_nature_movements = request.getArgNum1();
         TowerColour playerTeam = current_player.getTeam();
 
@@ -157,7 +175,40 @@ public class ActionController {
         } catch (Game.DistanceMotherNatureException e) {
             throw new ActionPhase.WrongAction("Can't move Mother Nature this far, please retry");
         }
-        //GameResultsController.getWinner(current_game,client,current_game.getPlayers());
+        
+        boolean isLastPlayer =
+                client.getCurrentGamePhase().getCurrentPlayers().indexOf(client) == client.getCurrentGamePhase().getCurrentPlayers().size() - 1;
+
+        Message firstEndingCondition = towersEnded(current_game, current_game.getPlayers(),currentGamePhase);
+        Message secondEndingCondition = minNumberOfIslands(current_game, current_game.getPlayers(), currentGamePhase);
+
+            if (firstEndingCondition != null ) {
+                    output = firstEndingCondition;
+            }
+           else if ( secondEndingCondition != null){
+                output = secondEndingCondition;
+            }
+
+           else if(isLastPlayer && current_game.getBag().size() == 0 ) {
+
+                if (firstEndingCondition != null ){
+                    output = firstEndingCondition;
+                }
+                else if ( secondEndingCondition != null){
+                    output = secondEndingCondition;
+                }
+            }
+
+           else if(isLastPlayer && current_player.getAssistants().size() == 0) {
+
+                if (firstEndingCondition != null ){
+                    output = firstEndingCondition;
+                }
+                else if ( secondEndingCondition != null){
+                    output = secondEndingCondition;
+                }
+            }
+
         return output;
     }
 
@@ -191,5 +242,41 @@ public class ActionController {
                 throw new ActionPhase.WrongAction("Not existing island, please retry");
         }
     }
+
+
+    private static Message towersEnded(Game game, LinkedList<Player> players, GamePhase currentGamePhase) {
+        TowerColour winnerTeam = game.getConclusionChecks().endBecauseAvailableTowersFinished(players, null);
+        String winner = null;
+        Message winningTeam = null;
+        if (winnerTeam != null) {
+
+            for (Player p : players) {
+                if (p.getTeam() == winnerTeam)
+                    winner = p.getPlayer_id();
+            }
+            currentGamePhase.setGameEnded(true);
+            winningTeam = new Message("The winner is: " + winner);
+            return winningTeam;
+        }
+        return null;
+    }
+
+
+    private static Message  minNumberOfIslands(Game game, List<Player> players, GamePhase currentGamePhase){
+        TowerColour winnerTeam = game.getConclusionChecks().endBecauseOfArchipelagoSize(3,game.getArchipelago(),players);
+        String winner = null;
+        Message winningTeam = null;
+         if(winnerTeam != null) {
+             for (Player p : players) {
+                 if (p.getTeam() == winnerTeam)
+                     winner = p.getPlayer_id();
+             }
+             currentGamePhase.setGameEnded(true);
+             winningTeam = new Message("The winner is: " + winner);
+             return winningTeam;
+        }
+        return null;
+    }
+
 
 }

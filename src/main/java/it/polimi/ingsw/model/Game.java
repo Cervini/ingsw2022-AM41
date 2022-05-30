@@ -12,6 +12,8 @@ public class Game{
     private List<Cloud> clouds; // list of all the clouds
     private LinkedList<Character> characters;
     private String status; // status of the game
+    private GameConclusionChecks conclusionChecks;
+
 
     // constants
     private static final int minimumNumberOfIslands = 3;
@@ -39,6 +41,7 @@ public class Game{
         gameSetup.placeStudentEntranceSetUp(this);
         characters = gameSetup.characterSetup();
         characterSetupStudents(characters);
+        conclusionChecks = new GameConclusionChecks();
     }
 
     private List<Cloud> cloudsSetup(int numberOfPlayers){
@@ -419,6 +422,9 @@ public class Game{
         public DistanceMotherNatureException(String msg){
             super(msg);
         }
+    }
+    public GameConclusionChecks getConclusionChecks() {
+        return conclusionChecks;
     }
 
 }

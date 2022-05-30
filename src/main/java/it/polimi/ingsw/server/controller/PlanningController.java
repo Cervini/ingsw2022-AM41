@@ -39,15 +39,14 @@ public class PlanningController extends BaseController {
                 GamePhase actionPhase = new ActionPhase(clientHandler.getGame(), sameMatchPlayers);
                 setGamePhaseForAllPlayers(sameMatchPlayers, actionPhase);
 
-                //il giocatore random non ha più il primo turno
-//                ClientHandler oldFirstTurn = (ClientHandler) sameMatchPlayers.stream().filter(ClientHandler::getPlayerFirstMove);
-//                oldFirstTurn.setPlayerFirstMove(false);
-//                sameMatchPlayers.get(0).setPlayerFirstMove(true);
             }
+
         } catch (GamePhase.WrongPhaseException e) {
             response.setArgString("Wrong command for this phase");
         } catch (GamePhase.WrongTurn e) {
             response.setArgString("It is not your turn");
+        } catch (GamePhase.GameEndedException e) {
+            response.setArgString("Game already ended");
         }
 
         return response;
@@ -127,6 +126,12 @@ public class PlanningController extends BaseController {
             if (c.getGame().getPlayer(c.getUsername()).getFace_up_assistant() == null) return false;
         }
         return true;
+    }
+
+
+    protected static void setGamePhaseForAllPlayers(List<ClientHandler> sameMatchPlayers, GamePhase gamePhase) {
+        sameMatchPlayers.stream()
+                .forEach(player -> player.setCurrentGamePhase(gamePhase));
     }
 
 }

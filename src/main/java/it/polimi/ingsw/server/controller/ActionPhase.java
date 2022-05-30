@@ -54,15 +54,18 @@ public class ActionPhase extends GamePhase {
             }
         }
 
-        // TODO: Can't move Mother Nature this far, please retry
     }
 
     @Override
     public void validateChooseCloud(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction {
         validatePlayerTurn(clientHandler);
         boolean isExpectedAction = currentPlayerNextAction.getAction() == PlayerAction.ActionType.CHOOSE_CLOUD;
+        boolean isLastRound =  clientHandler.getGame().getBag().size() == 0;
         if (!isExpectedAction) {
             throw new WrongAction("Before choose cloud you have to complete students and mother nature movements");
+        }
+        if(isLastRound){
+            throw new WrongAction("there are no students available");
         }
     }
 
