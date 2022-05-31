@@ -16,9 +16,9 @@ public class Login extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //Parent root = FXMLLoader.load(getClass().getResource("graphics/fxml/Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("graphics/fxml/Login.fxml"));
         primaryStage.setTitle("Eriantys - Login");
-        //primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 }

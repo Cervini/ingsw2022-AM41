@@ -86,7 +86,7 @@ public class Character{
         }
     }
 
-    public Game effect(Game game, Player player, LinkedList<Student> studentList1, LinkedList<Student> studentList2, Island island, Assistant assistant, Colour colour) throws Exception{
+    public Game effect(Game game, Player player, LinkedList<Student> studentList1, LinkedList<Student> studentList2, Island island, Colour colour) throws Exception{
         Game modifiedGame = null;
 
         if(increasedCost == false){
@@ -104,7 +104,7 @@ public class Character{
                 modifiedGame = effect3(game, island);
             }
             case 3 -> {
-                modifiedGame = effect4(game, assistant);
+                modifiedGame = effect4(game, player.getFace_up_assistant());
             }
             case 4 -> {
                 modifiedGame = effect5(game, island);
@@ -186,13 +186,19 @@ public class Character{
     }
 
     //Character 7 (case 6)
-    private Game effect7(Game game, Player player, LinkedList<Student> studentsToAdd, LinkedList<Student> studentsToRemove){
+    private Game effect7(Game game, Player player, LinkedList<Student> studentsSelectedFromPlayer, LinkedList<Student> studentsSelectedFromCharacter) throws Exception{
         int playerIndex;
         playerIndex = game.getPlayers().indexOf(player);
-        game.getPlayers().get(playerIndex).getSchool().removeStudents(studentsToAdd);
-        game.getPlayers().get(playerIndex).getSchool().putStudents(studentsToRemove);
-        students.remove(studentsToRemove);
-        students.addAll(studentsToAdd);
+        if(studentsSelectedFromPlayer.size() == studentsSelectedFromCharacter.size()) {
+            game.getPlayers().get(playerIndex).getSchool().removeStudents(studentsSelectedFromPlayer);
+            game.getPlayers().get(playerIndex).getSchool().putStudents(studentsSelectedFromCharacter);
+            for (Student studentToRemove : studentsSelectedFromCharacter) {
+                students.remove(studentToRemove);
+            }
+            students.addAll(studentsSelectedFromPlayer);
+        }else{
+            throw new Exception("You must select an equal ammount of students both from the island and the character");
+        }
         return game;
     }
 

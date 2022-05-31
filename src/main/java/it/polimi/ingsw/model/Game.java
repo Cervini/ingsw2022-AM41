@@ -135,7 +135,7 @@ public class Game{
             fromIsland.setMother_nature(false);
             archipelago.get((from + movement)%archipelago.size()).setMother_nature(true);
             // run influence check and change owner of the island if possible
-            islandCheck(archipelago.get((from + movement) % archipelago.size())); //TODO not sure of call timing
+            islandCheck(archipelago.get((from + movement) % archipelago.size()));
             archipelago.get(from).setMother_nature(false);
         } else {
             throw new DistanceMotherNatureException("Can't move Mother Nature this far!");

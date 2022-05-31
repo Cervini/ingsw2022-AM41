@@ -154,7 +154,9 @@ public class SchoolBoard implements Tile, Serializable {
     }
 
     public void removeStudents(LinkedList<Student> studentsToRemove) {
-        entrance.removeAll(studentsToRemove);
+        for(Student studentToRemove: studentsToRemove){
+            entrance.remove(studentToRemove);
+        }
     }
 
     public void putStudents(LinkedList<Student> studentsToAdd) {

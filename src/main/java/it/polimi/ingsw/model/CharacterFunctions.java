@@ -22,7 +22,7 @@ public class CharacterFunctions {
     }
 
     //Function of character 2
-    //TODO fix
+    //TODO fix - deep copy oppure metodo restore in Professor
     public Game checkInfluenceWithModifiedBoard(Game game, Player player) throws Exception{
         LinkedList<Player> originalPlayers = new LinkedList<>();
         int islandIndex;
@@ -43,7 +43,7 @@ public class CharacterFunctions {
     }
 
     //Function of character 6
-    //TODO fix
+    //TODO fix - deep copy oppure restore towers;
     public Game checkInfluenceWithoutTowers(Game game) throws Exception{
         int islandIndex;
         List<Island> originalArchipelago = game.getArchipelago();
