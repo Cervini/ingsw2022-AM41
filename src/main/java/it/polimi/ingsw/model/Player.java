@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Player implements Comparable{
-
     private String player_id = "new player"; // player's unique ID
     private final LinkedList<Assistant> assistants; // list of not yet played assistant cards
     private final TowerColour team; // color of the player's towers, determines the team in 4 player mode

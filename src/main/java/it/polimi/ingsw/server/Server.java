@@ -27,7 +27,7 @@ public class Server {
         }
     }
 
-    private static ExecutorService pool = Executors.newCachedThreadPool();
+    private static final ExecutorService pool = Executors.newCachedThreadPool();
 
     static void startServer(int portNumber) {
         System.out.println("starting server on port " + portNumber);

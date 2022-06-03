@@ -3,7 +3,7 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.model.Player;
 
 public class PlayerAction {
-    private Player player;
+    private final Player player;
     private ActionType action;
 
     public PlayerAction(Player player, ActionType action) {

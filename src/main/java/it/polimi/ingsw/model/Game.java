@@ -6,14 +6,13 @@ public class Game{
     private LinkedList<Player> players; // list of all the active players
     private int available_coins; // number of all the coins not owned by any player or placed on character cards
     private LinkedList<Student> bag; // list of all the students
-    private List<Professor> professors; // list of all the professors
+    private final List<Professor> professors; // list of all the professors
     private List<Island> archipelago; // list of all the islands
     private LinkedList<Player> turnOrder; // playing order of the turn
     private List<Cloud> clouds; // list of all the clouds
     private LinkedList<Character> characters;
-    private String status; // status of the game
-    private GameConclusionChecks conclusionChecks;
-
+    private final GameConclusionChecks conclusionChecks;
+    private Player activePlayer;
 
     // constants
     private static final int minimumNumberOfIslands = 3;
@@ -138,7 +137,7 @@ public class Game{
             fromIsland.setMother_nature(false);
             archipelago.get((from + movement)%archipelago.size()).setMother_nature(true);
             // run influence check and change owner of the island if possible
-            islandCheck(archipelago.get((from + movement) % archipelago.size())); //TODO not sure of call timing
+            islandCheck(archipelago.get((from + movement) % archipelago.size()));
             archipelago.get(from).setMother_nature(false);
         } else {
             throw new DistanceMotherNatureException("Can't move Mother Nature this far!");
@@ -427,4 +426,11 @@ public class Game{
         return conclusionChecks;
     }
 
+    public Player getActivePlayer() {
+        return activePlayer;
+    }
+
+    public void setActivePlayer(Player activePlayer) {
+        this.activePlayer = activePlayer;
+    }
 }

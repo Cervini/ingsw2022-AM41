@@ -7,10 +7,10 @@ import java.util.List;
 
 public class GamePhase {
 
-    private Game current_game;
+    private final Game current_game;
     private Boolean planning_phase = false;
     private Boolean action_phase = false;
-    private List<ClientHandler> current_players;
+    private final List<ClientHandler> current_players;
     private boolean gameEnded = false;
 
     public GamePhase(Game game, List<ClientHandler> players) {
@@ -102,5 +102,9 @@ public class GamePhase {
 
     public void setGameEnded(boolean gameEnded) {
         this.gameEnded = gameEnded;
+    }
+
+    public Game getCurrent_game() {
+        return current_game;
     }
 }

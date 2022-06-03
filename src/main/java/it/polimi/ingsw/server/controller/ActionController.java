@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.communication.messages.ToTile;
 import it.polimi.ingsw.model.*;
@@ -74,6 +75,7 @@ public class ActionController  {
                     (PlanningPhase) currentGamePhase;
             gamePhase.validateChooseCloud(clientHandler); // check if action is allowed
             response = processChoose(request, clientHandler); // action
+            changeActivePlayer(gamePhase); // change the order of currentPlayers
             boolean isLastPlayer =
                     gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1; // checks if all players have already played this phase
             if (isLastPlayer) {
@@ -81,11 +83,11 @@ public class ActionController  {
                 sort(currentGamePhase.getCurrentPlayers(),
                         Comparator.comparingInt((ClientHandler a)->a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue())); //players sorted by previous assistant value
 
-                ClientHandler oldFirstPlayer = (ClientHandler) currentGamePhase.getCurrentPlayers()
+                ClientHandler oldFirstPlayer = currentGamePhase.getCurrentPlayers()
                                                                 .stream()
                                                                 .filter(p-> (p.isPlayerFirstMove))
                                                                 .findAny().orElse(null);
-                oldFirstPlayer.setPlayerFirstMove(false); //sets the
+                oldFirstPlayer.setPlayerFirstMove(false);
                 ClientHandler firstPlayer = currentGamePhase.getCurrentPlayers().get(0);
                 firstPlayer.isPlayerFirstMove = true;
 
@@ -109,6 +111,20 @@ public class ActionController  {
         }
         return response;
     }
+
+    /**
+     * change the active player
+     */
+    private static void changeActivePlayer(GamePhase gamePhase) {
+        for (int i=0; i<gamePhase.getCurrentPlayers().size(); i++){
+            if(gamePhase.getCurrentPlayers().get(i).getUsername().equals(gamePhase.getCurrent_game().getActivePlayer().getPlayer_id())){
+                String name = gamePhase.getCurrentPlayers().get(i+1).getUsername();
+                Player player = gamePhase.getCurrent_game().getPlayer(name);
+                gamePhase.getCurrent_game().setActivePlayer(player);
+            }
+        }
+    }
+
     /**
      * @param request message containing the command
      * @param client  client that sent the request to start the game
@@ -154,14 +170,14 @@ public class ActionController  {
         GamePhase currentGamePhase = client.getCurrentGamePhase();
         int mother_nature_movements = request.getArgNum1();
         TowerColour playerTeam = current_player.getTeam();
-
         try {
             current_game.moveMotherNature(mother_nature_movements,current_player);
-
             if (current_game.getArchipelago().get(request.getArgNum1()).getTower() == playerTeam){
+                // TODO: even when island is conquered this string is not printed
                 output.setArgString("Mother nature moved, you have conquered this island!");
+            } else {
+                output.setArgString("Mother nature moved but you can't conquer this island");
             }
-            output.setArgString("Mother nature moved but you can't conquer this island");
 
         } catch (Game.DistanceMotherNatureException e) {
             throw new ActionPhase.WrongAction("Can't move Mother Nature this far, please retry");
@@ -179,7 +195,6 @@ public class ActionController  {
            else if ( secondEndingCondition != null){
                 output = secondEndingCondition;
             }
-
            else if( isLastPlayer && current_game.getBag().size() == 0 ) { //game ends if no students are left
                 Player winner = current_game.getConclusionChecks().checkWinner(current_game.getPlayers(),current_game.getArchipelago());
                 if (winner != null ){
@@ -202,14 +217,12 @@ public class ActionController  {
      * @param client  client that sent the request to start the game
      * @return a new STRING message containing the action result
      */
-
     private static Message processChoose(Message request, ClientHandler client) throws ActionPhase.WrongAction {
         Message output = new Message("string");
         Game game = client.getGame();
         if(game.getClouds().get(request.getArgNum1()).getStudents().size()==0){
             throw new ActionPhase.WrongAction("Can't choose this cloud, it has been already chosen by another player");
         } else {
-
                 game.chooseCloud(game.getClouds().get(request.getArgNum1()), game.getPlayer(client.getUsername()));
                 output.setArgString("Students moved to your School Board");
 

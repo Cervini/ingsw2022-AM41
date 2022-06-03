@@ -15,7 +15,6 @@ public class GamePack implements Serializable {
     private final List<Assistant> assistants;
     private final List<Cloud> clouds;
 
-
     /**
      * Packs the information that need to be showed to client
      * @param game game to be packed
@@ -67,7 +66,7 @@ public class GamePack implements Serializable {
     }
 
     /**
-     * prints the state of the game saved by the GamePack
+     * prints the state of the game saved by the GamePack (CLI use)
      */
     public void printPack(){
         System.out.println("\n---------------------------------");
@@ -236,8 +235,6 @@ public class GamePack implements Serializable {
         return null;
     }
 
-    public static final String WHITE = "\033[1;97m";
-    public static final String GREY = "\033[1;90m";
     public static final String RESET = "\u001B[0m";
     public static final String BLACK = "\u001B[30m";
     public static final String RED = "\033[1;91m";
@@ -245,4 +242,6 @@ public class GamePack implements Serializable {
     public static final String YELLOW = "\033[1;93m";
     public static final String BLUE = "\033[1;94m";
     public static final String PINK = "\033[1;95m";
+    public static final String WHITE = "\033[1;97m";
+    public static final String GREY = "\033[1;90m";
 }

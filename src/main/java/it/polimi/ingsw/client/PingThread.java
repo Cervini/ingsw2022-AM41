@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 
 public class PingThread implements Runnable{
     private Thread pingThread;
-    private String threadName = "PingThread";
+    private final String threadName = "PingThread";
     private String ipAddress;
     private int portNumber;
     private boolean isServerReachable;

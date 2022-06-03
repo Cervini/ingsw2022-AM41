@@ -29,8 +29,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceOnSpecificIsland(game, specificIsland);
 
         assertEquals(game.getArchipelago().get(7).getColour(), game.getPlayers().getFirst().getTeam());
-
-        System.out.println("checkInfluenceOnSpecificIslandTest1 complete");
     }
 
     @Test
@@ -54,8 +52,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceOnSpecificIsland(game, specificIsland);
 
         assertEquals(game.getArchipelago().get(0).getColour(), game.getPlayers().getLast().getTeam());
-
-        System.out.println("checkInfluenceOnSpecificIslandTest2 complete");
     }
 
     @Test
@@ -84,8 +80,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceOnSpecificIsland(game, specificIsland);
 
         assertEquals(game.getArchipelago().get(0).getColour(), game.getPlayers().getFirst().getTeam());
-
-        System.out.println("checkInfluenceOnSpecificIslandTest3 complete");
     }
 
     @Test
@@ -123,8 +117,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceOnSpecificIsland(game, specificIsland);
 
         assertEquals(game.getArchipelago().get(0).getColour(), game.getPlayers().get(1).getTeam());
-
-        System.out.println("checkInfluenceOnSpecificIslandTest4 complete");
     }
 
     @Test
@@ -142,9 +134,6 @@ class CharacterFunctionsTest {
         game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
         game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
         game.getArchipelago().get(0).putStudent(new Student(Colour.PINK));
-        game.getArchipelago().get(7).putStudent(new Student(Colour.BLUE));
-        game.getArchipelago().get(7).putStudent(new Student(Colour.BLUE));
-        game.getArchipelago().get(7).putStudent(new Student(Colour.BLUE));
         game.merge(game.getArchipelago().get(0), game.getArchipelago().get(1));
         game.getArchipelago().get(0).putStudent(new Student(Colour.RED));
         game.getArchipelago().get(0).putStudent(new Student(Colour.RED));
@@ -162,8 +151,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceOnSpecificIsland(game, specificIsland);
 
         assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(0).getColour());
-
-        System.out.println("checkInfluenceOnSpecificIslandTest5 complete");
     }
 
     @Test
@@ -221,8 +208,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithModifiedBoard(game, game.getPlayers().getLast());
 
         assertTrue(game.getPlayers().getLast().getOwned_professor().contains(new Professor(Colour.RED)));
-
-        System.out.println("checkInfluenceWithModifiedBoardTest3 complete");
     }
 
     @Test
@@ -240,8 +225,6 @@ class CharacterFunctionsTest {
         ownsProfessor = game.getPlayers().getFirst().hasProfessor(Colour.RED);
 
         assertTrue(ownsProfessor);
-
-        System.out.println("checkInfluenceWithModifiedBoardTest4 complete");
     }
 
     @Test
@@ -264,8 +247,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithModifiedBoard(game, game.getPlayers().getLast());
 
         assertTrue(ownedProfessor1.equals(game.getPlayers().getFirst().getOwned_professor()) && ownedProfessor2.equals(game.getPlayers().getLast().getOwned_professor()));
-
-        System.out.println("checkInfluenceWithModifiedBoardTest5 complete");
     }
 
     @Test
@@ -285,8 +266,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithModifiedBoard(game, game.getPlayers().get(1));
 
         assertEquals(game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getColour(), game.getPlayers().get(1).getTeam());
-
-        System.out.println("checkInfluenceWithModifiedBoardTest6 complete");
     }
 
     @Test
@@ -305,8 +284,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithoutTowers(game);
 
         assertEquals(game.getArchipelago().get(islandIndex).getColour(), game.getPlayers().getFirst().getTeam());
-
-        System.out.println("checkInfluenceWithoutTowersTest1 complete");
     }
 
     @Test
@@ -330,8 +307,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithoutTowers(game);
 
         assertEquals(game.getArchipelago().get(islandIndex).getColour(), game.getPlayers().getLast().getTeam());
-
-        System.out.println("checkInfluenceWithoutTowersTest2 complete");
     }
 
     //TODO fix, reset tower does not work
@@ -374,8 +349,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithBonus(game, game.getPlayers().getLast());
 
         assertEquals(game.getArchipelago().get(islandIndex).getColour(), game.getPlayers().getLast().getTeam());
-
-        System.out.println("checkInfluenceWithBonusTest1 complete");
     }
 
     @Test
@@ -399,8 +372,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithBonus(game, game.getPlayers().getLast());
 
         assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(islandIndex).getColour());
-
-        System.out.println("checkInfluenceWithBonusTest2 complete");
     }
 
     @Test
@@ -428,8 +399,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithBonus(game, game.getPlayers().getLast());
 
         assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(islandIndex).getColour());
-
-        System.out.println("checkInfluenceWithBonusTest3 complete");
     }
 
     @Test
@@ -453,8 +422,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithBonus(game, game.getPlayers().getLast());
 
         assertNull(game.getArchipelago().get(islandIndex).getColour());
-
-        System.out.println("checkInfluenceWithBonusTest4 complete");
     }
 
     @Test
@@ -475,8 +442,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithoutColour(game, Colour.RED);
 
         assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(islandIndex).getColour());
-
-        System.out.println("checkInfluenceWithoutColourTest1 complete");
     }
 
     @Test
@@ -499,8 +464,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithoutColour(game, Colour.RED);
 
         assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(islandIndex).getColour());
-
-        System.out.println("checkInfluenceWithoutColourTest2 complete");
     }
 
     @Test
@@ -531,8 +494,6 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithoutColour(game, Colour.GREEN);
 
         assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(islandIndex).getColour());
-
-        System.out.println("checkInfluenceWithoutColourTest3 complete");
     }
 
     @Test
@@ -563,7 +524,5 @@ class CharacterFunctionsTest {
         game = cf.checkInfluenceWithoutColour(game, Colour.YELLOW);
 
         assertEquals(game.getPlayers().get(1).getTeam(), game.getArchipelago().get(islandIndex).getColour());
-
-        System.out.println("checkInfluenceWithoutColourTest4 complete");
     }
 }

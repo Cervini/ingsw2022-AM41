@@ -47,7 +47,6 @@ public class PlanningController extends BaseController {
         } catch (GamePhase.GameEndedException e) {
             response.setArgString("Game already ended");
         }
-
         return response;
     }
 
