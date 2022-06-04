@@ -2,49 +2,91 @@ package it.polimi.ingsw.communication.messages;
 
 import it.polimi.ingsw.communication.GamePack;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
 public class Response {
-    private static boolean good;
-    private static int category;
-    private static int specification;
-    private static GamePack status;
+    private boolean effective;
+    private int category;
+    private int specification;
+    private GamePack status;
 
-    public Response(int message) {
-
+    public Response(int code) {
+        if(isExistingResponse(code)){
+            parseEffective(code);
+            code = code%10000;
+            parseCategory(code);
+            code = code%100;
+            parseSpecification(code);
+        }
+        else{
+            setEffective(false);
+            setCategory(0);
+            setSpecification(0);
+        }
     }
 
-    public Response(int message, GamePack status){
-
+    private void parseSpecification(int code) {
+        setSpecification(code);
     }
 
-    public static boolean isGood() {
-        return good;
+    private void parseCategory(int code) {
+        int digit = code / 100;
+        setCategory(digit);
     }
 
-    public static void setGood(boolean good) {
-        Response.good = good;
+    private void parseEffective(int code){
+        int digit = code / 10000;
+        setEffective(digit == 1);
     }
 
-    public static int getCategory() {
-        return category;
+    private boolean isExistingResponse(int code){
+        Integer intCode = code;
+        Set<Integer> codes = new HashSet<>();
+        try {
+            Scanner reader = new Scanner(new File("src/main/resources/it/polimi/ingsw/codes.txt"));
+            while (reader.hasNextInt()) {
+                codes.add(reader.nextInt());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: ");
+            e.printStackTrace();
+        }
+        return codes.contains(intCode);
     }
 
-    public static void setCategory(int category) {
-        Response.category = category;
+    public boolean isEffective() {
+        return this.effective;
     }
 
-    public static int getSpecification() {
-        return specification;
+    public void setEffective(boolean effective) {
+        this.effective = effective;
     }
 
-    public static void setSpecification(int specification) {
-        Response.specification = specification;
+    public int getCategory() {
+        return this.category;
     }
 
-    public static GamePack getStatus() {
-        return status;
+    public void setCategory(int category) {
+        this.category = category;
     }
 
-    public static void setStatus(GamePack status) {
-        Response.status = status;
+    public int getSpecification() {
+        return this.specification;
+    }
+
+    public void setSpecification(int specification) {
+        this.specification = specification;
+    }
+
+    public GamePack getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(GamePack status) {
+        this.status = status;
     }
 }

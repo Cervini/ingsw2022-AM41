@@ -128,10 +128,10 @@ public class Game{
      * Moves mother nature of 'movement' position
      * @param movement how much mother nature moves
      * @param player player who tries to move mother nature
-     * @throws Exception checking the player's played assistant throws exception if movement is greater than the movement points of the assistant
+     * @throws DistanceMotherNatureException checking the player's played assistant throws exception if movement is greater than the movement points of the assistant
      */
     public void moveMotherNature(int movement, Player player) throws DistanceMotherNatureException{
-        if (player.getFace_up_assistant().getMovement_points() >= movement) {
+        if ((player.getFace_up_assistant().getMovement_points() >= movement)||(movement<1)) {
             Island fromIsland = motherNaturePosition();
             int from = archipelago.indexOf(fromIsland);
             fromIsland.setMother_nature(false);

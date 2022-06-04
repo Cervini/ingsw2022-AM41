@@ -1,5 +1,6 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.messages;
 
+import it.polimi.ingsw.communication.GamePack;
 import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
 
