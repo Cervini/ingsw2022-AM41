@@ -84,6 +84,12 @@ public class Island implements Tile, Serializable {
         return player_influence;
     }
 
+
+    /**
+     * Process the conquer event, change the tower color of the island and gives back the tower to the players if necessary
+     * @param player conquering player
+     * @param players list of all game players
+     */
     private void conquer(Player player, LinkedList<Player> players) {
         TowerColour old_team = tower;
         this.tower = player.getTeam();
@@ -128,7 +134,7 @@ public class Island implements Tile, Serializable {
 
     @Override
     public void removeStudent(Student student) throws Exception {
-        throw new Exception("Students can't be removed from islands"); // TODO better exception
+        throw new Exception("Students can't be removed from islands");
     }
 
     //Same function as above, but it gets called when the power of character 8 is active

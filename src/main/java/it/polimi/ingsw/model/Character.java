@@ -5,13 +5,13 @@ import java.util.LinkedList;
 
 public class Character{
 
-    private int characterNumber;
+    private final int characterNumber;
     private int cost;
     private int noEntry;
     private boolean increasedCost;
 
-    private CharacterFunctions characterFunctions = new CharacterFunctions();
-    private LinkedList<Student> students = new LinkedList<>();
+    private final CharacterFunctions characterFunctions = new CharacterFunctions();
+    private final LinkedList<Student> students = new LinkedList<>();
 
     private static final int numberOfStudentsToRemove = 3;
     private static final int maxNoEntry = 4;

@@ -6,12 +6,13 @@ public class Game{
     private LinkedList<Player> players; // list of all the active players
     private int available_coins; // number of all the coins not owned by any player or placed on character cards
     private LinkedList<Student> bag; // list of all the students
-    private List<Professor> professors; // list of all the professors
+    private final List<Professor> professors; // list of all the professors
     private List<Island> archipelago; // list of all the islands
     private LinkedList<Player> turnOrder; // playing order of the turn
     private List<Cloud> clouds; // list of all the clouds
     private LinkedList<Character> characters;
-    private String status; // status of the game
+    private final GameConclusionChecks conclusionChecks;
+    private Player activePlayer;
 
     // constants
     private static final int minimumNumberOfIslands = 3;
@@ -39,6 +40,7 @@ public class Game{
         gameSetup.placeStudentEntranceSetUp(this);
         characters = gameSetup.characterSetup();
         characterSetupStudents(characters);
+        conclusionChecks = new GameConclusionChecks();
     }
 
     private List<Cloud> cloudsSetup(int numberOfPlayers){
@@ -126,10 +128,10 @@ public class Game{
      * Moves mother nature of 'movement' position
      * @param movement how much mother nature moves
      * @param player player who tries to move mother nature
-     * @throws Exception checking the player's played assistant throws exception if movement is greater than the movement points of the assistant
+     * @throws DistanceMotherNatureException checking the player's played assistant throws exception if movement is greater than the movement points of the assistant
      */
     public void moveMotherNature(int movement, Player player) throws DistanceMotherNatureException{
-        if (player.getFace_up_assistant().getMovement_points() >= movement) {
+        if ((player.getFace_up_assistant().getMovement_points() >= movement)||(movement<1)) {
             Island fromIsland = motherNaturePosition();
             int from = archipelago.indexOf(fromIsland);
             fromIsland.setMother_nature(false);
@@ -420,5 +422,15 @@ public class Game{
             super(msg);
         }
     }
+    public GameConclusionChecks getConclusionChecks() {
+        return conclusionChecks;
+    }
 
+    public Player getActivePlayer() {
+        return activePlayer;
+    }
+
+    public void setActivePlayer(Player activePlayer) {
+        this.activePlayer = activePlayer;
+    }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 import java.io.*;
 import java.net.Socket;
@@ -30,7 +31,6 @@ public class Client {
                         // used when Client starts before Server
                         createClientServerSocket();
                     }
-
                     Message request = new Message(writtenString); // parse the string into message
                     if(request.isStandard()){
                         out.writeObject(request); // send Message object through output stream
@@ -43,10 +43,8 @@ public class Client {
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + server_ip);
-            System.exit(1);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " + server_ip);
-            System.exit(1);
         }
     }
 
@@ -58,6 +56,7 @@ public class Client {
         if (readThread != null) {
             readThread.interrupt();
         }
+
         readThread = new Thread(new ReadThread(in)); // create a new ReadThread thread with the input stream obtained during connection
         readThread.start(); // start ReadThread thread
         serverWasOffline = false;

@@ -5,7 +5,6 @@ import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.server.controller.*;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,17 +14,14 @@ import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class ClientHandler implements Runnable{
-
     private String username = "new client";
     private final Socket clientSocket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private final List<ClientHandler> clients;
     private Game game = null;
-    public boolean isPlayerFirstMove =false;
-
+    public boolean isPlayerFirstMove = false;
     private GamePhase currentGamePhase;
 
     public ClientHandler (Socket clientSocket, List<ClientHandler> clients) {
@@ -47,18 +43,17 @@ public class ClientHandler implements Runnable{
             while(true) {
                 request = (Message) in.readObject();// read object from input stream and cast it into Message
                 while(request.getCommand() != Command.END) { // while the message is not an END type message
-                    // flush output stream
                     if(request.getCommand()!=Command.PING){ // if it's not a PING message
                         // parsing of not PING commands
                         Message response = null;// flush output stream
                         // send through output stream the msg in String form
-                        if((username.equals("new client"))&&(request.getCommand()!=Command.LOGIN)){
-                            response = new Message("string");
+                        if((username.equals("new client"))&&(request.getCommand()!=Command.LOGIN)){ // force login as first command
+                            response = new Message("string"); // setup response
                             response.setArgString("Must log in before sending any other command\n" +
                                     "type LOGIN <username>");
                         } else {
-
-                            switch(request.getCommand()){
+                            // if user has already logged in
+                            switch(request.getCommand()){ // process command
                                 case LOGIN -> response = LoginController.processLogin(request, this);
                                 case LOGOUT -> response = LoginController.processLogout(this);
                                 case START -> response = GameController.start(request, this, clients);
@@ -66,7 +61,6 @@ public class ClientHandler implements Runnable{
                                 case MOVE -> response = ActionController.move(request, this, currentGamePhase);
                                 case PLACE -> response = ActionController.place(request, this, currentGamePhase);
                                 case CHOOSE -> response = ActionController.choose(request, this, currentGamePhase);
-                                case STATUS -> response = new GameResultsController().getStatus(request, this);
                                 case NULL -> response = new Message("NULL");
                             }
                             // end of not PING commands
@@ -140,6 +134,9 @@ public class ClientHandler implements Runnable{
         return same;
     }
 
+    /**
+     * packs the game status in a new GamePack then sends the new status to all the playing users
+     */
     public void updateStatus(){
         Message status = new Message("status");
         status.setStandard(true);
@@ -155,7 +152,6 @@ public class ClientHandler implements Runnable{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         }
     }
 
@@ -173,5 +169,13 @@ public class ClientHandler implements Runnable{
 
     public GamePhase getCurrentGamePhase() {
         return currentGamePhase;
+    }
+
+    public String getPhase() {
+        if(currentGamePhase.isPlanningPhase())
+            return "PLANNING PHASE";
+        else {
+             return game.getActivePlayer().getPlayer_id();
+        }
     }
 }

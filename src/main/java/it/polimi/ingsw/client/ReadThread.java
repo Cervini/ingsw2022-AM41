@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 public class ReadThread implements Runnable{
 
     private final ObjectInputStream in; // stream from where the thread reads the objects
+    private String username;
 
     /**
      * @param in inherited stream from where the thread reads the objects
@@ -32,14 +33,13 @@ public class ReadThread implements Runnable{
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                    //ex.printStackTrace();
                 }
             }
-            if((msg!=null)&&(msg.getCommand()!=Command.STATUS)) // if the message is not null
-                System.out.println("Server says: " + msg); // print the content of the message
+            if((msg!=null)&&(msg.getCommand()!=Command.STATUS)){
+                // if the message is not null
+                System.out.println(msg); // print the content of the message
+            }
         }
     }
-
-
-
 }

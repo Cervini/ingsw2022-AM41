@@ -5,6 +5,9 @@ import java.util.List;
 
 public class GameConclusionChecks {
 
+    public GameConclusionChecks() {
+    }
+
     public TowerColour endBecauseOfArchipelagoSize(int minSize, List<Island> archipelago, List<Player> players){
         Player winner;
         if(archipelago.size()<=minSize){
@@ -53,7 +56,7 @@ public class GameConclusionChecks {
      * method used in endGame
      * @return the player who meets the winning conditions
      */
-    private Player checkWinner(List<Player> players, List<Island> archipelago){
+    public Player checkWinner(List<Player> players, List<Island> archipelago){
         Player winner = null;
         int towers = 0;
         int tmp;

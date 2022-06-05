@@ -8,11 +8,11 @@ import java.util.List;
 
 public class SchoolBoard implements Tile, Serializable {
 
-    private LinkedList<Student> entrance; // list of students at the entrance section of the School_board
-    private ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
+    private final LinkedList<Student> entrance; // list of students at the entrance section of the School_board
+    private final ArrayList<DiningRoom> dining_rooms; // list of all the Dining_rooms associated with this School_board
     private int towers; // number of towers currently on the School_board
     private String owner;
-    private TowerColour team;
+    private final TowerColour team;
     private Assistant face_up_assistant;
     private List<Professor> owned_professor; // list of all the currently owned professors
     private final int entrance_max;
@@ -70,9 +70,6 @@ public class SchoolBoard implements Tile, Serializable {
     public void takeTowers(int towers)  {
         if(this.towers >= towers)
             this.towers -= towers;
-        /*else {
-            throw new Exception("Player has not enough towers"); // TODO define better exception
-        }*/
     }
 
     /**

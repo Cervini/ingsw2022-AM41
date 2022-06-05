@@ -14,7 +14,6 @@ public class Message implements Serializable {
     private FromTile from_tile = FromTile.NULL;
     private ToTile to_tile = ToTile.NULL;
     private boolean standard = false; // if true the message has a correct structure
-
     private GamePack status = null;
 
     public Message(String string){
