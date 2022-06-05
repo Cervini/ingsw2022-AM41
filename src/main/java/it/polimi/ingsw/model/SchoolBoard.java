@@ -177,4 +177,6 @@ public class SchoolBoard implements Tile, Serializable {
     public void setOwned_professor(List<Professor> owned_professor) {
         this.owned_professor = owned_professor;
     }
+
+    public void putProfessor(Professor professor){ this.owned_professor.add(professor); }
 }

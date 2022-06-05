@@ -137,6 +137,28 @@ public class Island implements Tile, Serializable {
         throw new Exception("Students can't be removed from islands");
     }
 
+    //Same function as above, but it gets called when the power of character 6 is active
+    public void conquerCheck(LinkedList<Player> players, boolean noTowers) {
+        int backupTowers = island_size;
+        if(noTowers){
+            island_size = 0;
+        }
+        int[] influenceArray = new int[players.size()];
+        int maxIndex = 0;
+        influenceArray[0] = influence(players.get(0));
+        for(int i = 1; i < players.size(); i++){
+            influenceArray[i] = influence(players.get(i));
+            if(influenceArray[maxIndex] < influenceArray[i]){
+                maxIndex = i;
+                influenceArray[maxIndex] = influenceArray[i];
+            }
+        }
+        island_size = backupTowers;
+        if(onlyOne(influenceArray[maxIndex], influenceArray)){
+            conquer(players.get(maxIndex), players);
+        }
+    }
+
     //Same function as above, but it gets called when the power of character 8 is active
     public void conquerCheck(LinkedList<Player> players, Player cardPlayer, int additionalInfluence) throws Exception{
         int[] influenceArray = new int[players.size()];

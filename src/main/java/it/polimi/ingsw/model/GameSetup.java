@@ -102,6 +102,7 @@ public class GameSetup {
         }
         return professors;
     }
+
     public void placeStudentEntranceSetUp(Game game) {
 
             for (Player p : game.getPlayers()) {

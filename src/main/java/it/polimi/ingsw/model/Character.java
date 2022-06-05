@@ -104,7 +104,7 @@ public class Character{
                 modifiedGame = effect3(game, island);
             }
             case 3 -> {
-                modifiedGame = effect4(game, player.getFace_up_assistant());
+                modifiedGame = effect4(game, player, player.getFace_up_assistant());
             }
             case 4 -> {
                 modifiedGame = effect5(game, island);
@@ -122,7 +122,7 @@ public class Character{
                 modifiedGame = effect9(game, colour);
             }
             case 9 -> {
-                modifiedGame = effect10(game, player, studentList1.get(0), studentList1.get(1), studentList2.get(0), studentList2.get(1));
+                modifiedGame = effect10(game, player, studentList1, studentList2);
             }
             case 10 -> {
                 modifiedGame = effect11(game, player, studentList1.get(0));
@@ -157,13 +157,8 @@ public class Character{
     }
 
     //Character 4 (case 3)
-    private Game effect4(Game game, Assistant assistant){
-        int playerIndex = -1;
-        for(Player playerToCheck: game.getPlayers()){
-            if(playerToCheck.getFace_up_assistant().equals(assistant)){
-                playerIndex = game.getPlayers().indexOf(playerToCheck);
-            }
-        }
+    private Game effect4(Game game, Player player, Assistant assistant){
+        int playerIndex = game.getPlayers().indexOf(player);
         game.getPlayers().get(playerIndex).getFace_up_assistant().add2MovementPoints();
         return game;
     }
@@ -215,18 +210,18 @@ public class Character{
     }
 
     //Character 10 (case 9)
-    private Game effect10(Game game, Player player, Student studentInEntrance1, Student studentInEntrance2, Student studentInDiningRoom1, Student studentInDiningRoom2) throws Exception{
+    private Game effect10(Game game, Player player, LinkedList<Student> studentsInEntrance, LinkedList<Student> studentsInDiningRoom) throws Exception{
         int playerIndex;
         playerIndex = game.getPlayers().indexOf(player);
-        game.getPlayers().get(playerIndex).getSchool().removeStudent(studentInEntrance1);
-        game.getPlayers().get(playerIndex).getSchool().putStudent(studentInDiningRoom1);
-        game.getPlayers().get(playerIndex).getSchool().getDining_room(studentInEntrance1.getColour()).putStudent(studentInDiningRoom1);
-        game.getPlayers().get(playerIndex).getSchool().getDining_room(studentInDiningRoom1.getColour()).removeStudent(studentInDiningRoom1);
-        if(studentInEntrance2 != null && studentInDiningRoom2 != null){
-            game.getPlayers().get(playerIndex).getSchool().removeStudent(studentInEntrance2);
-            game.getPlayers().get(playerIndex).getSchool().putStudent(studentInDiningRoom2);
-            game.getPlayers().get(playerIndex).getSchool().getDining_room(studentInEntrance2.getColour()).putStudent(studentInDiningRoom2);
-            game.getPlayers().get(playerIndex).getSchool().getDining_room(studentInDiningRoom2.getColour()).removeStudent(studentInDiningRoom2);
+        game.getPlayers().get(playerIndex).getSchool().removeStudent(studentsInEntrance.getFirst());
+        game.getPlayers().get(playerIndex).getSchool().putStudent(studentsInDiningRoom.getFirst());
+        game.getPlayers().get(playerIndex).getSchool().getDining_room(studentsInEntrance.getFirst().getColour()).putStudent(studentsInEntrance.getFirst());
+        game.getPlayers().get(playerIndex).getSchool().getDining_room(studentsInDiningRoom.getFirst().getColour()).removeStudent(studentsInDiningRoom.getFirst());
+        if(studentsInEntrance.size() == 2 && studentsInDiningRoom.size() == 2){
+            game.getPlayers().get(playerIndex).getSchool().removeStudent(studentsInEntrance.getLast());
+            game.getPlayers().get(playerIndex).getSchool().putStudent(studentsInDiningRoom.getLast());
+            game.getPlayers().get(playerIndex).getSchool().getDining_room(studentsInEntrance.getLast().getColour()).putStudent(studentsInEntrance.getLast());
+            game.getPlayers().get(playerIndex).getSchool().getDining_room(studentsInDiningRoom.getLast().getColour()).removeStudent(studentsInDiningRoom.getLast());
         }
         return game;
     }

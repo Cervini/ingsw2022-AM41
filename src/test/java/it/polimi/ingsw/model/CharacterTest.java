@@ -107,9 +107,42 @@ class CharacterTest {
         Game game = new Game(2);
         Character character = new Character(1);
 
-        //Need to fix checkInfluenceWithModifiedBoard berfore testing
+        game.getCharacters().add(character);
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
+
+        game = character.effect(game, game.getPlayers().getLast(), null, null, null, null);
+
+        assertTrue(game.getPlayers().getFirst().getOwned_professor().contains(new Professor(Colour.RED)));
 
         System.out.println("effectTest2.0 complete");
+    }
+
+    @Test
+    void effectTest2_1() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(1);
+
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
+
+        game = character.effect(game, game.getPlayers().get(1), null, null, null, null);
+
+        assertEquals(game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getColour(), game.getPlayers().get(1).getTeam());
+
+        System.out.println("effectTest2.1 complete");
     }
 
     @Test
@@ -186,12 +219,54 @@ class CharacterTest {
         assistant = game.getPlayers().getFirst().getAssistants().get(0);
         initialMaxMovement = assistant.getMovement_points();
         game.getPlayers().getFirst().playAssistant(0);
+        game.getPlayers().getLast().playAssistant(1);
 
-        //game = character.effect(game, game.getPlayers().getFirst(), null, null, null, null);
-        //TODO fix
-        //assertEquals(initialMaxMovement + 2, game.getPlayers().getFirst().getFace_up_assistant().getMovement_points());
+        game = character.effect(game, game.getPlayers().getFirst(), null, null, null, null);
+
+        assertEquals(initialMaxMovement + 2, game.getPlayers().getFirst().getSchool().getFace_up_assistant().getMovement_points());
 
         System.out.println("effectTest4.0 complete");
+    }
+
+    @Test
+    void effectTest4_1() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(3);
+        Assistant assistant;
+        int initialMaxMovement;
+
+        assistant = game.getPlayers().getFirst().getAssistants().get(0);
+        initialMaxMovement = assistant.getMovement_points();
+        game.getPlayers().getFirst().playAssistant(0);
+        game.getPlayers().getLast().getAssistants().clear();
+        game.getPlayers().getLast().getAssistants().add(new Assistant(1, 1));
+        game.getPlayers().getLast().playAssistant(0);
+
+        game = character.effect(game,game.getPlayers().getFirst(), null, null, null, null);
+
+        assertEquals(initialMaxMovement, game.getPlayers().getLast().getSchool().getFace_up_assistant().getMovement_points());
+
+        System.out.println("effectTest4.1 complete");
+    }
+
+    @Test
+    void effectTest4_2() throws Exception{
+        Game game = new Game(3);
+        Character character = new Character(3);
+        Assistant assistant;
+        int initialMaxMovement;
+
+        assistant = game.getPlayers().get(1).getAssistants().get(3);
+        initialMaxMovement = assistant.getMovement_points();
+        game.getPlayers().getFirst().playAssistant(0);
+        game.getPlayers().get(1).playAssistant(3);
+        game.getPlayers().getLast().playAssistant(5);
+
+        game = character.effect(game,game.getPlayers().get(1), null, null, null, null);
+
+        assertEquals(initialMaxMovement + 2, game.getPlayers().get(1).getSchool().getFace_up_assistant().getMovement_points());
+
+        System.out.println("effectTest4.2 complete");
     }
 
     @Test
@@ -247,10 +322,43 @@ class CharacterTest {
     void effectTest6_0() throws Exception{
         Game game = new Game(2);
         Character character = new Character(5);
+        int islandIndex;
 
-        //Need to fix checkInfluenceWithoutTowers before testing
+        islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).setTower(game.getPlayers().getLast().getTeam());
+
+        game = character.effect(game, null, null, null, null, null);
+
+        assertEquals(game.getArchipelago().get(islandIndex).getColour(), game.getPlayers().getFirst().getTeam());
 
         System.out.println("effectTest6.0 complete");
+    }
+
+    @Test
+    void effectTest6_1() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(5);
+        int islandIndex;
+
+        islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.checkOwnership();
+        game.getArchipelago().get(islandIndex).getStudents().clear();
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).setTower(game.getPlayers().getLast().getTeam());
+        game.getPlayers().getLast().getSchool().takeTowers(1);
+
+        game = character.effect(game, null, null, null, null, null);
+
+        assertEquals(8, game.getPlayers().getLast().getSchool().getTowers());
+
+        System.out.println("effectTest6.1 complete");
     }
 
     @Test
@@ -396,4 +504,314 @@ class CharacterTest {
 
         System.out.println("effectTest7.3 complete");
     }
+
+    @Test
+    void effectTest8_0() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(7);
+        int islandIndex;
+
+        islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.checkOwnership();
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.BLUE));
+
+        game = character.effect(game, game.getPlayers().getLast(), null, null, null, null);
+
+        assertEquals(game.getArchipelago().get(islandIndex).getColour(), game.getPlayers().getLast().getTeam());
+
+        System.out.println("effectTest8.0 complete");
+    }
+
+    @Test
+    void effectTest8_1() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(7);
+        int islandIndex;
+
+        islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.checkOwnership();
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.PINK));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.PINK));
+
+        game = character.effect(game, game.getPlayers().getLast(), null, null, null, null);
+
+        assertNull(game.getArchipelago().get(islandIndex).getColour());
+
+        System.out.println("effectTest8.1 complete");
+    }
+
+    @Test
+    void effectTest9_0() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(8);
+        int islandIndex;
+
+        islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.checkOwnership();
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.BLUE));
+
+        game = character.effect(game, null, null, null, null,  Colour.RED);
+
+        assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(islandIndex).getColour());
+
+        System.out.println("effectTest9.0 complete");
+    }
+
+    @Test
+    void effectTest9_1() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(8);
+        int islandIndex;
+
+        islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.YELLOW).putStudent(new Student(Colour.YELLOW));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.checkOwnership();
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.YELLOW));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.BLUE));
+        game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
+
+        game = character.effect(game, null, null, null, null, Colour.YELLOW);
+
+        assertEquals(game.getPlayers().get(1).getTeam(), game.getArchipelago().get(islandIndex).getColour());
+
+        System.out.println("effectTest9.1 complete");
+    }
+
+    @Test
+    void effectTest10_0() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(9);
+        LinkedList<Student> studentsFromEntrance = new LinkedList<>();
+        LinkedList<Student> studentsFromDiningRoom = new LinkedList<>();
+
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.BLUE));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.GREEN));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+        studentsFromDiningRoom.add(new Student(Colour.PINK));
+        studentsFromDiningRoom.add(new Student(Colour.GREEN));
+        studentsFromEntrance.add(new Student(Colour.RED));
+        studentsFromEntrance.add(new Student(Colour.RED));
+
+        game = character.effect(game, game.getPlayers().getFirst(), studentsFromEntrance, studentsFromDiningRoom, null, null);
+
+        assertEquals(3, game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).getStudents());
+
+        System.out.println("effectTest10.0 complete");
+    }
+
+    @Test
+    void effectTest10_1() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(9);
+        LinkedList<Student> studentsFromEntrance = new LinkedList<>();
+        LinkedList<Student> studentsFromDiningRoom = new LinkedList<>();
+
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.BLUE));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.GREEN));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+        studentsFromDiningRoom.add(new Student(Colour.PINK));
+        studentsFromEntrance.add(new Student(Colour.RED));
+
+
+        game = character.effect(game, game.getPlayers().getFirst(), studentsFromEntrance, studentsFromDiningRoom, null, null);
+
+        assertEquals(2, game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).getStudents());
+
+        System.out.println("effectTest10.1 complete");
+    }
+
+    @Test
+    void effectTest10_2() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(9);
+        LinkedList<Student> studentsFromEntrance = new LinkedList<>();
+        LinkedList<Student> studentsFromDiningRoom = new LinkedList<>();
+
+        game.getPlayers().getFirst().getSchool().getEntrance().clear();
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.BLUE));
+        game.getPlayers().getFirst().getSchool().putStudent(new Student(Colour.GREEN));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.PINK).putStudent(new Student(Colour.PINK));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+        studentsFromDiningRoom.add(new Student(Colour.PINK));
+        studentsFromDiningRoom.add(new Student(Colour.GREEN));
+        studentsFromEntrance.add(new Student(Colour.RED));
+        studentsFromEntrance.add(new Student(Colour.RED));
+
+        game = character.effect(game, game.getPlayers().getFirst(), studentsFromEntrance, studentsFromDiningRoom, null, null);
+
+        assertTrue(game.getPlayers().getFirst().getSchool().getEntrance().contains(new Student(Colour.PINK)) && game.getPlayers().getFirst().getSchool().getEntrance().contains(new Student(Colour.GREEN)) && !game.getPlayers().getFirst().getSchool().getEntrance().contains(new Student(Colour.RED)));
+
+        System.out.println("effectTest10.2 complete");
+    }
+
+    @Test
+    void effectTest11_0() throws Exception {
+        Game game = new Game(2);
+        Character character = new Character(10);
+        LinkedList<Student> selectedStudents = new LinkedList<>();
+
+        game.getCharacters().add(character);
+        character.addStudent(new Student(Colour.RED));
+        character.addStudent(new Student(Colour.BLUE));
+        character.addStudent(new Student(Colour.GREEN));
+        character.addStudent(new Student(Colour.YELLOW));
+        selectedStudents.add(new Student(Colour.RED));
+
+        game = character.effect(game, game.getPlayers().getFirst(), selectedStudents, null, null, null);
+
+        assertEquals(1, game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).getStudents());
+
+        System.out.println("effectTest11.0 complete");
+    }
+
+    @Test
+    void effectTest11_1() throws Exception {
+        Game game = new Game(2);
+        Character character = new Character(10);
+        LinkedList<Student> selectedStudents = new LinkedList<>();
+
+        game.getCharacters().add(character);
+        character.addStudent(new Student(Colour.RED));
+        character.addStudent(new Student(Colour.BLUE));
+        character.addStudent(new Student(Colour.GREEN));
+        character.addStudent(new Student(Colour.YELLOW));
+        selectedStudents.add(new Student(Colour.RED));
+
+        game = character.effect(game, game.getPlayers().getFirst(), selectedStudents, null, null, null);
+
+        assertEquals(1, game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).getStudents());
+
+        System.out.println("effectTest11.1 complete");
+    }
+
+    @Test
+    void effectTest11_2() throws Exception {
+        Game game = new Game(2);
+        Character character = new Character(10);
+        LinkedList<Student> selectedStudents = new LinkedList<>();
+        int initialBagSize;
+
+        initialBagSize = game.getBag().size();
+        game.getCharacters().add(character);
+        character.addStudent(new Student(Colour.RED));
+        character.addStudent(new Student(Colour.BLUE));
+        character.addStudent(new Student(Colour.GREEN));
+        character.addStudent(new Student(Colour.YELLOW));
+        selectedStudents.add(new Student(Colour.RED));
+
+        game = character.effect(game, game.getPlayers().getFirst(), selectedStudents, null, null, null);
+
+        assertEquals(4, character.getStudents().size());
+
+        System.out.println("effectTest11.2 complete");
+    }
+
+    @Test
+    void effectTest12_0() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(11);
+
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+
+        game = character.effect(game, null, null, null, null, Colour.RED);
+
+        assertEquals(1, game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).getStudents());
+
+        System.out.println("effectTest12.0 complete");
+    }
+
+    @Test
+    void effectTest12_1() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(11);
+        int initialBagSize;
+
+        initialBagSize = game.getBag().size();
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+
+        game = character.effect(game, null, null, null, null, Colour.RED);
+
+        assertEquals(initialBagSize + 5, game.getBag().size());
+
+        System.out.println("effectTest12.1 complete");
+    }
+
+    @Test
+    void effectTest12_2() throws Exception{
+        Game game = new Game(4);
+        Character character = new Character(11);
+
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+
+        game = character.effect(game, null, null, null, null, Colour.RED);
+
+        assertEquals(0, game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).getStudents());
+
+        System.out.println("effectTest12.2 complete");
+    }
+
+    /*
+    @Test
+    void effectTest() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(X);
+
+        System.out.println("effectTestX complete");
+    }
+    */
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,9 +25,9 @@ public class CharacterFunctions {
     //Function of character 2
     //TODO fix - deep copy oppure metodo restore in Professor
     public Game checkInfluenceWithModifiedBoard(Game game, Player player) throws Exception{
-        LinkedList<Player> originalPlayers = new LinkedList<>();
+        ArrayList<SchoolBoard> schoolBoardsBackup = new ArrayList<>();
         int islandIndex;
-        originalPlayers.addAll(game.getPlayers());
+        doSchoolBoardsBackup(game.getPlayers(), schoolBoardsBackup);
         game = changeOwnership(game, player);
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
@@ -35,29 +36,21 @@ public class CharacterFunctions {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
             game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
         }
-        for(Player playerToCheck: originalPlayers){
-            playerToCheck.getSchool().resetTowers(game.getPlayers().get(game.getPlayers().indexOf(playerToCheck)).getSchool().getTowers());
-        }
-        game.setPlayers(originalPlayers);
+        restoreSchoolBoard(game.getPlayers(), schoolBoardsBackup);
         return game;
     }
 
     //Function of character 6
-    //TODO fix - deep copy oppure restore towers;
     public Game checkInfluenceWithoutTowers(Game game) throws Exception{
         int islandIndex;
-        List<Island> originalArchipelago = game.getArchipelago();
-        for(Island islandToCheck: game.getArchipelago()){
-            islandToCheck.setIsland_size(0);
-        }
+        boolean noTowers = true;
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
-            game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
+            game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers(), noTowers);
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
             game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
         }
-        game.setArchipelago(originalArchipelago);
         return game;
     }
 
@@ -113,5 +106,21 @@ public class CharacterFunctions {
             }
         }
         return -1;
+    }
+
+    //
+    private void doSchoolBoardsBackup(LinkedList<Player> players, ArrayList<SchoolBoard> schoolBoards){
+        for(int i = 0; i < players.size(); i++){
+            schoolBoards.add(new SchoolBoard(players.get(i)));
+            for(Professor ownedProfessor: players.get(i).getOwned_professor()){
+                schoolBoards.get(i).putProfessor(new Professor(ownedProfessor.getColour()));
+            }
+        }
+    }
+
+    private void restoreSchoolBoard(LinkedList<Player> players, ArrayList<SchoolBoard> schoolBoards){
+        for(int i = 0; i < players.size(); i++){
+            players.get(i).getSchool().setOwned_professor(schoolBoards.get(i).getOwned_professor());
+        }
     }
 }

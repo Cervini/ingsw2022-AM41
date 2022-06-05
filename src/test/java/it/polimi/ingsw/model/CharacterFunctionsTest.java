@@ -2,8 +2,6 @@ package it.polimi.ingsw.model;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class CharacterFunctionsTest {
@@ -13,6 +11,10 @@ class CharacterFunctionsTest {
         CharacterFunctions cf = new CharacterFunctions();
         Game game = new Game(2);
         Island specificIsland;
+
+        for(Island islandToClear: game.getArchipelago()){
+            islandToClear.getStudents().clear();
+        }
 
         game.getPlayers().getFirst().addProfessor(new Professor(Colour.BLUE));
         game.getPlayers().getLast().addProfessor(new Professor(Colour.PINK));
@@ -37,6 +39,10 @@ class CharacterFunctionsTest {
         Game game = new Game(2);
         Island specificIsland;
 
+        for(Island islandToClear: game.getArchipelago()){
+            islandToClear.getStudents().clear();
+        }
+
         game.getPlayers().getFirst().addProfessor(new Professor(Colour.BLUE));
         game.getPlayers().getLast().addProfessor(new Professor(Colour.PINK));
 
@@ -59,6 +65,10 @@ class CharacterFunctionsTest {
         CharacterFunctions cf = new CharacterFunctions();
         Game game = new Game(2);
         Island specificIsland;
+
+        for(Island islandToClear: game.getArchipelago()){
+            islandToClear.getStudents().clear();
+        }
 
         game.getPlayers().getFirst().addProfessor(new Professor(Colour.BLUE));
         game.getPlayers().getLast().addProfessor(new Professor(Colour.PINK));
@@ -87,6 +97,10 @@ class CharacterFunctionsTest {
         CharacterFunctions cf = new CharacterFunctions();
         Game game = new Game(3);
         Island specificIsland;
+
+        for(Island islandToClear: game.getArchipelago()){
+            islandToClear.getStudents().clear();
+        }
 
         game.getPlayers().getFirst().addProfessor(new Professor(Colour.BLUE));
         game.getPlayers().getLast().addProfessor(new Professor(Colour.PINK));
@@ -125,6 +139,10 @@ class CharacterFunctionsTest {
         Game game = new Game(4);
         Island specificIsland;
 
+        for(Island islandToClear: game.getArchipelago()){
+            islandToClear.getStudents().clear();
+        }
+
         game.getPlayers().getFirst().addProfessor(new Professor(Colour.BLUE));
         game.getPlayers().getLast().addProfessor(new Professor(Colour.PINK));
         game.getPlayers().getFirst().addProfessor(new Professor(Colour.RED));
@@ -155,8 +173,7 @@ class CharacterFunctionsTest {
 
     @Test
     void checkInfluenceWithModifiedBoardTest1() throws Exception{
-        //TODO fix, board reset does not work
-        /*CharacterFunctions cf = new CharacterFunctions();
+        CharacterFunctions cf = new CharacterFunctions();
         Game game = new Game(2);
 
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
@@ -164,19 +181,19 @@ class CharacterFunctionsTest {
         game.checkOwnership();
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
 
         game = cf.checkInfluenceWithModifiedBoard(game, game.getPlayers().getLast());
 
         assertTrue(game.getPlayers().getFirst().getOwned_professor().contains(new Professor(Colour.RED)));
 
-        System.out.println("checkInfluenceWithModifiedBoardTest1 complete");*/
+        System.out.println("checkInfluenceWithModifiedBoardTest1 complete");
     }
 
     @Test
     void checkInfluenceWithModifiedBoardTest2() throws Exception{
-        //TODO fix
-        /*CharacterFunctions cf = new CharacterFunctions();
+        CharacterFunctions cf = new CharacterFunctions();
         Game game = new Game(2);
 
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
@@ -184,13 +201,14 @@ class CharacterFunctionsTest {
         game.checkOwnership();
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
 
         game = cf.checkInfluenceWithModifiedBoard(game, game.getPlayers().getLast());
 
         assertTrue(game.getPlayers().getFirst().getOwned_professor().contains(new Professor(Colour.RED)));
 
-        System.out.println("checkInfluenceWithModifiedBoardTest2 complete");*/
+        System.out.println("checkInfluenceWithModifiedBoardTest2 complete");
     }
 
     @Test
@@ -203,11 +221,12 @@ class CharacterFunctionsTest {
         game.checkOwnership();
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
 
         game = cf.checkInfluenceWithModifiedBoard(game, game.getPlayers().getLast());
 
-        assertTrue(game.getPlayers().getLast().getOwned_professor().contains(new Professor(Colour.RED)));
+        assertTrue(game.getPlayers().getFirst().getOwned_professor().contains(new Professor(Colour.RED)));
     }
 
     @Test
@@ -220,19 +239,20 @@ class CharacterFunctionsTest {
         game.checkOwnership();
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
         game.checkOwnership();
         ownsProfessor = game.getPlayers().getFirst().hasProfessor(Colour.RED);
 
         assertTrue(ownsProfessor);
+
+        System.out.println("checkInfluenceWithModifiedBoardTest4 complete");
     }
 
     @Test
     void checkInfluenceWithModifiedBoardTest5() throws Exception{
         CharacterFunctions cf = new CharacterFunctions();
         Game game = new Game(2);
-        List<Professor> ownedProfessor1;
-        List<Professor> ownedProfessor2;
 
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
@@ -241,12 +261,10 @@ class CharacterFunctionsTest {
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
         game.checkOwnership();
-        ownedProfessor1 = game.getPlayers().getFirst().getOwned_professor();
-        ownedProfessor2 = game.getPlayers().getLast().getOwned_professor();
 
         game = cf.checkInfluenceWithModifiedBoard(game, game.getPlayers().getLast());
 
-        assertTrue(ownedProfessor1.equals(game.getPlayers().getFirst().getOwned_professor()) && ownedProfessor2.equals(game.getPlayers().getLast().getOwned_professor()));
+        assertTrue(game.getPlayers().getFirst().getOwned_professor().contains(new Professor(Colour.RED)));
     }
 
     @Test
@@ -254,6 +272,7 @@ class CharacterFunctionsTest {
         CharacterFunctions cf = new CharacterFunctions();
         Game game = new Game(3);
 
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.checkOwnership();
@@ -261,11 +280,42 @@ class CharacterFunctionsTest {
         game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
 
         game = cf.checkInfluenceWithModifiedBoard(game, game.getPlayers().get(1));
 
         assertEquals(game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getColour(), game.getPlayers().get(1).getTeam());
+    }
+
+    @Test
+    void checkInfluenceWithModifiedBoardTest7() throws Exception{
+        CharacterFunctions cf = new CharacterFunctions();
+        Game game = new Game(3);
+
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+        game.checkOwnership();
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.getPlayers().get(1).getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.GREEN).putStudent(new Student(Colour.GREEN));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
+
+        game = cf.checkInfluenceWithModifiedBoard(game, game.getPlayers().get(1));
+
+        assertTrue(game.getPlayers().getFirst().getOwned_professor().contains(new Professor(Colour.RED)) && game.getPlayers().get(1).getOwned_professor().contains(new Professor(Colour.GREEN)) && game.getPlayers().getLast().getOwned_professor().contains(new Professor(Colour.BLUE)));
+
+        System.out.println("checkInfluenceWithModifiedBoardTest7 complete");
     }
 
     @Test
@@ -309,8 +359,7 @@ class CharacterFunctionsTest {
         assertEquals(game.getArchipelago().get(islandIndex).getColour(), game.getPlayers().getLast().getTeam());
     }
 
-    //TODO fix, reset tower does not work
-    /*@Test
+    @Test
     void checkInfluenceWithoutTowersTest3() throws Exception{
         CharacterFunctions cf = new CharacterFunctions();
         Game game = new Game(2);
@@ -321,6 +370,7 @@ class CharacterFunctionsTest {
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getLast().getSchool().getDining_room(Colour.BLUE).putStudent(new Student(Colour.BLUE));
         game.checkOwnership();
+        game.getArchipelago().get(islandIndex).getStudents().clear();
         game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
         game.getArchipelago().get(islandIndex).setTower(game.getPlayers().getLast().getTeam());
         game.getPlayers().getLast().getSchool().takeTowers(1);
@@ -330,7 +380,7 @@ class CharacterFunctionsTest {
         assertEquals(8, game.getPlayers().getLast().getSchool().getTowers());
 
         System.out.println("checkInfluenceWithoutTowersTest3 complete");
-    }*/
+    }
 
     @Test
     void checkInfluenceWithBonusTest1() throws Exception{
