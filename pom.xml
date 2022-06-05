@@ -62,6 +62,13 @@
     </dependency>
   </dependencies>
 
+  <distributionManagement>
+    <repository>
+      <id>AM41</id> <!-- Check if id is correct -->
+      <url>https://github.com/Cervini/ingsw2022-AM41.git</url>
+    </repository>
+  </distributionManagement>
+
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
