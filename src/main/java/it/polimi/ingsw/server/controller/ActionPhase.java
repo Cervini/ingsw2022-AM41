@@ -24,8 +24,6 @@ public class ActionPhase extends GamePhase {
 
     @Override
     public void validatePlaceStudent(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction {
-        //The player has to: PLACE 3 students -> MOVE mother nature -> CHOOSE the cloud
-
         // 1. check turn
         //if (clientHandler.isPlayerFirstMove) throw new WrongTurn();
         validatePlayerTurn(clientHandler);

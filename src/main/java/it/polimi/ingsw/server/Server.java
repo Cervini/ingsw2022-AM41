@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.graphics.Main;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -51,6 +53,12 @@ public class Server {
                 break;
             }
             ClientHandler clientThread = new ClientHandler(clientSocket, clients);
+
+
+
+            String[] mainArgs = new String[] {""};
+            Main.main(mainArgs,clientThread);
+
             pool.execute(clientThread);
             System.out.println("Number of connected players: " + clients.size());
         }

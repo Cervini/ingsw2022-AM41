@@ -185,10 +185,10 @@ public class ActionController  {
 
         boolean isLastPlayer =
                 client.getCurrentGamePhase().getCurrentPlayers().indexOf(client) == client.getCurrentGamePhase().getCurrentPlayers().size() - 1;
-
-        Message firstEndingCondition = towersEnded(current_game, current_game.getPlayers(),currentGamePhase); //game ends if all towers have been placed by one players
-        Message secondEndingCondition = minNumberOfIslands(current_game, current_game.getPlayers(), currentGamePhase);//game ends if only three groups of islands are left
-
+        //game ends if all towers have been placed by one player
+        Message firstEndingCondition = towersEnded(current_game, current_game.getPlayers(),currentGamePhase);
+        //game ends if only three groups of islands are left
+        Message secondEndingCondition = minNumberOfIslands(current_game, current_game.getPlayers(), currentGamePhase);
             if (firstEndingCondition != null ) {
                     output = firstEndingCondition;
             }

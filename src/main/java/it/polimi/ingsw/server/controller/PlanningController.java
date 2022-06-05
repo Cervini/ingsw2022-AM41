@@ -13,6 +13,12 @@ import static java.util.Collections.sort;
 
 public class PlanningController extends BaseController {
 
+    /**
+     * @param request contains client's command
+     * @param clientHandler contains client reference
+     * @param currentGamePhase contains client's GamePhase attribute
+     * @return server response
+     */
     public static Message play(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
 
         Message response = new Message("string");
@@ -30,8 +36,6 @@ public class PlanningController extends BaseController {
 
             if (canStartActionPhase) {
                 List<ClientHandler> sameMatchPlayers = clientHandler.sameMatchPlayers();
-
-                //ordino in base al valore dell'assistente
 
                 sort(sameMatchPlayers,
                         Comparator.comparingInt((ClientHandler a) -> a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue()));

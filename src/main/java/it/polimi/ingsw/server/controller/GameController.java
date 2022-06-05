@@ -4,8 +4,10 @@ import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.server.ClientHandler;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.swap;
 
@@ -34,8 +36,9 @@ public class GameController extends BaseController {
             output.setArgString("Game of " + available + " started");
             setAsPlaying(message.getArgNum1(), game, client.getClients()); // set the other available client as players
 
-            Random random_player = new Random();
-            ClientHandler first_player = (ClientHandler) clients.get(random_player.nextInt(client.sameMatchPlayers().size()));//during the first round the first player is randomly chosen
+            Collections.shuffle(client.sameMatchPlayers());
+
+            ClientHandler first_player = client.sameMatchPlayers().get(0);//during the first round the first player is randomly chosen
             first_player.isPlayerFirstMove = true;
 
             List<ClientHandler> sameMatchPlayers = first_player.sameMatchPlayers();
@@ -44,9 +47,13 @@ public class GameController extends BaseController {
 
             Player firstPlayer = game.getPlayer(first_player.getUsername());
             swap(game.getPlayers(), game.getPlayers().indexOf(firstPlayer), 0); //first_player is now in the first position
-
+            //puts each player username in a list
+            List <String> turnOrder = sameMatchPlayers.stream().map(ClientHandler::getUsername).toList();
+            //converts list of strings to a string
+            String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
+            //sends to client turns order
             for (ClientHandler handler : first_player.sameMatchPlayers()) {
-                alert(handler, "It's " + first_player.getUsername() + "'s turn");
+                alert(handler, "Turns order: "+ turns);
             }
         } else {
             output.setArgString("Not enough players, wait some time then retry.");
