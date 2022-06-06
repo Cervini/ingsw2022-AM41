@@ -356,6 +356,15 @@ public class Game{
         }
     }
 
+    public void playCharacter(Character playedCharacter, Player player, LinkedList<Student> studentList1, LinkedList<Student> studentList2, Island island, Colour colour) throws Exception{
+        if(player.getCoins() >= playedCharacter.getCost()) {
+            player.spend(playedCharacter.getCost());
+            characters.get(characters.indexOf(playedCharacter)).effect(this, player, studentList1, studentList2, island, colour);
+        }else{
+            throw new Exception("Not enough coins to play Character " + playedCharacter.getCharacterNumber() + ". You need " + (playedCharacter.getCost() - player.getCoins()) + " more to play it!");
+        }
+    }
+
     //Used to find the character that holds the "NoEntry" cards, it works only if there's one
     private int findNoEntryCharacter(LinkedList<Character> characters){
         for(Character characterToCheck: characters){

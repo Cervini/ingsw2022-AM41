@@ -188,4 +188,6 @@ public class Player implements Comparable{
     public void addProfessor(Professor professor){
         school.getOwned_professor().add(professor);
     }
+
+    public void giveCoins(int numberOfCoins) { coins = coins + numberOfCoins; }
 }

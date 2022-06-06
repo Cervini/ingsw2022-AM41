@@ -1084,4 +1084,110 @@ class GameTest {
 
         game.moveStudent(player.getSchool(), player.getSchool().getDining_room(Colour.BLUE),student);
     }
+
+    @Test
+    void playCharacterTest1() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(1);
+
+        if(!game.getCharacters().contains(character)){
+            game.getCharacters().removeFirst();
+            game.getCharacters().add(character);
+        }
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().giveCoins(3);
+
+        game.playCharacter(character, game.getPlayers().getLast(), null, null, null, null);
+
+        assertTrue(game.getPlayers().getFirst().getOwned_professor().contains(new Professor(Colour.RED)));
+
+        System.out.println("playCharacterTest1 complete");
+    }
+
+    @Test
+    void playCharacterTest2() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(1);
+
+        if(!game.getCharacters().contains(character)){
+            game.getCharacters().removeFirst();
+            game.getCharacters().add(character);
+        }
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().giveCoins(3);
+
+        game.playCharacter(character, game.getPlayers().getLast(), null, null, null, null);
+
+        assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getColour());
+
+        System.out.println("playCharacterTest2 complete");
+    }
+
+    @Test
+    void playCharacterTest3() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(1);
+        int initialNumberOfCoins;
+        int initialCharacterCost;
+
+        if(!game.getCharacters().contains(character)){
+            game.getCharacters().removeFirst();
+            game.getCharacters().add(character);
+        }
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().giveCoins(3);
+        initialNumberOfCoins = game.getPlayers().getLast().getCoins();
+        initialCharacterCost = character.getCost();
+
+        game.playCharacter(character, game.getPlayers().getLast(), null, null, null, null);
+
+        assertEquals(initialNumberOfCoins - initialCharacterCost, game.getPlayers().getLast().getCoins());
+
+        System.out.println("playCharacterTest3 complete");
+    }
+
+    @Test
+    void playCharacterTest4() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(1);
+        int initialCharacterCost;
+
+        if(!game.getCharacters().contains(character)){
+            game.getCharacters().removeFirst();
+            game.getCharacters().add(character);
+        }
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
+        game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
+        game.getPlayers().getLast().giveCoins(3);
+        initialCharacterCost = character.getCost();
+
+        game.playCharacter(character, game.getPlayers().getLast(), null, null, null, null);
+
+        assertEquals(initialCharacterCost + 1, character.getCost());
+
+        System.out.println("playCharacterTest4 complete");
+    }
 }
