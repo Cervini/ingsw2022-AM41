@@ -413,10 +413,6 @@ public class Game{
         this.players = players;
     }
 
-    public void setBag(LinkedList<Student> bag) {
-        this.bag = bag;
-    }
-
     public void setArchipelago(List<Island> archipelago) {
         this.archipelago = archipelago;
     }
@@ -442,4 +438,6 @@ public class Game{
     public void setActivePlayer(Player activePlayer) {
         this.activePlayer = activePlayer;
     }
+
+    
 }

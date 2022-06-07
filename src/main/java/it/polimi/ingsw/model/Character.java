@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class Character{
+public class Character implements Serializable {
 
     private final int characterNumber;
     private int cost;

@@ -1,9 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
-import it.polimi.ingsw.graphics.Main;
-
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -13,14 +10,11 @@ public class Client {
 
     private static final String server_ip = "127.0.0.1";
     private static final int server_port = 1234;
-
     private static Socket socket;
     private static ObjectOutputStream out;
     private static ObjectInputStream in;
     private static Thread readThread;
     private static boolean serverWasOffline = true;
-
-
 
     public static void main (String[] args) throws IOException {
         PingThread ping = new PingThread(server_ip, server_port);

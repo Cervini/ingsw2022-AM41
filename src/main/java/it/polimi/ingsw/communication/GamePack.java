@@ -1,8 +1,8 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.Character;
 import it.polimi.ingsw.server.ClientHandler;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,22 +14,25 @@ public class GamePack implements Serializable {
     private final List<SchoolBoard> schoolBoards;
     private final List<Assistant> assistants;
     private final List<Cloud> clouds;
+    private final List<Character> characters;
 
     /**
      * Packs the information that need to be showed to client
      * @param game game to be packed
      * @param client player whose view is being packed
      */
-    public GamePack(Game game, ClientHandler client){
+    public GamePack(Game game, ClientHandler client) {
         islands = game.getArchipelago(); // get islands from game
         schoolBoards = new ArrayList<>(); // create empty list of school boards
-        for(Player player: game.getPlayers()){
+        for (Player player : game.getPlayers()) {
             schoolBoards.add(player.getSchool()); // for each player get the school board
         }
         assistants = new LinkedList<>(); // create empty list of Assistants
         assistants.addAll(game.getPlayer(client.getUsername()).getAssistants()); // get the Assistants from the client player
         clouds = new LinkedList<>(); // create empty list of clouds
         clouds.addAll(game.getClouds()); // get the clouds from game
+        characters = new LinkedList<>(); // create empty list of clouds
+        characters.addAll(game.getCharacters());
     }
 
     /**
@@ -40,6 +43,7 @@ public class GamePack implements Serializable {
         schoolBoards.clear();
         assistants.clear();
         clouds.clear();
+        characters.clear();
         //refill the lists as done in constructor
         islands = game.getArchipelago();
         for(Player player: game.getPlayers()){
@@ -47,6 +51,7 @@ public class GamePack implements Serializable {
         }
         assistants.addAll(game.getPlayer(client.getUsername()).getAssistants());
         clouds.addAll(game.getClouds());
+        characters.addAll(game.getCharacters());
     }
 
     /**
@@ -63,6 +68,8 @@ public class GamePack implements Serializable {
         assistants.addAll(game.getPlayers().getFirst().getAssistants());
         clouds = new LinkedList<>();
         clouds.addAll(game.getClouds());
+        characters = new LinkedList<>(); // create empty list of clouds
+        characters.addAll(game.getCharacters());
     }
 
     /**
@@ -73,10 +80,18 @@ public class GamePack implements Serializable {
         printArchipelago();
         printClouds();
         System.out.println("---------------------------------");
+        printCharacters();
+        System.out.println("---------------------------------");
         printSchoolBoards();
         System.out.println("---------------------------------");
         printClientAssistants();
         System.out.println("---------------------------------");
+    }
+
+    private void printCharacters() {
+        for(Character character: characters){
+            System.out.print("| Character "+characters.indexOf(character)+" | cost: "+character.getCost()+" |\n");
+        }
     }
 
     private void printArchipelago(){
