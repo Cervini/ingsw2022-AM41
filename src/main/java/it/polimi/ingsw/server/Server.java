@@ -56,8 +56,8 @@ public class Server {
 
 
 
-            String[] mainArgs = new String[] {""};
-            Main.main(mainArgs,clientThread);
+            //String[] mainArgs = new String[] {""};
+            //Main.main(mainArgs,clientThread);
 
             pool.execute(clientThread);
             System.out.println("Number of connected players: " + clients.size());

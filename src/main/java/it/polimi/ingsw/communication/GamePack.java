@@ -14,7 +14,7 @@ public class GamePack implements Serializable {
     private final List<SchoolBoard> schoolBoards;
     private final List<Assistant> assistants;
     private final List<Cloud> clouds;
-    private final List<Character> characters;
+    private final List<Integer> characterCosts;
 
     /**
      * Packs the information that need to be showed to client
@@ -31,8 +31,10 @@ public class GamePack implements Serializable {
         assistants.addAll(game.getPlayer(client.getUsername()).getAssistants()); // get the Assistants from the client player
         clouds = new LinkedList<>(); // create empty list of clouds
         clouds.addAll(game.getClouds()); // get the clouds from game
-        characters = new LinkedList<>(); // create empty list of clouds
-        characters.addAll(game.getCharacters());
+        characterCosts = new LinkedList<>(); // create empty list of clouds
+        for(Character character: game.getCharacters()){
+            characterCosts.add(character.getCost());
+        }
     }
 
     /**
@@ -43,7 +45,7 @@ public class GamePack implements Serializable {
         schoolBoards.clear();
         assistants.clear();
         clouds.clear();
-        characters.clear();
+        characterCosts.clear();
         //refill the lists as done in constructor
         islands = game.getArchipelago();
         for(Player player: game.getPlayers()){
@@ -51,7 +53,9 @@ public class GamePack implements Serializable {
         }
         assistants.addAll(game.getPlayer(client.getUsername()).getAssistants());
         clouds.addAll(game.getClouds());
-        characters.addAll(game.getCharacters());
+        for(Character character: game.getCharacters()){
+            characterCosts.add(character.getCost());
+        }
     }
 
     /**
@@ -68,8 +72,10 @@ public class GamePack implements Serializable {
         assistants.addAll(game.getPlayers().getFirst().getAssistants());
         clouds = new LinkedList<>();
         clouds.addAll(game.getClouds());
-        characters = new LinkedList<>(); // create empty list of clouds
-        characters.addAll(game.getCharacters());
+        characterCosts = new LinkedList<>(); // create empty list of clouds
+        for(Character character: game.getCharacters()){
+            characterCosts.add(character.getCost());
+        }
     }
 
     /**
@@ -89,8 +95,8 @@ public class GamePack implements Serializable {
     }
 
     private void printCharacters() {
-        for(Character character: characters){
-            System.out.print("| Character "+characters.indexOf(character)+" | cost: "+character.getCost()+" |\n");
+        for(int i=0; i<characterCosts.size(); i++){
+            System.out.print("| Character "+ i +" | cost: "+characterCosts.get(i)+" |\n");
         }
     }
 
