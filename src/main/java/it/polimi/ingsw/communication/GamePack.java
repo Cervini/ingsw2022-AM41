@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.communication.messages.CharacterInfo;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.Character;
 import it.polimi.ingsw.server.ClientHandler;
@@ -14,7 +15,7 @@ public class GamePack implements Serializable {
     private final List<SchoolBoard> schoolBoards;
     private final List<Assistant> assistants;
     private final List<Cloud> clouds;
-    private final List<Integer> characterCosts;
+    private final LinkedList<CharacterInfo> characters;
 
     /**
      * Packs the information that need to be showed to client
@@ -31,9 +32,9 @@ public class GamePack implements Serializable {
         assistants.addAll(game.getPlayer(client.getUsername()).getAssistants()); // get the Assistants from the client player
         clouds = new LinkedList<>(); // create empty list of clouds
         clouds.addAll(game.getClouds()); // get the clouds from game
-        characterCosts = new LinkedList<>(); // create empty list of clouds
+        characters = new LinkedList<CharacterInfo>(); // create empty list of clouds
         for(Character character: game.getCharacters()){
-            characterCosts.add(character.getCost());
+            getCharInfo(characters, character);
         }
     }
 
@@ -45,7 +46,7 @@ public class GamePack implements Serializable {
         schoolBoards.clear();
         assistants.clear();
         clouds.clear();
-        characterCosts.clear();
+        characters.clear();
         //refill the lists as done in constructor
         islands = game.getArchipelago();
         for(Player player: game.getPlayers()){
@@ -54,7 +55,7 @@ public class GamePack implements Serializable {
         assistants.addAll(game.getPlayer(client.getUsername()).getAssistants());
         clouds.addAll(game.getClouds());
         for(Character character: game.getCharacters()){
-            characterCosts.add(character.getCost());
+            getCharInfo(characters, character);
         }
     }
 
@@ -72,11 +73,26 @@ public class GamePack implements Serializable {
         assistants.addAll(game.getPlayers().getFirst().getAssistants());
         clouds = new LinkedList<>();
         clouds.addAll(game.getClouds());
-        characterCosts = new LinkedList<>(); // create empty list of clouds
+        characters = new LinkedList<>(); // create empty list of clouds
         for(Character character: game.getCharacters()){
-            characterCosts.add(character.getCost());
+            getCharInfo(characters, character);
         }
     }
+
+    /**
+     * Creates a new CharacterInfo instance and adds it to a List of CharacterInfo
+     * @param characters list
+     * @param character character to get the info from
+     */
+    private void getCharInfo(LinkedList<CharacterInfo> characters, Character character) {
+        int cost = character.getCost();
+        String description = character.getDescription();
+        List<Student> students = character.getStudents();
+        int noEntry = character.gettNoEntry();
+        CharacterInfo characterInfo = new CharacterInfo(cost, description, students, noEntry);
+        characters.add(characterInfo);
+    }
+
 
     /**
      * prints the state of the game saved by the GamePack (CLI use)
@@ -95,8 +111,20 @@ public class GamePack implements Serializable {
     }
 
     private void printCharacters() {
-        for(int i=0; i<characterCosts.size(); i++){
-            System.out.print("| Character "+ i +" | cost: "+characterCosts.get(i)+" |\n");
+        for(int i = 0; i< characters.size(); i++){
+            System.out.print("| Character "+ i +" | cost: "+ characters.get(i).cost()+" |");
+            if(characters.get(i).students().size()!=0){
+                for(Student student: characters.get(i).students()){
+                    System.out.print(changeColorStudent(student.getColour()));
+                    System.out.print("S ");
+                    System.out.print(RESET);
+                }
+                System.out.print(" | ");
+            }
+            if(characters.get(i).noEntry()!=0){
+                System.out.print(" No Entry Cards: " + characters.get(i).noEntry());
+            }
+            System.out.println();
         }
     }
 

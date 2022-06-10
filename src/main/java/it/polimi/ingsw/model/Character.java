@@ -10,6 +10,7 @@ public class Character implements Serializable {
     private int cost;
     private int noEntry;
     private boolean increasedCost;
+    private String description;
 
     private final CharacterFunctions characterFunctions = new CharacterFunctions();
     private final LinkedList<Student> students = new LinkedList<>();
@@ -24,40 +25,52 @@ public class Character implements Serializable {
         switch (characterNumber){
             case 0 -> {
                 cost = 1;
+                description = "Take 1 student from this card and place it on an island of your choice.";
             }
             case 1 -> {
                 cost = 2;
+                description = "During this turn you take control of any number of Professors even if you have the same\nnumber of Students as the player who currently controls them.";
             }
             case 2 -> {
                 cost = 3;
+                description = "Choose an Island and resolve the Island as if Mother Nature had ended her movement there.\nMother Nature will still move and the Island where she ends her movement will also be resolved.";
             }
             case 3 -> {
                 cost = 1;
+                description = "You may move Mother Nature up to 2 additional Islands than is indicated by the Assistant\ncard you've played.";
             }
             case 4 -> {
                 cost = 2;
                 noEntry = maxNoEntry;
+                description = "Place a No Entry tile non an Island of your choice. The first time Mother Nature ends her\nmovement there, put the No Entry tile back onto this card DO NOT calculate influence on that Island, or place any Towers.";
             }
             case 5 -> {
                 cost = 3;
+                description = "When resolving a Conquering on an Island, Towers do not count towards influence";
             }
             case 6 -> {
                 cost = 1;
+                description = "You may take up to 3 Students from this card and replace them with the same number of\nStudents from your Entrance.";
             }
             case 7 -> {
                 cost = 2;
+                description = "During the influence calculation this turn, you count as having 2 more influence.";
             }
             case 8 -> {
                 cost = 3;
+                description = "Choose a color of Student: during the influence calculation this turn, that color adds no influence.";
             }
             case 9 -> {
                 cost = 1;
+                description = "You may exchange up to 2 Students between your Entrance and your Dining Room.";
             }
             case 10 -> {
                 cost = 2;
+                description = "Take 1 Student from this card and place it in your Dining Room.";
             }
             case 11 -> {
                 cost = 3;
+                description = "Choose a type of Student: every player (including yourself) must return 3 Students from\ntheir Dining Room to the bag. If any player has fewer tha 3 Students of that type, return as many Students as they have.";
             }
         }
     }
@@ -74,6 +87,10 @@ public class Character implements Serializable {
     }
 
     public int getCost() {return cost; }
+
+    public int gettNoEntry(){
+        return noEntry;
+    }
 
     public LinkedList<Student> getStudents() {return students;}
 
@@ -247,5 +264,9 @@ public class Character implements Serializable {
         }
         Collections.shuffle(game.getBag());
         return game;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

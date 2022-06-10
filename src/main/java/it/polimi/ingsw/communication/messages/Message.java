@@ -119,7 +119,28 @@ public class Message implements Serializable {
                     this.standard = true;
                 }
             }
+            case HELP -> {
+                printHelp();
+            }
         } // switch end
+    }
+
+    private void printHelp() {
+        System.out.println("""
+                List of available commands:
+                LOGIN [u]: log in with u as username, the username must not be already used by any
+                           other connected user and cannot contain spaces.
+                LOGOUT: log out and disrupt the match if already in one
+                START [x]: start a new game with x players
+                PLAY [x]: play character with x as index, indexes are indicated next to the Assistant's attributes.
+                PLACE ENTRANCE [x] [DINING/ISLAND] [y]: move the student in the x position (in the school board),\s
+                                                        from to either the island number y or the dining room of the \s
+                                                        right color.
+                MOVE [x]: move mother nature of x positions.
+                CHOOSE [x]: choose the cloud from where the students are taken int the final phase of your turn.
+                USE [x]: play Character with x index.
+                EFFECT [x]: get info of character with x index;
+                """);
     }
 
 

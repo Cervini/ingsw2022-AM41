@@ -365,7 +365,7 @@ public class Game{
         }
     }
 
-    //Used to find the character that holds the "NoEntry" cards, it works only if there's one
+    //Used to find the character that holds the "noEntry" cards, it works only if there's one
     private int findNoEntryCharacter(LinkedList<Character> characters){
         for(Character characterToCheck: characters){
             if(characterToCheck.getCharacterNumber() == noEntryCharacterNumber){
