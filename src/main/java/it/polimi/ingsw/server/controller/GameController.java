@@ -104,4 +104,18 @@ public class GameController extends BaseController {
             throw new RuntimeException(e);
         }
     }
+
+
+    //TODO: THIS V
+    public static Message info(Message request, ClientHandler clientHandler) {
+        Message output = new Message("string");
+        if (clientHandler.getGame() == null) { // if the player is already participating in a game
+            output.setArgString("Not playing yet!");
+            return output;
+        } else {
+            // set as string argument the character description
+            output.setArgString(clientHandler.getGame().getCharacters().get(request.getArgNum1()).getDescription());
+        }
+        return output;
+    }
 }

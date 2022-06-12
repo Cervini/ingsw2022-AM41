@@ -73,7 +73,7 @@ public class Message implements Serializable {
                 if(args.size()>1)
                     System.out.println("Excess arguments were ignored");
             }
-            case CHOOSE, MOVE, PLAY, START, CHARACTER -> {
+            case CHOOSE, MOVE, PLAY, START, USE, EFFECT -> {
                 if(args.size()>1){
                     try{
                         this.argNum1 = Integer.parseInt(args.get(1));
@@ -142,7 +142,6 @@ public class Message implements Serializable {
                 EFFECT [x]: get info of character with x index;
                 """);
     }
-
 
     public Command getCommand() {
         return command;
