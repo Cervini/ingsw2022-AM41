@@ -23,6 +23,7 @@ public class Game{
     private static final int characterNeeds4Students1 = 0;
     private static final int characterNeeds6Students = 6;
     private static final int characterNeeds4Students2 = 10;
+    private static final int[] specialCharacterNumbers = {1, 5, 7, 8};
 
     /**
      * prepares the game
@@ -134,15 +135,18 @@ public class Game{
         if ((player.getFace_up_assistant().getMovement_points() >= movement)||(movement<1)) {
             Island fromIsland = motherNaturePosition();
             int from = archipelago.indexOf(fromIsland);
-            fromIsland.setMother_nature(false);
-            archipelago.get((from + movement)%archipelago.size()).setMother_nature(true);
-            // run influence check and change owner of the island if possible
-            islandCheck(archipelago.get((from + movement) % archipelago.size()));
             archipelago.get(from).setMother_nature(false);
+            archipelago.get((from + movement)%archipelago.size()).setMother_nature(true);
+            if(characterPlayer() != null && !specialCharacterActive()) {
+                // run influence check and change owner of the island if possible
+                islandCheck(archipelago.get((from + movement) % archipelago.size()));
+            }else{
+                // run influence check with a character effect active and change owned of the island if possible
+                specialCheck();
+            }
         } else {
             throw new DistanceMotherNatureException("Can't move Mother Nature this far!");
         }
-
     }
 
     /**
@@ -359,6 +363,7 @@ public class Game{
     public void playCharacter(Character playedCharacter, Player player, LinkedList<Student> studentList1, LinkedList<Student> studentList2, Island island, Colour colour) throws Exception{
         if(player.getCoins() >= playedCharacter.getCost()) {
             player.spend(playedCharacter.getCost());
+            player.setPlayedCharacterNumber(playedCharacter.getCharacterNumber());
             characters.get(characters.indexOf(playedCharacter)).effect(this, player, studentList1, studentList2, island, colour);
         }else{
             throw new Exception("Not enough coins to play Character " + playedCharacter.getCharacterNumber() + ". You need " + (playedCharacter.getCost() - player.getCoins()) + " more to play it!");
@@ -373,6 +378,37 @@ public class Game{
             }
         }
         return -1;
+    }
+
+    private Player characterPlayer() {
+        for(Player playerToCheck: players){
+            if(playerToCheck.getPlayedCharacterNumber() >= 0){
+                return playerToCheck;
+            }
+        }
+        return null;
+    }
+
+    private boolean specialCharacterActive(){
+        for(int i: specialCharacterNumbers){
+            if(i == characterPlayer().getPlayedCharacterNumber()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void specialCheck() {
+        try {
+            for(Character character: characters){
+                if(character.getCharacterNumber() == characterPlayer().getPlayedCharacterNumber()){
+                    character.activateEffect(this);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        characterPlayer().setPlayedCharacterNumber(-1);
     }
 
     public LinkedList<Player> getPlayers() {
@@ -427,6 +463,7 @@ public class Game{
             super(msg);
         }
     }
+
     public GameConclusionChecks getConclusionChecks() {
         return conclusionChecks;
     }

@@ -17,6 +17,7 @@ public class Player implements Comparable{
     private final SchoolBoard school; // School_board associated with the player
     private final boolean tower_holder; // used to check winners and the end of the game is set true if the player hold the towers for the team
     private int dining_coins; // number of coins obtained by adding students in the dining rooms
+    private int playedCharacterNumber; // index of the character played, it only lasts until the end of the turn. It's set to -1 when there are no active character from this player
 
     // default constructor, creates the player and gives them 8 towers
     public Player(TowerColour team) {
@@ -29,6 +30,7 @@ public class Player implements Comparable{
         this.school = new SchoolBoard(this);
         this.tower_holder = true;
         this.dining_coins = 0;
+        this.playedCharacterNumber = -1;
     }
 
     // alternative constructor, creates the player and gives them nTowers number of tower
@@ -42,6 +44,7 @@ public class Player implements Comparable{
         this.school = new SchoolBoard(nTowers, this, max_entrance);
         this.tower_holder = nTowers != 0;
         this.dining_coins = 0;
+        this.playedCharacterNumber = -1;
     }
 
     /**
@@ -190,4 +193,12 @@ public class Player implements Comparable{
     }
 
     public void giveCoins(int numberOfCoins) { coins = coins + numberOfCoins; }
+
+    public void setPlayedCharacterNumber(int playedCharaterNumber){
+        this.playedCharacterNumber = playedCharaterNumber;
+    }
+
+    public int getPlayedCharacterNumber(){
+        return playedCharacterNumber;
+    }
 }

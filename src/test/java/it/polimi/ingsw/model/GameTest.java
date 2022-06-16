@@ -1127,8 +1127,10 @@ class GameTest {
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
         game.getPlayers().getLast().giveCoins(3);
+        game.getPlayers().getLast().playAssistant(1);
 
         game.playCharacter(character, game.getPlayers().getLast(), null, null, null, null);
+        game.moveMotherNature(0, game.getPlayers().getLast());
 
         assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getColour());
 

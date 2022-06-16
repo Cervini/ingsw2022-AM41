@@ -11,13 +11,20 @@ public class Character implements Serializable {
     private int noEntry;
     private boolean increasedCost;
     private String description;
-
     private final CharacterFunctions characterFunctions = new CharacterFunctions();
     private final LinkedList<Student> students = new LinkedList<>();
+
+    //Variables used to memorize variables and play the effect at the required time during the match
+    private Player memoryPlayer;
+    private Colour memoryColour;
+
 
     private static final int numberOfStudentsToRemove = 3;
     private static final int maxNoEntry = 4;
 
+    /** Constructor of Character
+     *  @requires characterNumber != null && characterNumber >= 0 && characterNumber < 12
+     */
     public Character(int characterNumber){
         this.characterNumber = characterNumber;
 
@@ -75,27 +82,52 @@ public class Character implements Serializable {
         }
     }
 
+    /** Returns the character number, this value also indicates what kind of effect this character can produce
+     *  @ensures \return != null && \return >= 0 && \return < 12;
+     */
     public int getCharacterNumber(){
         return characterNumber;
     }
 
+    /** Increases the number of NoEntry of this Character, this happens as a consequence of activating the
+     * NoEntry on an island
+     * @ensures getNoEntryNumber() > 0 && getNoEntryNumber() <= 4
+     */
     public void returnNoEntry(){
-
         if(noEntry < maxNoEntry) {
             noEntry++;
         }
     }
 
+    /** Returns the cost of playing this character
+     * @ensures \return != null && \return > 0
+     */
     public int getCost() {return cost; }
 
-    public int gettNoEntry(){
+    /** Returns the number of NoEntry still available on the island
+     * @ensures \return >= 0 && \return <= 4
+     */
+    public int getNoEntryNumber(){
         return noEntry;
     }
 
+    /** Returns the students situated on this island
+     * @ensures (size() == 4 || size() == 6) && (\old(size()) == 4 || \old(size()) == 6)
+     */
     public LinkedList<Student> getStudents() {return students;}
 
+    /** Adds the student passed as a parameter to the character
+     * @requires student != null
+     * @ensures (size() == \old(size()) + 1) && students.contains(student)
+     * @param student is the student to be added to the character
+     */
     public void addStudent(Student student) {students.add(student);}
 
+    /** Removes a NoEntry from the character because it has to be put on an island
+     *  @ensures getNoEntryNumber() == 0    ? null
+     *                                      : getNoEntryNumber() = (\old(getNoEntryNumber) - 1)
+     *  @throws Exception when there are no NoEntry available
+     */
     private void getNoEntry() throws Exception {
         if(noEntry > 0){
             noEntry--;
@@ -104,6 +136,17 @@ public class Character implements Serializable {
         }
     }
 
+    /** @requires game != null && player != null && characterNumber != null &&
+     *      characterNumber >= 0 && characterNumber < 12
+     *  @ensures increasedCost  ? getCost() == \old(getCost())
+     *                          : getCost() == (\old(getCost() + 1 )
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param player is the player that activated the effect of the character
+     * @param studentList1 it's function depends on whether the characterNumber is 0, 6, 9 or 10
+     * @param studentList2 it's function depends on whether the characterNumber is 6 or 9
+     * @param island is the island on which the character effect will have consequences
+     * @param colour is the colour selected by the player that the character will consider differently
+     */
     public Game effect(Game game, Player player, LinkedList<Student> studentList1, LinkedList<Student> studentList2, Island island, Colour colour) throws Exception{
         Game modifiedGame = null;
 
@@ -116,28 +159,28 @@ public class Character implements Serializable {
                 modifiedGame = effect1(game, studentList1.getFirst(), island);
             }
             case 1 -> {
-                modifiedGame = effect2(game, player);
+                effect2(game, player);
             }
             case 2 -> {
                 modifiedGame = effect3(game, island);
             }
             case 3 -> {
-                modifiedGame = effect4(game, player, player.getFace_up_assistant());
+                modifiedGame = effect4(game, player);
             }
             case 4 -> {
                 modifiedGame = effect5(game, island);
             }
             case 5 -> {
-                modifiedGame = effect6(game);
+                effect6(game);
             }
             case 6 -> {
                 modifiedGame = effect7(game, player, studentList1, studentList2);
             }
             case 7 -> {
-                modifiedGame = effect8(game, player);
+                effect8(game, player);
             }
             case 8 -> {
-                modifiedGame = effect9(game, colour);
+                effect9(game, colour);
             }
             case 9 -> {
                 modifiedGame = effect10(game, player, studentList1, studentList2);
@@ -152,7 +195,14 @@ public class Character implements Serializable {
         return modifiedGame;
     }
 
-    //Character 1 (case 0)
+    /**Character 1 (case 0)
+     * @requires game != null && selectedStudent != null && island != null
+     * @ensures game.getBag().size() == (\old(game.getBag().size() - 1) &&
+     *          island.getStudents().contains(selectedStudent)
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param selectedStudent is the student that has to be moved from this character to the island
+     * @param island is the island to which selectedStudent is going to be moved
+     */
     private Game effect1(Game game, Student selectedStudent, Island island){
         int indexOfIslandToEdit;
         students.remove(selectedStudent);
@@ -162,26 +212,45 @@ public class Character implements Serializable {
         return game;
     }
 
-    //Character 2 (case 1)
-    private Game effect2(Game game, Player player) throws Exception{
-        game = characterFunctions.checkInfluenceWithModifiedBoard(game, player);
-        return game;
+    /**Character 2 (case 1)
+     * @requires game != null && player != null
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param player is the player that activated the effect of the character
+     */
+    private void effect2(Game game, Player player) throws Exception{
+        memoryPlayer = player;
     }
 
-    //Character 3 (case 2)
+    /**Character 3 (case 2)
+     * @requires game != null && island != null
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param island island on which it has to be calculated the influence, even if mother nature is not there
+     */
     private Game effect3(Game game, Island island) throws Exception{
         game = characterFunctions.checkInfluenceOnSpecificIsland(game, island);
         return game;
     }
 
-    //Character 4 (case 3)
-    private Game effect4(Game game, Player player, Assistant assistant){
+    /**Character 4 (case 3)
+     * @requires game != null && player != null
+     * @ensures player.getFace_up_assistant().getMovement_points() ==
+     *          (\old(player.getFace_up_assistant().getMovement_points()) + 2)
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param player is the player that activated the effect of the character
+     */
+    private Game effect4(Game game, Player player){
         int playerIndex = game.getPlayers().indexOf(player);
         game.getPlayers().get(playerIndex).getFace_up_assistant().add2MovementPoints();
         return game;
     }
 
-    //Character 5 (case 4)
+    /**Character 5 (case 4)
+     * @requires game != null && island != null
+     * @ensures island.getNo_entry() &&
+     *          getNoEntryNumber() == (\old(getNoEntryNumber() - 1))
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param island is the island on which is going to be set a NoEntry
+     */
     private Game effect5(Game game, Island island) throws Exception{
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(island);
@@ -192,13 +261,29 @@ public class Character implements Serializable {
         return game;
     }
 
-    //Character 6 (case 5)
-    private Game effect6(Game game) throws Exception{
-        game = characterFunctions.checkInfluenceWithoutTowers(game);
-        return game;
+    /**Character 6 (case 5)
+     * @requires game != null
+     * @param game is the current situation of the match that is going to be modified by the character
+     */
+    private void effect6(Game game) throws Exception{
     }
 
-    //Character 7 (case 6)
+    /**Character 7 (case 6)
+     * @requires game != null && player != null && studentsSelectedFromPlayer != null &&
+     *          studentsSelectedFromCharacter != null &&
+     *          studentsSelectedFromPlayer.size() == studentsSelectedFromCharacter.size() &&
+     *          this.contains(studentsSelectedFromCharacter)
+     * @ensures player.getSchool().getStudents().contains(selectedStudentsFromCharacter) &&
+     *          students.size() == \old(students.size()) &&
+     *          students.contains(studentsSelectedFromPlayer)
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param player is the player that activated the effect of the character
+     * @param studentsSelectedFromPlayer students that are going to be moved from the player entrance to
+     *                                   this character
+     * @param studentsSelectedFromCharacter students that are going to be moved from this character to
+     *                                      the player's entrance
+     * @throws Exception if studentsSelectedFromCharacter and studentsSelectedFromPlayer are not the same size
+     */
     private Game effect7(Game game, Player player, LinkedList<Student> studentsSelectedFromPlayer, LinkedList<Student> studentsSelectedFromCharacter) throws Exception{
         int playerIndex;
         playerIndex = game.getPlayers().indexOf(player);
@@ -210,24 +295,40 @@ public class Character implements Serializable {
             }
             students.addAll(studentsSelectedFromPlayer);
         }else{
-            throw new Exception("You must select an equal ammount of students both from the island and the character");
+            throw new Exception("You must select an equal amount of students both from the island and the character");
         }
         return game;
     }
 
-    //Character 8 (case 7)
-    private Game effect8(Game game, Player player) throws Exception{
-        game = characterFunctions.checkInfluenceWithBonus(game, player);
-        return game;
+    /**Character 8 (case 7)
+     * @requires game != null && player != null
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param player is the player that activated the effect of the character
+     */
+    private void effect8(Game game, Player player) throws Exception{
+        memoryPlayer = player;
     }
 
-    //Character 9 (case 8)
-    private Game effect9(Game game, Colour colour) throws Exception{
-        game = characterFunctions.checkInfluenceWithoutColour(game, colour);
-        return game;
+    /**Character 9 (case 8)
+     * @requires game !=  null && colour != null
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param colour is the colour selected by the player that will not affect the influence calculations
+     *               during this round
+     */
+    private void effect9(Game game, Colour colour) throws Exception{
+        memoryColour = colour;
     }
 
-    //Character 10 (case 9)
+    /**Character 10 (case 9)
+     * @requires game != null && player != null && studentsInEntrance != null && studentsInDiningRoom != null
+     *          && studentsInEntrance.size() == studentsInDiningRoom.size() && studentsInEntrance.size() <= 2
+     * @ensures player.getSchool().getStudents().contains(studentsInDiningRoom) &&
+     *          \old(player.getSchool().getStudents().contains(studentsInEntrance))
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param player is the player that activated the effect of the character
+     * @param studentsInEntrance students to move from the player's entrance to its dining room
+     * @param studentsInDiningRoom students to move from the player's dining room to its entrance
+     */
     private Game effect10(Game game, Player player, LinkedList<Student> studentsInEntrance, LinkedList<Student> studentsInDiningRoom) throws Exception{
         int playerIndex;
         playerIndex = game.getPlayers().indexOf(player);
@@ -244,7 +345,16 @@ public class Character implements Serializable {
         return game;
     }
 
-    //Character 11 (case 10)
+    /**Character 11 (case 10)
+     * @requires game != null && player != null && student != null && this.contains(student)
+     * @ensures player.getSchool().getDining_room(student.getColour()) ==
+     *          (\old(player.getSchool().getDining_room(student.getColour())) + 1) &&
+     *          game.getBag().size() == (\old(game.getBag().size()) + 1) &&
+     *          students.size() == \old(students.size())
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param player is the player that activated the effect of the character
+     * @param student is the student to be moved from this character to the player's dining room
+     */
     private Game effect11(Game game, Player player, Student student) throws Exception{
         students.remove(student);
         player.getSchool().getDining_room(student.getColour()).putStudent(student);
@@ -252,7 +362,12 @@ public class Character implements Serializable {
         return game;
     }
 
-    //Character 12 (case 11)
+    /**Character 12 (case 11)
+     * @requires game != null && colour != null
+     * @ensures game.getBag().size() >= \old(game.getBag().size())
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param colour is the colour of the 3 students that will be removed from each player's dining room
+     */
     private Game effect12(Game game, Colour colour) throws Exception{
         for(Player playerToCheck: game.getPlayers()) {
             for (int i = 0; i < numberOfStudentsToRemove; i++) {
@@ -266,6 +381,27 @@ public class Character implements Serializable {
         return game;
     }
 
+    public Game activateEffect(Game game) throws Exception{
+        switch (characterNumber){
+            case 1 -> {
+                game = characterFunctions.checkInfluenceWithModifiedBoard(game, memoryPlayer);
+            }
+            case 5 -> {
+                game = characterFunctions.checkInfluenceWithoutTowers(game);
+            }
+            case 7 -> {
+                game = characterFunctions.checkInfluenceWithBonus(game, memoryPlayer);
+            }
+            case 8 -> {
+                game = characterFunctions.checkInfluenceWithoutColour(game, memoryColour);
+            }
+        }
+        memoryPlayer = null;
+        memoryColour = null;
+        return game;
+    }
+
+    //Returns a brief description of the character and its effect
     public String getDescription() {
         return description;
     }

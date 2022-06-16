@@ -59,8 +59,8 @@
 
   <distributionManagement>
     <repository>
-      <id>AM41</id> <!-- Check if id is correct -->
-      <url>https://github.com/Cervini/ingsw2022-AM41.git</url>
+      <id>AM41</id> <!-- Edit to generate .jar -->
+      <url>file://C/Users/davof/Downloads</url>
     </repository>
   </distributionManagement>
 

@@ -88,7 +88,7 @@ public class GamePack implements Serializable {
         int cost = character.getCost();
         String description = character.getDescription();
         List<Student> students = character.getStudents();
-        int noEntry = character.gettNoEntry();
+        int noEntry = character.getNoEntryNumber();
         CharacterInfo characterInfo = new CharacterInfo(cost, description, students, noEntry);
         characters.add(characterInfo);
     }

@@ -116,7 +116,8 @@ class CharacterTest {
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
 
-        game = character.effect(game, game.getPlayers().getLast(), null, null, null, null);
+        character.effect(game, game.getPlayers().getLast(), null, null, null, null);
+        character.activateEffect(game);
 
         assertTrue(game.getPlayers().getFirst().getOwned_professor().contains(new Professor(Colour.RED)));
 
@@ -138,7 +139,8 @@ class CharacterTest {
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getStudents().clear();
         game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).putStudent(new Student(Colour.RED));
 
-        game = character.effect(game, game.getPlayers().get(1), null, null, null, null);
+        character.effect(game, game.getPlayers().get(1), null, null, null, null);
+        character.activateEffect(game);
 
         assertEquals(game.getArchipelago().get(game.getArchipelago().indexOf(game.motherNaturePosition())).getColour(), game.getPlayers().get(1).getTeam());
 
@@ -163,7 +165,8 @@ class CharacterTest {
 
         specificIsland = game.getArchipelago().get(7);
 
-        game = character.effect(game, null, null, null, specificIsland, null);
+        character.effect(game, null, null, null, specificIsland, null);
+        character.activateEffect(game);
 
         assertEquals(game.getArchipelago().get(7).getColour(), game.getPlayers().getFirst().getTeam());
 
@@ -202,7 +205,8 @@ class CharacterTest {
         game.merge(game.getArchipelago().get(0), game.getArchipelago().get(1));
         specificIsland = game.getArchipelago().get(0);
 
-        game = character.effect(game, null, null, null, specificIsland, null);
+        character.effect(game, null, null, null, specificIsland, null);
+        character.activateEffect(game);
 
         assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(0).getColour());
 
@@ -287,7 +291,8 @@ class CharacterTest {
         Character character = new Character(4);
 
         game.getCharacters().add(character);
-        game = character.effect(game, null, null, null, game.getArchipelago().get(1), null);
+        game.getPlayers().getFirst().giveCoins(4);
+        game.playCharacter(character, game.getPlayers().getFirst(), null, null, game.getArchipelago().get(1), null);
 
         assertTrue(game.getArchipelago().get(1).getNo_entry());
         game.getPlayers().getFirst().playAssistant(0);
@@ -304,7 +309,8 @@ class CharacterTest {
         Character character = new Character(4);
 
         game.getCharacters().add(character);
-        game = character.effect(game, null, null, null, game.getArchipelago().get(1), null);
+        game.getPlayers().getFirst().giveCoins(4);
+        game.playCharacter(character, game.getPlayers().getFirst(), null, null, game.getArchipelago().get(1), null);
 
         game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
@@ -331,7 +337,8 @@ class CharacterTest {
         game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
         game.getArchipelago().get(islandIndex).setTower(game.getPlayers().getLast().getTeam());
 
-        game = character.effect(game, null, null, null, null, null);
+        character.effect(game, null, null, null, null, null);
+        character.activateEffect(game);
 
         assertEquals(game.getArchipelago().get(islandIndex).getColour(), game.getPlayers().getFirst().getTeam());
 
@@ -354,7 +361,8 @@ class CharacterTest {
         game.getArchipelago().get(islandIndex).setTower(game.getPlayers().getLast().getTeam());
         game.getPlayers().getLast().getSchool().takeTowers(1);
 
-        game = character.effect(game, null, null, null, null, null);
+        character.effect(game, null, null, null, null, null);
+        character.activateEffect(game);
 
         assertEquals(8, game.getPlayers().getLast().getSchool().getTowers());
 
@@ -519,7 +527,8 @@ class CharacterTest {
         game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
         game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.BLUE));
 
-        game = character.effect(game, game.getPlayers().getLast(), null, null, null, null);
+        character.effect(game, game.getPlayers().getLast(), null, null, null, null);
+        character.activateEffect(game);
 
         assertEquals(game.getArchipelago().get(islandIndex).getColour(), game.getPlayers().getLast().getTeam());
 
@@ -544,7 +553,8 @@ class CharacterTest {
         game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.PINK));
         game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.PINK));
 
-        game = character.effect(game, game.getPlayers().getLast(), null, null, null, null);
+        character.effect(game, game.getPlayers().getLast(), null, null, null, null);
+        character.activateEffect(game);
 
         assertNull(game.getArchipelago().get(islandIndex).getColour());
 
@@ -566,7 +576,8 @@ class CharacterTest {
         game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.RED));
         game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.BLUE));
 
-        game = character.effect(game, null, null, null, null,  Colour.RED);
+        character.effect(game, null, null, null, null,  Colour.RED);
+        character.activateEffect(game);
 
         assertEquals(game.getPlayers().getLast().getTeam(), game.getArchipelago().get(islandIndex).getColour());
 
@@ -598,7 +609,8 @@ class CharacterTest {
         game.getArchipelago().get(islandIndex).putStudent(new Student(Colour.BLUE));
         game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
 
-        game = character.effect(game, null, null, null, null, Colour.YELLOW);
+        character.effect(game, null, null, null, null, Colour.YELLOW);
+        character.activateEffect(game);
 
         assertEquals(game.getPlayers().get(1).getTeam(), game.getArchipelago().get(islandIndex).getColour());
 
