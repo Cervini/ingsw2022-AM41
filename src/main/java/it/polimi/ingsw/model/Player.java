@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 
 import java.util.LinkedList;
@@ -51,12 +50,17 @@ public class Player implements Comparable{
      * read the assistants card stats from assistants_stats.txt and set up the Assistant list
      */
     private void deck_setup() {
-        try {
-            Scanner reader = new Scanner(new File("src/main/resources/it/polimi/ingsw/assistants_stats.txt"));
+
+            try (InputStream in = getClass().getClassLoader().getResourceAsStream("it/polimi/ingsw/assistants_stats.txt");
+                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in))) {
+
+            //Scanner reader = new Scanner(new File("src/main/resources/it/polimi/ingsw/assistants_stats.txt"));
+            Scanner reader = new Scanner(bufferedReader);
+
             while (reader.hasNextInt()) {
                 assistants.add(new Assistant(reader.nextInt(), reader.nextInt()));
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             System.out.println("Error: ");
             e.printStackTrace();
         }
