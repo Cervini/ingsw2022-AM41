@@ -28,6 +28,7 @@ public class GameController extends BaseController {
             output.setArgString("Impossible number of players.");
             return output;
         }
+
         int available = availableClients(client.getClients());//count available clients
         if (available >= message.getArgNum1()) { // if there are enough available players
             Game game = new Game(message.getArgNum1()); // create the game
@@ -36,19 +37,16 @@ public class GameController extends BaseController {
             output.setArgString("Game of " + available + " started");
             setAsPlaying(message.getArgNum1(), game, client.getClients()); // set the other available client as players
 
-            Collections.shuffle(client.sameMatchPlayers());
-
-            ClientHandler first_player = client.sameMatchPlayers().get(0);//during the first round the first player is randomly chosen
+            Random randomIndex = new Random();
+            ClientHandler first_player = client.sameMatchPlayers().get(randomIndex.nextInt(client.sameMatchPlayers().size()));//during the first round the first player is randomly chosen
+            Collections.swap(client.getClients(),0,client.getClients().indexOf(first_player));
             first_player.isPlayerFirstMove = true;
-
             List<ClientHandler> sameMatchPlayers = first_player.sameMatchPlayers();
             GamePhase gamePhase = new PlanningPhase(game, sameMatchPlayers);
             setGamePhaseForAllPlayers(sameMatchPlayers, gamePhase); //all players have the same GamePhase attribute
 
-            Player firstPlayer = game.getPlayer(first_player.getUsername());
-            swap(game.getPlayers(), game.getPlayers().indexOf(firstPlayer), 0); //first_player is now in the first position
             //puts each player username in a list
-            List <String> turnOrder = sameMatchPlayers.stream().map(ClientHandler::getUsername).toList();
+            List <String> turnOrder = client.sameMatchPlayers().stream().map(ClientHandler::getUsername).toList();
             //converts list of strings to a string
             String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
             //sends to client turns order
@@ -106,7 +104,6 @@ public class GameController extends BaseController {
     }
 
 
-    //TODO: THIS V
     public static Message info(Message request, ClientHandler clientHandler) {
         Message output = new Message("string");
         if (clientHandler.getGame() == null) { // if the player is already participating in a game
