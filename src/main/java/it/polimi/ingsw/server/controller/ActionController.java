@@ -16,8 +16,11 @@ import java.util.List;
 public class ActionController  {
 
     public static Message place(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
-
         Message response = new Message("string");
+        if (clientHandler.getGame() == null){
+            response.setArgString("Game not started yet");
+            return response;
+        }
         try {
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
                     (ActionPhase) currentGamePhase :
@@ -43,6 +46,10 @@ public class ActionController  {
 
     public static Message move(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
         Message response = new Message("string");
+        if (clientHandler.getGame() == null){
+            response.setArgString("Game not started yet");
+            return response;
+        }
         try {
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
                     (ActionPhase) currentGamePhase :
@@ -68,6 +75,10 @@ public class ActionController  {
 
     public static Message choose(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
         Message response = new Message("string");
+        if (clientHandler.getGame() == null){
+            response.setArgString("Game not started yet");
+            return response;
+        }
 
         try {
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
@@ -75,7 +86,7 @@ public class ActionController  {
                     (PlanningPhase) currentGamePhase;
             gamePhase.validateChooseCloud(clientHandler); // check if action is allowed
             response = processChoose(request, clientHandler); // action
-            changeActivePlayer(gamePhase); // change the order of currentPlayers
+            //changeActivePlayer(gamePhase); // change the order of currentPlayers
             boolean isLastPlayer =
                     gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1; // checks if all players have already played this phase
             if (isLastPlayer) {

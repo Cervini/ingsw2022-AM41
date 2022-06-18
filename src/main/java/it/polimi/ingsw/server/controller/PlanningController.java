@@ -23,6 +23,11 @@ public class PlanningController extends BaseController {
 
         Message response = new Message("string");
 
+        if (clientHandler.getGame() == null){
+            response.setArgString("Game not started yet");
+            return response;
+        }
+
         try {
 
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
