@@ -137,11 +137,11 @@ public class Game{
             int from = archipelago.indexOf(fromIsland);
             archipelago.get(from).setMother_nature(false);
             archipelago.get((from + movement)%archipelago.size()).setMother_nature(true);
-            if(characterPlayer() != null && !specialCharacterActive()) {
+            if(!specialCharacterActive()) {
                 // run influence check and change owner of the island if possible
                 islandCheck(archipelago.get((from + movement) % archipelago.size()));
             }else{
-                // run influence check with a character effect active and change owned of the island if possible
+                // run influence check with a character effect active and change the owner of the island if possible
                 specialCheck();
             }
         } else {
@@ -279,7 +279,7 @@ public class Game{
             island.conquerCheck(players);
         } else {
             island.setNo_entry(false);
-            getCharacters().get(findNoEntryCharacter(getCharacters())).returnNoEntry();
+            getCharacters().get(findNoEntryCharacter()).returnNoEntry();
         }
     }
 
@@ -360,6 +360,15 @@ public class Game{
         }
     }
 
+    /**This function is used to play the characters available in each game     *
+     * @param playedCharacter selected character to play
+     * @param player is the player that activated the effect of the character
+     * @param studentList1 it's function depends on whether the characterNumber is 0, 6, 9 or 10
+     * @param studentList2 it's function depends on whether the characterNumber is 6 or 9
+     * @param island is the island on which the character effect will have consequences
+     * @param colour is the colour selected by the player that the character will consider differently
+     * @throws Exception when the player doesn't have enough coins for the selected character
+     */
     public void playCharacter(Character playedCharacter, Player player, LinkedList<Student> studentList1, LinkedList<Student> studentList2, Island island, Colour colour) throws Exception{
         if(player.getCoins() >= playedCharacter.getCost()) {
             player.spend(playedCharacter.getCost());
@@ -370,8 +379,14 @@ public class Game{
         }
     }
 
-    //Used to find the character that holds the "noEntry" cards, it works only if there's one
-    private int findNoEntryCharacter(LinkedList<Character> characters){
+    /**Used to find the character that holds the "noEntry" cards, it works only if there's one
+     * @ensures characters.size() == \old(characters.size()) &&
+     *          (\forall int i; i>=0 && i<characters.size(); characters.get(i) == \old(characters.get(i)) &&
+     *          (\result == -1 || \result == 4) &&
+     *          \result == 4 <==> (\exists Character character; ; characters.contains(character) &&
+     *              character.getCharacterNumber() == 4)
+     */
+    private int findNoEntryCharacter(){
         for(Character characterToCheck: characters){
             if(characterToCheck.getCharacterNumber() == noEntryCharacterNumber){
                 return characters.indexOf(characterToCheck);
@@ -380,6 +395,11 @@ public class Game{
         return -1;
     }
 
+    /**Used to find the player who played the character
+     * @ensures players.size() == \old(players.size()) &&
+     *          \result != null <==> (\exists Player player; ; players.contains(player) &&
+     *              player.getPlayedCharacterNumber())
+     */
     private Player characterPlayer() {
         for(Player playerToCheck: players){
             if(playerToCheck.getPlayedCharacterNumber() >= 0){
@@ -389,26 +409,32 @@ public class Game{
         return null;
     }
 
+    //Used to see if any of characters 2, 6, 8, 9 is being played this turn
     private boolean specialCharacterActive(){
-        for(int i: specialCharacterNumbers){
-            if(i == characterPlayer().getPlayedCharacterNumber()){
+        if(characterPlayer() == null){
+            return false;
+        }
+        for(int numberToCheck: specialCharacterNumbers){
+            if(numberToCheck == characterPlayer().getPlayedCharacterNumber()){
                 return true;
             }
         }
         return false;
     }
 
+    //Used to run influence check with a character effect active and change the owner of the island if possible
     private void specialCheck() {
         try {
             for(Character character: characters){
                 if(character.getCharacterNumber() == characterPlayer().getPlayedCharacterNumber()){
                     character.activateEffect(this);
+                    characterPlayer().setPlayedCharacterNumber(-1);
+                    return;
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        characterPlayer().setPlayedCharacterNumber(-1);
     }
 
     public LinkedList<Player> getPlayers() {
@@ -475,6 +501,4 @@ public class Game{
     public void setActivePlayer(Player activePlayer) {
         this.activePlayer = activePlayer;
     }
-
-    
 }

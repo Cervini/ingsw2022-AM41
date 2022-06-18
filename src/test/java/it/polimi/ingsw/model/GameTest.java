@@ -1192,4 +1192,56 @@ class GameTest {
 
         System.out.println("playCharacterTest4 complete");
     }
+
+    @Test
+    void moveMotherNatureTest20() throws Exception{
+        Game game = new Game(2);
+
+        game.getPlayers().getFirst().playAssistant(3);
+        game.moveMotherNature(2, game.getPlayers().getFirst());
+
+        assertTrue(game.getArchipelago().get(2).isMother_nature());
+
+        System.out.println("moveMotherNatureTest20 complete");
+    }
+
+    @Test
+    void moveMotherNatureTest21() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(1);
+
+        if(!game.getCharacters().contains(character)){
+            game.getCharacters().removeFirst();
+            game.getCharacters().add(character);
+        }
+
+        game.getPlayers().getFirst().playAssistant(3);
+        game.getPlayers().getFirst().giveCoins(10);
+        game.playCharacter(character, game.getPlayers().getFirst(), null, null, null, null);
+        game.moveMotherNature(2, game.getPlayers().getFirst());
+
+        assertTrue(game.getArchipelago().get(2).isMother_nature());
+
+        System.out.println("moveMotherNatureTest21 complete");
+    }
+
+    @Test
+    void moveMotherNatureTest22() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(1);
+
+        if(!game.getCharacters().contains(character)){
+            game.getCharacters().removeFirst();
+            game.getCharacters().add(character);
+        }
+
+        game.getPlayers().getFirst().playAssistant(3);
+        game.getPlayers().getFirst().giveCoins(10);
+        game.playCharacter(character, game.getPlayers().getFirst(), null, null, null, null);
+        game.moveMotherNature(2, game.getPlayers().getFirst());
+
+        assertEquals(-1, game.getPlayers().getFirst().getPlayedCharacterNumber());
+
+        System.out.println("moveMotherNatureTest22 complete");
+    }
 }

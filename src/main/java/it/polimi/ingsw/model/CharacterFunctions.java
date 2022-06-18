@@ -9,21 +9,8 @@ public class CharacterFunctions {
     private static final int additionalInfluence = 2;
     private static final int noEntryCharacterNumber = 4;
 
-    //Function of character 3
-    public Game checkInfluenceOnSpecificIsland(Game game, Island island) throws Exception{
-        int islandIndex;
-        islandIndex = game.getArchipelago().indexOf(island);
-        if(!game.getArchipelago().get(islandIndex).getNo_entry()){
-            game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
-        } else {
-            game.getArchipelago().get(islandIndex).setNo_entry(false);
-            game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
-        }
-        return game;
-    }
 
     //Function of character 2
-    //TODO fix - deep copy oppure metodo restore in Professor
     public Game checkInfluenceWithModifiedBoard(Game game, Player player) throws Exception{
         ArrayList<SchoolBoard> schoolBoardsBackup = new ArrayList<>();
         int islandIndex;
@@ -37,6 +24,19 @@ public class CharacterFunctions {
             game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
         }
         restoreSchoolBoard(game.getPlayers(), schoolBoardsBackup);
+        return game;
+    }
+
+    //Function of character 3
+    public Game checkInfluenceOnSpecificIsland(Game game, Island island) throws Exception{
+        int islandIndex;
+        islandIndex = game.getArchipelago().indexOf(island);
+        if(!game.getArchipelago().get(islandIndex).getNo_entry()){
+            game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
+        } else {
+            game.getArchipelago().get(islandIndex).setNo_entry(false);
+            game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
+        }
         return game;
     }
 
@@ -108,7 +108,6 @@ public class CharacterFunctions {
         return -1;
     }
 
-    //
     private void doSchoolBoardsBackup(LinkedList<Player> players, ArrayList<SchoolBoard> schoolBoards){
         for(int i = 0; i < players.size(); i++){
             schoolBoards.add(new SchoolBoard(players.get(i)));

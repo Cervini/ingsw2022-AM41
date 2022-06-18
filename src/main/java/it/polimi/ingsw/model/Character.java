@@ -381,6 +381,11 @@ public class Character implements Serializable {
         return game;
     }
 
+    /**Characters 2, 6, 8, 9 need to activate their effect at the end of the turn, even if they are played
+     * at another time during the game phase. This function is automatically called by the game when it's
+     * the right time to activate these characters' effect
+     * @param game is the current situation of the match that is going to be modified by the character
+     */
     public Game activateEffect(Game game) throws Exception{
         switch (characterNumber){
             case 1 -> {
