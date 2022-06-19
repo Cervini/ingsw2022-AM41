@@ -54,8 +54,6 @@ public class Server {
             }
             ClientHandler clientThread = new ClientHandler(clientSocket, clients);
 
-
-
             //String[] mainArgs = new String[] {""};
             //Main.main(mainArgs,clientThread);
 

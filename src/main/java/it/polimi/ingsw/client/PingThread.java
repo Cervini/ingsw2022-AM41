@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import static it.polimi.ingsw.client.Client.serverWasOffline;
+
 
 public class PingThread implements Runnable{
     private Thread pingThread;
@@ -42,6 +44,10 @@ public class PingThread implements Runnable{
                 isServerReachable = ping.ping(ipAddress, portNumber);
                 Thread.sleep(5000);
                  //System.out.println("Server is reachable "+isServerReachable );
+                if (!isServerReachable) {
+                    System.out.println("Server is not available, please wait..");
+                    serverWasOffline = true;
+                }
             }
         }catch (InterruptedException e){
             System.out.println("Thread " + threadName + " interrupted");
