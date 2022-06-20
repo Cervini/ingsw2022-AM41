@@ -32,10 +32,6 @@ public class GameController extends BaseController {
         int available = availableClients(client.getClients());//count available clients
         if (available >= message.getArgNum1()) { // if there are enough available players
             Game game = new Game(message.getArgNum1()); // create the game
-            client.setGame(game);
-            game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the client who sent START command as a player
-            output.setArgString("Game of " + available + " started");
-            setAsPlaying(message.getArgNum1(), game, client.getClients()); // set the other available client as players
 
             Random randomIndex = new Random();
             ClientHandler first_player = client.sameMatchPlayers().get(randomIndex.nextInt(client.sameMatchPlayers().size()));//during the first round the first player is randomly chosen
@@ -53,6 +49,11 @@ public class GameController extends BaseController {
             for (ClientHandler handler : first_player.sameMatchPlayers()) {
                 alert(handler, "Turns order: "+ turns);
             }
+            client.setGame(game);
+            game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the client who sent START command as a player
+            output.setArgString("Game of " + available + " started");
+            setAsPlaying(message.getArgNum1(), game, client.getClients()); // set the other available client as players
+
         } else {
             output.setArgString("Not enough players, wait some time then retry.");
         }

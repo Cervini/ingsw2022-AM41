@@ -45,7 +45,7 @@ public class ActionPhase extends GamePhase {
             if (currentPlayerNextAction.getAction() == PlayerAction.ActionType.CHOOSE_CLOUD) {
                 throw new WrongAction("As next action you have to choose Cloud");
             } else {
-                throw new WrongAction("Before move Mother Nature you should complete students movement");
+                throw new WrongAction("Before move Mother Nature you have to move three students from your schoolboard");
             }
         }
 
@@ -82,12 +82,16 @@ public class ActionPhase extends GamePhase {
         }
     }
 
+    /**
+     * checks if the player can complete PLACE command
+     * @param player who sent the command PLACE
+     */
     public boolean alreadyMovedThreeStudents(ClientHandler player){
 
         int entranceSize = player.getGame().getPlayer(player.getUsername()).getSchool().getEntranceSize();
         switch (player.sameMatchPlayers().size()) {
             case 2 -> { if(entranceSize == 4)  return true ;}
-            case 3 -> { if(entranceSize == 6)  return true ;}
+            case 3 -> { if(entranceSize == 5)  return true ;}
         }
         return false;
     }

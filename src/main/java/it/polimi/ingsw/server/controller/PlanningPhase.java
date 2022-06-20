@@ -27,7 +27,6 @@ public class PlanningPhase extends GamePhase {
         }
 
         if (!isFirstPlayer) {
-
             ClientHandler firstPlayerHandler = clientHandler.sameMatchPlayers()
                     .stream()
                     .filter(p -> p.isPlayerFirstMove)
@@ -38,14 +37,12 @@ public class PlanningPhase extends GamePhase {
             if (!firstPlayerPlayed) {
                 throw new PlanningPhase.WrongTurn("First player have to play before your move");
             }
-
-
             boolean existPlayerBeforeMeThatHaveToPlay = false; //checks if there are no players before you
-            for (Player pl : game.getPlayers()) {
-                if (pl.getPlayer_id() == player.getPlayer_id()) {
+            for (ClientHandler pl : clientHandler.sameMatchPlayers()) {
+                if (pl.getUsername() == player.getPlayer_id()) {
                     break;
                 }
-                boolean playerPlayed = pl.getFace_up_assistant() != null;
+                boolean playerPlayed = pl.getGame().getPlayer(pl.getUsername()).getFace_up_assistant() != null;
                 if (!playerPlayed) {
                     existPlayerBeforeMeThatHaveToPlay = true;
                     break;
