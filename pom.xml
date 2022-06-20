@@ -60,7 +60,7 @@
   <distributionManagement>
     <repository>
       <id>AM41</id> <!-- Edit to generate .jar -->
-      <url>file://C/Users/davof/Downloads</url>
+      <url>https://github.com/Cervini/ingsw2022-AM41/tree/master/deliverables</url>
     </repository>
   </distributionManagement>
 
@@ -165,21 +165,6 @@
                 <addClasspath>true</addClasspath>
                 <classpathPrefix>lib/</classpathPrefix>
                 <mainClass> it.polimi.ingsw.server.Server </mainClass>
-              </manifest>
-            </archive>
-          </configuration>
-        </plugin>
-        <plugin>
-          <!-- Build an executable JAR -->
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version> 3.0.2 </version>
-          <configuration>
-            <archive>
-              <manifest>
-                <addClasspath>true</addClasspath>
-                <classpathPrefix>lib/</classpathPrefix>
-                <mainClass> it.polimi.ingsw.client.Client </mainClass>
               </manifest>
             </archive>
           </configuration>
