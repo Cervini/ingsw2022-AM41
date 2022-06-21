@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.swap;
-
 public class GameController extends BaseController {
 
     /**

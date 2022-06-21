@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.communication.messages.ToTile;
 import it.polimi.ingsw.model.*;
@@ -157,8 +156,8 @@ public class ActionController  {
                 }
             }
             case ISLAND -> {
-                if(request.getArgNum2()<=client.getGame().getArchipelago().size())
-                    client.getGame().moveStudent(currentPlayer.getSchool(),client.getGame().getArchipelago().get(request.getArgNum2()), played);
+                if(request.getSingleArgNum2()<=client.getGame().getArchipelago().size())
+                    client.getGame().moveStudent(currentPlayer.getSchool(),client.getGame().getArchipelago().get(request.getSingleArgNum2()), played);
                 else {
                     throw new ActionPhase.WrongAction("Not existing island, please retry");
                 }
@@ -253,7 +252,7 @@ public class ActionController  {
         }
         if(request.getTo_tile() == ToTile.ISLAND){
             // check if island exists
-            if(request.getArgNum2() >= client.getGame().getArchipelago().size())
+            if(request.getSingleArgNum2() >= client.getGame().getArchipelago().size())
                 throw new ActionPhase.WrongAction("Not existing island, please retry");
         }
     }
