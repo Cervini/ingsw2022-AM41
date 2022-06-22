@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+
 public class GameController extends BaseController {
 
     /**
@@ -124,6 +125,7 @@ public class GameController extends BaseController {
         Game game = client.getGame();
 
         try {
+            validateTurn(client);
             validateCharacter(index, client, player);
             Character chosenCharacter = client.getGame().getSelectedCharacters().get(index); //get chosen Character
             int characterIndex = chosenCharacter.getCharacterNumber();
@@ -156,6 +158,30 @@ public class GameController extends BaseController {
         if( index < 0 || index > 2) throw new NonExistentCharacterException();
         if (player.getPlayedCharacterNumber() != -1) throw new alreadyPlayedACharacterException();
 
+    }
+    private static void validateTurn(ClientHandler client) throws GamePhase.WrongTurn {
+
+        Player player = client.getGame().getPlayer(client.getUsername());
+        if(client.getCurrentGamePhase().isPlanningPhase()) {
+        boolean existPlayerBeforeMeThatHaveToPlay = false; //checks if there are no players before you
+        for (ClientHandler pl : client.sameMatchPlayers()) {
+            if (pl.getUsername() == player.getPlayer_id()) {
+                break;
+            }
+            boolean playerPlayed = pl.getGame().getPlayer(pl.getUsername()).getFace_up_assistant() != null;
+            if (!playerPlayed) {
+                existPlayerBeforeMeThatHaveToPlay = true;
+                break;
+            }
+        }
+        if (existPlayerBeforeMeThatHaveToPlay) { // there are players before me
+            throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
+        }
+    } else {
+            if ( ActionPhase.getCurrentPlayerNextAction().getPlayer() != player) {
+                throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
+            }
+        }
     }
     public static class alreadyPlayedACharacterException extends Exception {
         public alreadyPlayedACharacterException() {}

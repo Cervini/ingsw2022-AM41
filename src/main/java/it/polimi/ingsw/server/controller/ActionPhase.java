@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ActionPhase extends GamePhase {
-    private PlayerAction currentPlayerNextAction;
+    private static PlayerAction currentPlayerNextAction;
 
     public ActionPhase(Game game, List<ClientHandler> players) {
         super(game, players);
@@ -63,6 +63,11 @@ public class ActionPhase extends GamePhase {
             throw new WrongAction("there are no students available");
         }
     }
+    @Override
+    public void validateUse(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction {
+        validatePlayerTurn(clientHandler);
+    }
+
 
     public void setNextActionForCurrentPlayer() {
         currentPlayerNextAction.setNextAction();
@@ -75,7 +80,7 @@ public class ActionPhase extends GamePhase {
         currentPlayerNextAction = new PlayerAction(nextPlayer, PlayerAction.ActionType.MOVE_STUDENT);
     }
 
-    private void validatePlayerTurn(ClientHandler clientHandler) throws WrongTurn {
+    public void validatePlayerTurn(ClientHandler clientHandler) throws WrongTurn {
         Player playerThatTryTheMove = clientHandler.getGame().getPlayer(clientHandler.getUsername());
         if (currentPlayerNextAction.getPlayer() != playerThatTryTheMove) {
             throw new WrongTurn();
@@ -104,4 +109,7 @@ public class ActionPhase extends GamePhase {
         }
     }
 
+    public static PlayerAction getCurrentPlayerNextAction() {
+        return currentPlayerNextAction;
+    }
 }

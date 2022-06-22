@@ -18,12 +18,12 @@ public class CharacterController {
             chosenStudent = getStudentsOfCharacter(chosenCharacter,game,studentsIndexes); //gets students placed on character card
             int islandNumber = parameters.getSingleArgNum2();
             Island chosenIsland = game.getArchipelago().get(islandNumber); //get chosen island
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, student placed on island "+islandNumber);
             game.playCharacter(chosenCharacter, player,chosenStudent,null,chosenIsland,null);
         } catch (NoStudentsException ex) {
             response.setArgString("No students on this card");
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -31,10 +31,10 @@ public class CharacterController {
     public static Message processChar1(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         try {
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, you have taken control of all professors");
             game.playCharacter(chosenCharacter, player,null,null,null,null);
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -44,10 +44,10 @@ public class CharacterController {
         int islandNumber = parameters.getSingleArgNum2();
         Island chosenIsland = game.getArchipelago().get(islandNumber);
         try {
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, mother nature has been placed on island "+islandNumber);
             game.playCharacter(chosenCharacter, player,null,null,chosenIsland,null);
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -56,9 +56,9 @@ public class CharacterController {
         Message response = new Message("string");
             try {
                 game.playCharacter(chosenCharacter, player,null,null,null,null);
-                response.setArgString("Character played successfully");
+                response.setArgString("Character played successfully, you may move Mother Nature up to 2 additional Islands");
         } catch (Exception e) {
-                throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+                throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
          return response;
     }
@@ -68,10 +68,10 @@ public class CharacterController {
         int islandNumber = parameters.getSingleArgNum2();
         Island chosenIsland = game.getArchipelago().get(islandNumber);
         try {
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, no entry tile has been placed on island "+islandNumber);
             game.playCharacter(chosenCharacter, player,null,null,chosenIsland,null);
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
 
@@ -81,9 +81,9 @@ public class CharacterController {
         Message response = new Message("string");
         try {
             game.playCharacter(chosenCharacter, player,null,null,null,null);
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, next time mother nature will move towers will not count towards influence ");
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -100,7 +100,7 @@ public class CharacterController {
         } catch (NoStudentsException ex ) {
             response.setArgString("No students on this card");
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -111,7 +111,7 @@ public class CharacterController {
             game.playCharacter(chosenCharacter, player,null,null,null,null);
             response.setArgString("Character played successfully");
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -122,7 +122,7 @@ public class CharacterController {
             game.playCharacter(chosenCharacter, player,null,null,null,chosenColour);
             response.setArgString("Character played successfully");
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -143,7 +143,7 @@ public class CharacterController {
         } catch (NoStudentsException e) {
             response.setArgString("Not enough students in your entrance");
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -160,7 +160,7 @@ public class CharacterController {
         } catch (NoStudentsException ex) {
             response.setArgString("No students on this card");
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -172,7 +172,7 @@ public class CharacterController {
             game.playCharacter(chosenCharacter, player,null,null,null,chosenColour);
             response.setArgString("Character played successfully");
         } catch (Exception e) {
-            throw  new Exception("e.getMessage()"); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.server.ClientHandler;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class GamePhase {
         if (gameEnded){
             throw new GameEndedException("Game already ended");
         }
+        // TODO: validare che il player che sta facendo la mossa non e' unico presente nel gioco in questo momento
         if (this instanceof ActionPhase) {
             throw new PlanningPhase.WrongPhaseException();
 
@@ -41,10 +43,15 @@ public class GamePhase {
         validateCorrectActionGamePhase("Method validateChooseCloud cannot be called from GamePhase parent class");
     }
 
+    public void validateUse(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction, GameEndedException {
+        validateCorrectActionGamePhase("Method validateMoveMotherNature cannot be called from GamePhase parent class");
+    }
+
     private void validateCorrectActionGamePhase(String msg) throws WrongPhaseException, WrongTurn, GameEndedException {
         if (gameEnded){
             throw new GameEndedException("Game already ended");
         }
+        // TODO: validare che il player che sta facendo la mossa non e' unico presente nel gioco in questo momento
         if (this instanceof PlanningPhase) {
             throw new WrongPhaseException();
         }
@@ -107,4 +114,5 @@ public class GamePhase {
     public Game getCurrent_game() {
         return current_game;
     }
+
 }
