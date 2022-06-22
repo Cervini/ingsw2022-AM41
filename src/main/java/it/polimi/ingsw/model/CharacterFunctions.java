@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 public class CharacterFunctions {
 
@@ -21,7 +20,7 @@ public class CharacterFunctions {
             game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
-            game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
+            game.getSelectedCharacters().get(findNoEntryCharacter(game.getSelectedCharacters())).returnNoEntry();
         }
         restoreSchoolBoard(game.getPlayers(), schoolBoardsBackup);
         return game;
@@ -35,7 +34,7 @@ public class CharacterFunctions {
             game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers());
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
-            game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
+            game.getSelectedCharacters().get(findNoEntryCharacter(game.getSelectedCharacters())).returnNoEntry();
         }
         return game;
     }
@@ -49,7 +48,7 @@ public class CharacterFunctions {
             game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers(), noTowers);
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
-            game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
+            game.getSelectedCharacters().get(findNoEntryCharacter(game.getSelectedCharacters())).returnNoEntry();
         }
         return game;
     }
@@ -62,7 +61,7 @@ public class CharacterFunctions {
             game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers(), player, additionalInfluence);
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
-            game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
+            game.getSelectedCharacters().get(findNoEntryCharacter(game.getSelectedCharacters())).returnNoEntry();
         }
         return game;
     }
@@ -75,7 +74,7 @@ public class CharacterFunctions {
             game.getArchipelago().get(islandIndex).conquerCheck(game.getPlayers(), colourToExclude);
         } else {
             game.getArchipelago().get(islandIndex).setNo_entry(false);
-            game.getCharacters().get(findNoEntryCharacter(game.getCharacters())).returnNoEntry();
+            game.getSelectedCharacters().get(findNoEntryCharacter(game.getSelectedCharacters())).returnNoEntry();
         }
         return game;
     }

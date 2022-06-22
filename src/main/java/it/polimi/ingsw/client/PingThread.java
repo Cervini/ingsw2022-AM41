@@ -42,7 +42,7 @@ public class PingThread implements Runnable{
         try{
             while (true){
                 isServerReachable = ping.ping(ipAddress, portNumber);
-                Thread.sleep(5000);
+                Thread.sleep(2000);
                  //System.out.println("Server is reachable "+isServerReachable );
                 if (!isServerReachable) {
                     System.out.println("Server is not available, please wait..");

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.Character;
 import it.polimi.ingsw.server.ClientHandler;
 import java.io.IOException;
 import java.util.Collections;
@@ -110,8 +111,55 @@ public class GameController extends BaseController {
             return output;
         } else {
             // set as string argument the character description
-            output.setArgString(clientHandler.getGame().getCharacters().get(request.getArgNum1()).getDescription());
+            output.setArgString(clientHandler.getGame().getSelectedCharacters().get(request.getArgNum1()).getDescription());
         }
         return output;
     }
+
+
+    public static Message character(Message request, ClientHandler client, List clients) {
+        Message response = new Message("string");
+        int index = request.getArgNum1();
+        Player player = client.getGame().getPlayer(client.getUsername());
+        Game game = client.getGame();
+
+        try {
+            validateCharacter(index, client, player);
+            Character chosenCharacter = client.getGame().getSelectedCharacters().get(index); //get chosen Character
+            int characterIndex = chosenCharacter.getCharacterNumber();
+            switch (characterIndex){
+                case 0 -> response = CharacterController.processChar0(player, request,game, chosenCharacter);
+                case 1 -> response = CharacterController.processChar1(player, request,game,chosenCharacter);
+                case 2 -> response = CharacterController.processChar2(player, request,game,chosenCharacter);
+                case 3 -> response = CharacterController.processChar3(player, request,game,chosenCharacter);
+                case 4 -> response = CharacterController.processChar4(player, request,game,chosenCharacter);
+                case 5 -> response = CharacterController.processChar5(player, request,game,chosenCharacter);
+                case 6 -> response = CharacterController.processChar6(player, request,game,chosenCharacter);
+                case 7 -> response = CharacterController.processChar7(player, request,game,chosenCharacter);
+                case 8 -> response = CharacterController.processChar8(player, request,game,chosenCharacter);
+                case 9 -> response = CharacterController.processChar9(player, request,game,chosenCharacter);
+                case 10 -> response = CharacterController.processChar10(player, request,game,chosenCharacter);
+                case 11 -> response = CharacterController.processChar11(player, request,game,chosenCharacter);
+            }
+        } catch (alreadyPlayedACharacterException e) {
+            response.setArgString("You have already played a character during this round, wait for the next round");
+        } catch (NonExistentCharacterException ex) {
+            response.setArgString("There is no such character");
+        }
+
+        return response;
+    }
+
+    private static void validateCharacter(int index, ClientHandler client, Player player) throws alreadyPlayedACharacterException, NonExistentCharacterException {
+        if( index < 0 || index > 2) throw new NonExistentCharacterException();
+        if (player.getPlayedCharacterNumber() != -1) throw new alreadyPlayedACharacterException();
+
+    }
+    public static class alreadyPlayedACharacterException extends Exception {
+        public alreadyPlayedACharacterException() {}
+    }
+    public static class NonExistentCharacterException extends Exception {
+        public NonExistentCharacterException() {}
+    }
+
 }

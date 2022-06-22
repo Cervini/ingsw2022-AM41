@@ -10,9 +10,10 @@ public class Game{
     private List<Island> archipelago; // list of all the islands
     private LinkedList<Player> turnOrder; // playing order of the turn
     private List<Cloud> clouds; // list of all the clouds
-    private LinkedList<Character> characters;
+    private LinkedList<Character> selectedCharacters;
     private final GameConclusionChecks conclusionChecks;
     private Player activePlayer;
+    private List<Character> characters;
 
     // constants
     private static final int minimumNumberOfIslands = 3;
@@ -39,8 +40,9 @@ public class Game{
         clouds = cloudsSetup(numberOfPlayers);
         professors = gameSetup.professorSetup();
         gameSetup.placeStudentEntranceSetUp(this);
-        characters = gameSetup.characterSetup();
-        characterSetupStudents(characters);
+        selectedCharacters = gameSetup.characterSetup();
+        characterSetupStudents(selectedCharacters);
+        characters=gameSetup.setAllCharacters();
         conclusionChecks = new GameConclusionChecks();
     }
 
@@ -279,7 +281,7 @@ public class Game{
             island.conquerCheck(players);
         } else {
             island.setNo_entry(false);
-            getCharacters().get(findNoEntryCharacter()).returnNoEntry();
+            getSelectedCharacters().get(findNoEntryCharacter()).returnNoEntry();
         }
     }
 
@@ -373,7 +375,7 @@ public class Game{
         if(player.getCoins() >= playedCharacter.getCost()) {
             player.spend(playedCharacter.getCost());
             player.setPlayedCharacterNumber(playedCharacter.getCharacterNumber());
-            characters.get(characters.indexOf(playedCharacter)).effect(this, player, studentList1, studentList2, island, colour);
+            selectedCharacters.get(selectedCharacters.indexOf(playedCharacter)).effect(this, player, studentList1, studentList2, island, colour);
         }else{
             throw new Exception("Not enough coins to play Character " + playedCharacter.getCharacterNumber() + ". You need " + (playedCharacter.getCost() - player.getCoins()) + " more to play it!");
         }
@@ -387,9 +389,9 @@ public class Game{
      *              character.getCharacterNumber() == 4)
      */
     private int findNoEntryCharacter(){
-        for(Character characterToCheck: characters){
+        for(Character characterToCheck: selectedCharacters){
             if(characterToCheck.getCharacterNumber() == noEntryCharacterNumber){
-                return characters.indexOf(characterToCheck);
+                return selectedCharacters.indexOf(characterToCheck);
             }
         }
         return -1;
@@ -425,7 +427,7 @@ public class Game{
     //Used to run influence check with a character effect active and change the owner of the island if possible
     private void specialCheck() {
         try {
-            for(Character character: characters){
+            for(Character character: selectedCharacters){
                 if(character.getCharacterNumber() == characterPlayer().getPlayedCharacterNumber()){
                     character.activateEffect(this);
                     characterPlayer().setPlayedCharacterNumber(-1);
@@ -465,7 +467,7 @@ public class Game{
         return turnOrder;
     }
 
-    public LinkedList<Character> getCharacters() { return characters;}
+    public LinkedList<Character> getSelectedCharacters() { return selectedCharacters;}
 
     public void setAvailable_coins(int available_coins) {
         this.available_coins = available_coins;
@@ -479,8 +481,8 @@ public class Game{
         this.archipelago = archipelago;
     }
 
-    public void setCharacters(LinkedList<Character> characters) {
-        this.characters = characters;
+    public void setSelectedCharacters(LinkedList<Character> selectedCharacters) {
+        this.selectedCharacters = selectedCharacters;
     }
 
     public static class DistanceMotherNatureException extends Exception{
@@ -500,5 +502,9 @@ public class Game{
 
     public void setActivePlayer(Player activePlayer) {
         this.activePlayer = activePlayer;
+    }
+
+    public List<Character> getAllCharacters() {
+        return characters;
     }
 }

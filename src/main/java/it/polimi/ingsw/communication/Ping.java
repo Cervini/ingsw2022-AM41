@@ -14,15 +14,16 @@ public class Ping {
         try (Socket socket = new Socket(server_ip, server_port);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); // prepare output stream
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
-
             Message pingRequest = new Message("PING");
             out.writeObject(pingRequest);
             out.flush();
-
             Message pingResponse = (Message) in.readObject();
-
+            in.close();
+            out.close();
+            socket.close();
             return pingResponse.getCommand().equals(Command.PONG);
         } catch (IOException | ClassNotFoundException e){
+            //System.out.println("Client exception: " + e);
             return false;
         }
     }

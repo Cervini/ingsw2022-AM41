@@ -149,5 +149,13 @@ public class GameSetup {
         }
         return selectedCharacters;
     }
+
+    public List<Character> setAllCharacters() {
+        LinkedList<Character> characters = new LinkedList<>();
+        for (int i=0; i<totalNumberOfCharacters; i++){
+            characters.add(new Character(i));
+        }
+        return characters;
+    }
 }
 

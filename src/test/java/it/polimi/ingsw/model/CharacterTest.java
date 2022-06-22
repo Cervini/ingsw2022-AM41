@@ -107,7 +107,7 @@ class CharacterTest {
         Game game = new Game(2);
         Character character = new Character(1);
 
-        game.getCharacters().add(character);
+        game.getSelectedCharacters().add(character);
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.checkOwnership();
@@ -290,7 +290,7 @@ class CharacterTest {
         Game game = new Game(2);
         Character character = new Character(4);
 
-        game.getCharacters().add(character);
+        game.getSelectedCharacters().add(character);
         game.getPlayers().getFirst().giveCoins(4);
         game.playCharacter(character, game.getPlayers().getFirst(), null, null, game.getArchipelago().get(1), null);
 
@@ -308,7 +308,7 @@ class CharacterTest {
         Game game = new Game(2);
         Character character = new Character(4);
 
-        game.getCharacters().add(character);
+        game.getSelectedCharacters().add(character);
         game.getPlayers().getFirst().giveCoins(4);
         game.playCharacter(character, game.getPlayers().getFirst(), null, null, game.getArchipelago().get(1), null);
 
@@ -701,7 +701,7 @@ class CharacterTest {
         Character character = new Character(10);
         LinkedList<Student> selectedStudents = new LinkedList<>();
 
-        game.getCharacters().add(character);
+        game.getSelectedCharacters().add(character);
         character.addStudent(new Student(Colour.RED));
         character.addStudent(new Student(Colour.BLUE));
         character.addStudent(new Student(Colour.GREEN));
@@ -721,7 +721,7 @@ class CharacterTest {
         Character character = new Character(10);
         LinkedList<Student> selectedStudents = new LinkedList<>();
 
-        game.getCharacters().add(character);
+        game.getSelectedCharacters().add(character);
         character.addStudent(new Student(Colour.RED));
         character.addStudent(new Student(Colour.BLUE));
         character.addStudent(new Student(Colour.GREEN));
@@ -743,7 +743,7 @@ class CharacterTest {
         int initialBagSize;
 
         initialBagSize = game.getBag().size();
-        game.getCharacters().add(character);
+        game.getSelectedCharacters().add(character);
         character.addStudent(new Student(Colour.RED));
         character.addStudent(new Student(Colour.BLUE));
         character.addStudent(new Student(Colour.GREEN));

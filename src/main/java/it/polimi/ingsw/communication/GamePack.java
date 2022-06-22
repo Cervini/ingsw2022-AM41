@@ -33,7 +33,7 @@ public class GamePack implements Serializable {
         clouds = new LinkedList<>(); // create empty list of clouds
         clouds.addAll(game.getClouds()); // get the clouds from game
         characters = new LinkedList<CharacterInfo>(); // create empty list of clouds
-        for(Character character: game.getCharacters()){
+        for(Character character: game.getSelectedCharacters()){
             getCharInfo(characters, character);
         }
     }
@@ -54,7 +54,7 @@ public class GamePack implements Serializable {
         }
         assistants.addAll(game.getPlayer(client.getUsername()).getAssistants());
         clouds.addAll(game.getClouds());
-        for(Character character: game.getCharacters()){
+        for(Character character: game.getSelectedCharacters()){
             getCharInfo(characters, character);
         }
     }
@@ -74,7 +74,7 @@ public class GamePack implements Serializable {
         clouds = new LinkedList<>();
         clouds.addAll(game.getClouds());
         characters = new LinkedList<>(); // create empty list of clouds
-        for(Character character: game.getCharacters()){
+        for(Character character: game.getSelectedCharacters()){
             getCharInfo(characters, character);
         }
     }

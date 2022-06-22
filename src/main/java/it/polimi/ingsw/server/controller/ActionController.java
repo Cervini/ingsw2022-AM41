@@ -89,7 +89,6 @@ public class ActionController  {
             boolean isLastPlayer =
                     gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1; // checks if all players have already played this phase
             if (isLastPlayer) {
-
                 sort(currentGamePhase.getCurrentPlayers(),
                         Comparator.comparingInt((ClientHandler a)->a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue())); //players sorted by previous assistant value
 
@@ -105,6 +104,8 @@ public class ActionController  {
                 setGamePhaseForAllPlayers(currentGamePhase.getCurrentPlayers(),planningPhase);
                 planningPhase.getCurrentPlayers().forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null));
                 firstPlayer.getGame().startTurn(); //clouds filled
+                setCharacters(clientHandler.getGame().getPlayers());
+
             } else {
                 ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the next player
                 actionPhase.setNextPlayerAndFirstAction(clientHandler);
@@ -300,6 +301,8 @@ public class ActionController  {
         }
         return null;
     }
-
+    private static void setCharacters(List<Player> players){
+        players.forEach(player -> player.setPlayedCharacterNumber(-1));
+    }
 
 }

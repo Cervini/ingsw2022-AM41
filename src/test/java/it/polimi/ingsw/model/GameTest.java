@@ -1090,9 +1090,9 @@ class GameTest {
         Game game = new Game(2);
         Character character = new Character(1);
 
-        if(!game.getCharacters().contains(character)){
-            game.getCharacters().removeFirst();
-            game.getCharacters().add(character);
+        if(!game.getSelectedCharacters().contains(character)){
+            game.getSelectedCharacters().removeFirst();
+            game.getSelectedCharacters().add(character);
         }
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
@@ -1115,9 +1115,9 @@ class GameTest {
         Game game = new Game(2);
         Character character = new Character(1);
 
-        if(!game.getCharacters().contains(character)){
-            game.getCharacters().removeFirst();
-            game.getCharacters().add(character);
+        if(!game.getSelectedCharacters().contains(character)){
+            game.getSelectedCharacters().removeFirst();
+            game.getSelectedCharacters().add(character);
         }
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
@@ -1144,9 +1144,9 @@ class GameTest {
         int initialNumberOfCoins;
         int initialCharacterCost;
 
-        if(!game.getCharacters().contains(character)){
-            game.getCharacters().removeFirst();
-            game.getCharacters().add(character);
+        if(!game.getSelectedCharacters().contains(character)){
+            game.getSelectedCharacters().removeFirst();
+            game.getSelectedCharacters().add(character);
         }
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
@@ -1172,9 +1172,9 @@ class GameTest {
         Character character = new Character(1);
         int initialCharacterCost;
 
-        if(!game.getCharacters().contains(character)){
-            game.getCharacters().removeFirst();
-            game.getCharacters().add(character);
+        if(!game.getSelectedCharacters().contains(character)){
+            game.getSelectedCharacters().removeFirst();
+            game.getSelectedCharacters().add(character);
         }
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
@@ -1210,9 +1210,9 @@ class GameTest {
         Game game = new Game(2);
         Character character = new Character(1);
 
-        if(!game.getCharacters().contains(character)){
-            game.getCharacters().removeFirst();
-            game.getCharacters().add(character);
+        if(!game.getSelectedCharacters().contains(character)){
+            game.getSelectedCharacters().removeFirst();
+            game.getSelectedCharacters().add(character);
         }
 
         game.getPlayers().getFirst().playAssistant(3);
@@ -1230,9 +1230,9 @@ class GameTest {
         Game game = new Game(2);
         Character character = new Character(1);
 
-        if(!game.getCharacters().contains(character)){
-            game.getCharacters().removeFirst();
-            game.getCharacters().add(character);
+        if(!game.getSelectedCharacters().contains(character)){
+            game.getSelectedCharacters().removeFirst();
+            game.getSelectedCharacters().add(character);
         }
 
         game.getPlayers().getFirst().playAssistant(3);
