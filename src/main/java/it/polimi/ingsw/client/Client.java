@@ -3,23 +3,29 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.communication.messages.Message;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 
 public class Client {
-    public static final String SERVER_IP = "127.0.0.1";
-    public static final int SERVER_PORT = 1234;
+    private static  String SERVER_IP ;
+    private static  int SERVER_PORT;
 
     private static Socket socket;
     private static ObjectOutputStream out;
     private static ObjectInputStream in;
     private static Thread readThread;
     protected static boolean serverWasOffline = true;
-
+    private static String host;
 
 
     public static void main (String[] args) {
+        if (args == null || args.length <2 ){
+            throw new IllegalArgumentException("To start client you have to set ip and port number");
+        }
+        SERVER_IP = args[0];
+        SERVER_PORT = Integer.parseInt(args[1]);
         PingThread ping = new PingThread(SERVER_IP, SERVER_PORT);
         ping.start();
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
@@ -52,6 +58,7 @@ public class Client {
     }
 
     public static void createClientServerSocket() throws IOException {
+
         socket = new Socket(SERVER_IP, SERVER_PORT); // instance server socket
         out = new ObjectOutputStream(socket.getOutputStream()); // prepare output stream
         in = new ObjectInputStream(socket.getInputStream()); // prepare input stream

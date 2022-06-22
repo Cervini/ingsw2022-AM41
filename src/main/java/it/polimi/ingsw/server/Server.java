@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.graphics.Main;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -18,10 +19,12 @@ public class Server {
     }
 
     static int getPort(String[] args) {
-        return 1234;
+        if (args == null || args.length < 1) throw new IllegalArgumentException("You have to set port number to start server");
+        return Integer.parseInt(args[0]);
     }
 
     public static void main(String[] args) {
+
         String mode = getMode(args);
         if (mode == "server") {
             int port = getPort(args);
@@ -35,6 +38,8 @@ public class Server {
         System.out.println("starting server on port " + portNumber);
         ServerSocket serverSocket = null;
         try {
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            System.out.println("Server opened at "+ inetAddress.getHostAddress());
             serverSocket = new ServerSocket(portNumber);
         } catch (IOException e) {
             System.out.println("cannot start server on port " + portNumber);
@@ -53,10 +58,6 @@ public class Server {
                 break;
             }
             ClientHandler clientThread = new ClientHandler(clientSocket, clients);
-
-            //String[] mainArgs = new String[] {""};
-            //Main.main(mainArgs,clientThread);
-
             pool.execute(clientThread);
             System.out.println("Number of connected players: " + clients.size());
         }
