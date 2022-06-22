@@ -145,6 +145,8 @@ public class GameController extends BaseController {
             response.setArgString("You have already played a character during this round, wait for the next round");
         } catch (NonExistentCharacterException ex) {
             response.setArgString("There is no such character");
+        }catch (Exception notEnoughCoins) {
+            response.setArgString(notEnoughCoins.getMessage());
         }
 
         return response;
