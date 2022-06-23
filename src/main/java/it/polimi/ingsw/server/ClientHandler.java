@@ -28,6 +28,8 @@ public class ClientHandler implements Runnable{
     public boolean isPlayerFirstMove = false;
     private GamePhase currentGamePhase;
     private boolean onePlayerLeft = false;
+    private boolean alreadyUpdated = false;
+    private static boolean isGameAlreadyStarted = false;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clients = clients;
@@ -77,11 +79,12 @@ public class ClientHandler implements Runnable{
                         }
                         // end of not PING commands
                     }
-                    if(game!=null){
+                    if(game!=null && !alreadyUpdated){
                         updateStatus();
                     }
                     out.writeObject(response); // send through output stream the msg in String form
                     out.flush();
+                    setAlreadyUpdated(false);
                 } else {
                     Message pongResponse = new Message("PONG");
                     out.writeObject(pongResponse);
@@ -103,7 +106,7 @@ public class ClientHandler implements Runnable{
                 clientSocket.close();
                 this.setPlayerIsOffline(true);
                 LoginController.processLogout(this);
-                //clients.remove(this);
+                clients.remove(this);
                 //System.out.println("Client disconnected, socket closed");
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -238,8 +241,10 @@ public class ClientHandler implements Runnable{
         this.playerIsOffline = playerIsOffline;
     }
 
-
-   /*public String checkNumPlayers(ClientHandler player){
+    public void setAlreadyUpdated(boolean alreadyUpdated) {
+        this.alreadyUpdated = alreadyUpdated;
+    }
+/*public String checkNumPlayers(ClientHandler player){
         while(player.sameMatchPlayers().size() == 1){continue;};
         return null;
     }
@@ -249,6 +254,11 @@ public class ClientHandler implements Runnable{
             c.setGame(null);
         }
     }*/
+    public void setGameAlreadyStarted(boolean gameAlreadyStarted) {
+        isGameAlreadyStarted = gameAlreadyStarted;
+    }
 
-
+    public boolean isGameAlreadyStarted() {
+        return isGameAlreadyStarted;
+    }
 }

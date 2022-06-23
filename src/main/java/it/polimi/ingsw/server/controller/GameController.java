@@ -40,20 +40,24 @@ public class GameController extends BaseController {
             List<ClientHandler> sameMatchPlayers = first_player.sameMatchPlayers();
             GamePhase gamePhase = new PlanningPhase(game, sameMatchPlayers);
             setGamePhaseForAllPlayers(sameMatchPlayers, gamePhase); //all players have the same GamePhase attribute
-
+            client.setGame(game);
+            game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the client who sent START command as a player
+            output.setArgString("Game of " + available + " started");
+            setAsPlaying(message.getArgNum1(), game, client.getClients()); // set the other available client as players
             //puts each player username in a list
             List <String> turnOrder = client.sameMatchPlayers().stream().map(ClientHandler::getUsername).toList();
             //converts list of strings to a string
             String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
             //sends to client turns order
+            client.updateStatus();
             for (ClientHandler handler : first_player.sameMatchPlayers()) {
-                alert(handler, "Turns order: "+ turns);
-            }
-            client.setGame(game);
-            game.getPlayers().get(0).setPlayer_id(client.getUsername()); //set the client who sent START command as a player
-            output.setArgString("Game of " + available + " started");
-            setAsPlaying(message.getArgNum1(), game, client.getClients()); // set the other available client as players
+                handler.setGameAlreadyStarted(true);
+                if(!handler.equals(client)){
+                alert(handler, "Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n card, type PLAY [x] (type 'HELP' if you need more info)");}
 
+            }
+            output.setArgString("Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n card, type PLAY [x] (type 'HELP' if you need more info)");
+            client.setAlreadyUpdated(true);
         } else {
             output.setArgString("Not enough players, wait some time then retry.");
         }
@@ -79,7 +83,7 @@ public class GameController extends BaseController {
             if (handler.isAvailable()) {
                 handler.setGame(game);
                 game.getPlayers().get(count).setPlayer_id(handler.getUsername());
-                alert(handler, "Game of " + numberOfPlayers + " started");
+                //alert(handler, "Game of " + numberOfPlayers + " started");
                 count++;
                 if (count >= numberOfPlayers)
                     break;
@@ -126,7 +130,7 @@ public class GameController extends BaseController {
 
         try {
             validateTurn(client);
-            validateCharacter(index, client, player);
+            validateCharacter(index, player);
             Character chosenCharacter = client.getGame().getSelectedCharacters().get(index); //get chosen Character
             int characterIndex = chosenCharacter.getCharacterNumber();
             switch (characterIndex){
@@ -154,7 +158,7 @@ public class GameController extends BaseController {
         return response;
     }
 
-    private static void validateCharacter(int index, ClientHandler client, Player player) throws alreadyPlayedACharacterException, NonExistentCharacterException {
+    private static void validateCharacter(int index, Player player) throws alreadyPlayedACharacterException, NonExistentCharacterException {
         if( index < 0 || index > 2) throw new NonExistentCharacterException();
         if (player.getPlayedCharacterNumber() != -1) throw new alreadyPlayedACharacterException();
 
@@ -162,7 +166,6 @@ public class GameController extends BaseController {
     private static void validateTurn(ClientHandler client) throws GamePhase.WrongTurn {
 
         Player player = client.getGame().getPlayer(client.getUsername());
-        if(client.getCurrentGamePhase().isPlanningPhase()) {
         boolean existPlayerBeforeMeThatHaveToPlay = false; //checks if there are no players before you
         for (ClientHandler pl : client.sameMatchPlayers()) {
             if (pl.getUsername() == player.getPlayer_id()) {
@@ -177,11 +180,10 @@ public class GameController extends BaseController {
         if (existPlayerBeforeMeThatHaveToPlay) { // there are players before me
             throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
         }
-    } else {
             if ( ActionPhase.getCurrentPlayerNextAction().getPlayer() != player) {
                 throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
             }
-        }
+
     }
     public static class alreadyPlayedACharacterException extends Exception {
         public alreadyPlayedACharacterException() {}

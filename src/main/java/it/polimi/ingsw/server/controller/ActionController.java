@@ -6,10 +6,12 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.server.ClientHandler;
 
 import static it.polimi.ingsw.server.controller.BaseController.setGamePhaseForAllPlayers;
+import static it.polimi.ingsw.server.controller.GameController.alert;
 import static java.util.Collections.sort;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ActionController  {
@@ -28,6 +30,7 @@ public class ActionController  {
             response = processPlace(request, clientHandler); // action
             ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the same player
             if (actionPhase.alreadyMovedThreeStudents(clientHandler)) {
+                response.setArgString("Now you have to move mother nature, type MOVE [x] (type 'HELP' if you need \n  more info)");
                 actionPhase.setNextActionForCurrentPlayer();
             }
         } catch (GamePhase.WrongTurn e) {
@@ -58,6 +61,9 @@ public class ActionController  {
             response = processMove(request, clientHandler); // action
             ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the same player
             actionPhase.setNextActionForCurrentPlayer();
+            clientHandler.updateStatus();
+            response.setArgString("You can now choose a cloud, type CHOOSE [x] (type 'HELP' if you need more info) ");
+            clientHandler.setAlreadyUpdated(true);
 
         } catch (GamePhase.WrongTurn e) {
             response.setArgString("Wrong turn");
@@ -91,6 +97,17 @@ public class ActionController  {
             if (isLastPlayer) {
                 sort(currentGamePhase.getCurrentPlayers(),
                         Comparator.comparingInt((ClientHandler a)->a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue())); //players sorted by previous assistant value
+                List <String> turnOrder = currentGamePhase.getCurrentPlayers().stream().map(ClientHandler::getUsername).toList();
+                //converts list of strings to a string
+                String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
+                for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
+                    if(!handler.equals(clientHandler)){
+                        handler.updateStatus();
+                        alert(handler, "New round has begun! Turns order (based on previous assistant card value):\n "+ turns + "You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)");
+                        handler.setAlreadyUpdated(true);
+                    }
+                }
+               response.setArgString("New round has begun! Turns order (based on previous assistant card value):\n "+ turns + "You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)");
 
                 ClientHandler oldFirstPlayer = currentGamePhase.getCurrentPlayers()
                                                                 .stream()
@@ -109,6 +126,17 @@ public class ActionController  {
             } else {
                 ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the next player
                 actionPhase.setNextPlayerAndFirstAction(clientHandler);
+                int previousPlayerIdx = actionPhase.getCurrentPlayers().indexOf(clientHandler);
+                ClientHandler clientHandlerOfNextPlayer = actionPhase.getCurrentPlayers().get(previousPlayerIdx + 1);
+
+                for (ClientHandler handler : actionPhase.getCurrentPlayers()) {
+                    if(!handler.equals(clientHandler)){
+                    alert(handler, "Next player is: "+clientHandlerOfNextPlayer.getUsername());
+                }
+                }
+                response.setArgString("Next player is: "+clientHandlerOfNextPlayer.getUsername());
+
+
             }
 
         } catch (GamePhase.WrongTurn e) {
@@ -123,18 +151,6 @@ public class ActionController  {
         return response;
     }
 
-    /**
-     * change the active player
-     */
-    private static void changeActivePlayer(GamePhase gamePhase) {
-        for (int i=0; i<gamePhase.getCurrentPlayers().size(); i++){
-            if(gamePhase.getCurrentPlayers().get(i).getUsername().equals(gamePhase.getCurrent_game().getActivePlayer().getPlayer_id())){
-                String name = gamePhase.getCurrentPlayers().get(i+1).getUsername();
-                Player player = gamePhase.getCurrent_game().getPlayer(name);
-                gamePhase.getCurrent_game().setActivePlayer(player);
-            }
-        }
-    }
 
     /**
      * @param request message containing the command

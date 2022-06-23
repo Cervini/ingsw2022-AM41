@@ -7,7 +7,9 @@ import it.polimi.ingsw.server.ClientHandler;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.server.controller.GameController.alert;
 import static java.util.Collections.sort;
 
 
@@ -36,8 +38,18 @@ public class PlanningController extends BaseController {
             gamePhase.validatePlayAssistant(clientHandler); // check if move is allowed
             response = processPlay(request, clientHandler); // process move
 
-
             boolean canStartActionPhase = allPlayersHavePlayedAnAssistant(clientHandler);
+
+            if(!canStartActionPhase){
+                int previousPlayerIdx = clientHandler.sameMatchPlayers().indexOf(clientHandler);
+                ClientHandler clientHandlerOfNextPlayer = clientHandler.sameMatchPlayers().get(previousPlayerIdx + 1);
+                for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
+                    if(!handler.equals(clientHandler)){
+                        alert(handler, "Next player is: "+clientHandlerOfNextPlayer.getUsername());
+                    }
+            }
+            response.setArgString("Next player is: "+clientHandlerOfNextPlayer.getUsername());}
+
 
             if (canStartActionPhase) {
                 List<ClientHandler> sameMatchPlayers = clientHandler.sameMatchPlayers();
@@ -46,7 +58,19 @@ public class PlanningController extends BaseController {
                         Comparator.comparingInt((ClientHandler a) -> a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue()));
                 GamePhase actionPhase = new ActionPhase(clientHandler.getGame(), sameMatchPlayers);
                 setGamePhaseForAllPlayers(sameMatchPlayers, actionPhase);
-
+                List <String> turnOrder = sameMatchPlayers.stream().map(ClientHandler::getUsername).toList();
+                //converts list of strings to a string
+                String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
+                //sends to client turns order
+                clientHandler.updateStatus();
+                for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
+                    if(!handler.equals(clientHandler)){
+                    alert(handler, "Action Phase started! Turns order: "+ turns+". First of all move three \n students from your entrance to an island or to the dining room \n " +
+                            "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)");}
+                }
+                clientHandler.setAlreadyUpdated(true);
+                response.setArgString("Action Phase started! Turns order: "+ turns+". First of all move three \n students from your entrance to an island or to the dining room \n " +
+                        "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)");
             }
 
         } catch (GamePhase.WrongPhaseException e) {
@@ -58,6 +82,7 @@ public class PlanningController extends BaseController {
         }
         return response;
     }
+
 
     /**
      * @param message message containing the command

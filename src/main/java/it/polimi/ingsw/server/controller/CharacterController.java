@@ -68,7 +68,7 @@ public class CharacterController {
         int islandNumber = parameters.getSingleArgNum2();
         Island chosenIsland = game.getArchipelago().get(islandNumber);
         try {
-            response.setArgString("Character played successfully, no entry tile has been placed on island "+islandNumber);
+            response.setArgString("Character played successfully, no-entry tile has been placed on island "+islandNumber);
             game.playCharacter(chosenCharacter, player,null,null,chosenIsland,null);
         } catch (Exception e) {
             throw  new Exception(e.getMessage()); // "Not enough coins" exception
@@ -96,7 +96,7 @@ public class CharacterController {
             LinkedList<Student> studentsFromCharacter = getStudentsOfCharacter(chosenCharacter, game,studentsFromCharacterIndexes);
             LinkedList<Student> studentsFromEntrance = getStudentsOfEntrance(chosenCharacter,player,game, studentsFromEntranceIndexes);
             game.playCharacter(chosenCharacter, player,studentsFromCharacter,studentsFromEntrance,null,null);
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, students have been placed in your School board Entrance");
         } catch (NoStudentsException ex ) {
             response.setArgString("No students on this card");
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class CharacterController {
         Message response = new Message("string");
         try {
             game.playCharacter(chosenCharacter, player,null,null,null,null);
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, you have 2 additional influence points ");
         } catch (Exception e) {
             throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
@@ -120,7 +120,7 @@ public class CharacterController {
         Colour chosenColour = parameters.getArgColour();
         try {
             game.playCharacter(chosenCharacter, player,null,null,null,chosenColour);
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, this colour will add no influence ");
         } catch (Exception e) {
             throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
@@ -139,7 +139,7 @@ public class CharacterController {
         try {
             LinkedList<Student> studentsFromEntrance = getStudentsOfEntrance(chosenCharacter, player,game, studentsFromEntranceIndexes);
             game.playCharacter(chosenCharacter, player,null,null,null,null);
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, students have been exchanged!");
         } catch (NoStudentsException e) {
             response.setArgString("Not enough students in your entrance");
         } catch (Exception e) {
@@ -156,7 +156,7 @@ public class CharacterController {
         try {
             chosenStudent = getStudentsOfCharacter(chosenCharacter, game,studentsIndexes); //gets students placed on character card
             game.playCharacter(chosenCharacter, player,chosenStudent,null,null,null);
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, student placed in your dining room");
         } catch (NoStudentsException ex) {
             response.setArgString("No students on this card");
         } catch (Exception e) {
@@ -170,7 +170,7 @@ public class CharacterController {
         Colour chosenColour = parameters.getArgColour();
         try {
             game.playCharacter(chosenCharacter, player,null,null,null,chosenColour);
-            response.setArgString("Character played successfully");
+            response.setArgString("Character played successfully, your students have been returned to the bag ");
         } catch (Exception e) {
             throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
@@ -183,7 +183,7 @@ public class CharacterController {
         for (int i = 0; i < numberOfStudents; i++) {
             chosenStudent.add(chosenCharacter.getStudents().get(i));
         }
-        if (chosenCharacter.getStudents().size() == 0) throw new NoStudentsException("There no students left");
+        if (chosenCharacter.getStudents().size() == 0) throw new NoStudentsException("There are no students left");
         return chosenStudent;
     }
     private static LinkedList<Student> getStudentsOfEntrance(Character chosenCharacter, Player player, Game game, List parameters) throws NoStudentsException {
@@ -192,7 +192,7 @@ public class CharacterController {
         for (int i = 0; i < numberOfStudents; i++) {
             chosenStudents.add(player.getSchool().getEntrance().get(i));
         }
-        if (chosenCharacter.getStudents().size() == 0) throw new NoStudentsException("There no students left");
+        if (chosenCharacter.getStudents().size() == 0) throw new NoStudentsException("There are no students left");
         return chosenStudents;
     }
     private static LinkedList<Student> getStudentsOfDining(Player player,Game game, List parameters ) throws NoStudentsException {
