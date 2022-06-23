@@ -118,8 +118,8 @@ public class Game{
     //This function has to be executed when two islands that are next to each other are conquered by the same player, this means that they have to merge into a single island
     /**
      * merges island2 into island1
-     * @param island1
-     * @param island2
+     * @param island1 is the island that has to be merged with island2
+     * @param island2 is the island that has to be merged with island1
      */
     public void merge(Island island1, Island island2){
         if(island1.mergeIslands(island2)){
@@ -227,8 +227,6 @@ public class Game{
     }
 
     /**
-     * @param owner
-     * @param numberOfStudents
      * @return true if the owner parameter has value > 0 and is not tied with any other owner
      */
     public boolean goodValue(OwnerInfo owner, LinkedList<OwnerInfo> numberOfStudents){
@@ -245,8 +243,6 @@ public class Game{
     }
 
     /**
-     * @param colour
-     * @param playerToCheck
      * @return true if playerToCheck owns professor of color colour
      */
     private boolean ownsProfessor(Colour colour, Player playerToCheck) {
@@ -259,8 +255,6 @@ public class Game{
     }
 
     /**
-     * @param colour
-     * @param playerToCheck
      * @return professor of specified color from playerToCheck
      */
     private Professor returnProfessor(Colour colour, Player playerToCheck) {
