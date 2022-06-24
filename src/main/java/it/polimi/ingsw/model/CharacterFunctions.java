@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
 
 public class CharacterFunctions {
 
@@ -10,7 +9,7 @@ public class CharacterFunctions {
 
 
     //Function of character 2
-    public Game checkInfluenceWithModifiedBoard(Game game, Player player) throws Exception{
+    public Game checkInfluenceWithModifiedBoard(Game game, Player player) {
         ArrayList<SchoolBoard> schoolBoardsBackup = new ArrayList<>();
         int islandIndex;
         doSchoolBoardsBackup(game.getPlayers(), schoolBoardsBackup);
@@ -27,7 +26,7 @@ public class CharacterFunctions {
     }
 
     //Function of character 3
-    public Game checkInfluenceOnSpecificIsland(Game game, Island island) throws Exception{
+    public Game checkInfluenceOnSpecificIsland(Game game, Island island) {
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(island);
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
@@ -40,7 +39,7 @@ public class CharacterFunctions {
     }
 
     //Function of character 6
-    public Game checkInfluenceWithoutTowers(Game game) throws Exception{
+    public Game checkInfluenceWithoutTowers(Game game) {
         int islandIndex;
         boolean noTowers = true;
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
