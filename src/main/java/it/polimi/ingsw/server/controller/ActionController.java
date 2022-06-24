@@ -84,7 +84,6 @@ public class ActionController  {
             response.setArgString("Game not started yet");
             return response;
         }
-
         try {
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
                     (ActionPhase) currentGamePhase :
@@ -161,7 +160,6 @@ public class ActionController  {
         Player currentPlayer = client.getGame().getPlayer(client.getUsername()); // get the player who sent command PLACE
         Message output = new Message("string"); // set up output message
         placeArgumentCheck(request, client); // if the arguments are not ok exceptions are thrown
-
         Student played = currentPlayer.getSchool().getEntrance().get(request.getArgNum1()); // get the placed student
         switch (request.getTo_tile()){
             case DINING -> {

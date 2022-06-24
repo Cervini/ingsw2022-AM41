@@ -26,7 +26,6 @@ public class Server {
 
 
     public Server(String[] args) {
-
         String mode = getMode(args);
         if (mode == "server") {
             int port = getPort(args);

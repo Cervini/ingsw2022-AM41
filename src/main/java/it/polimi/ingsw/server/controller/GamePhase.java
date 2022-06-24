@@ -84,7 +84,6 @@ public class GamePhase {
     public static class WrongPhaseException extends Exception {
 
         public WrongPhaseException() {}
-
         public WrongPhaseException(String msg) {
             super(msg);
         }
@@ -92,14 +91,12 @@ public class GamePhase {
 
     public static class WrongTurn extends Exception {
         public WrongTurn() {}
-
         public WrongTurn(String msg) {
             super(msg);
         }
     }
     public static class GameEndedException extends Exception {
         public GameEndedException() {}
-
         public GameEndedException(String msg) {
             super(msg);
         }

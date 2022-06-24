@@ -19,7 +19,6 @@ public class Client {
     protected static boolean serverWasOffline = true;
     private String host;
 
-
     public Client (String[] args) {
         if (args == null || args.length <2 ){
             throw new IllegalArgumentException("To start client you have to set ip and port number");
@@ -31,8 +30,6 @@ public class Client {
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         try {
             String writtenString;
-
-
             while ((writtenString = stdIn.readLine()) != null ) {
                 if (ping.isServerReachable()) {
 

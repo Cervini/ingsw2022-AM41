@@ -201,7 +201,6 @@ public class ClientHandler implements Runnable{
             }
             else { return check; }
         }
-
         executor.shutdownNow();
         //player.getCurrentGamePhase().setGameEnded(true);
         onePlayerLeft = false;

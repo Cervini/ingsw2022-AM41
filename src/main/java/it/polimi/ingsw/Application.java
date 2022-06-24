@@ -13,6 +13,7 @@ import java.util.Arrays;
  */
 
 public class Application {
+
     public static void main(String[] args) {
         if (args == null || args.length < 2) throw new IllegalArgumentException("You have to specify application mode (client or server) and all mandatory parameters");
         String mode = args[0];
