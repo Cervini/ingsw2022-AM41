@@ -30,6 +30,11 @@ public class Message implements Serializable {
         checkNextArgument(this.command, args);
     }
 
+    /**
+     * parses a string to Command enum ignoring upper or lower-case differences
+     * @param string argument in String format
+     * @return Command enum parsed from string parameter
+     */
     private Command toCommandEnum(String string){
         string = string.toUpperCase();
         try {
@@ -40,6 +45,11 @@ public class Message implements Serializable {
         }
     }
 
+    /**
+     * parses a string to ToTile enum ignoring upper or lower-case differences
+     * @param string argument in String format
+     * @return ToTile enum parsed from string parameter
+     */
     private ToTile toToTileEnum(String string){
         string = string.toUpperCase();
         try {
@@ -50,6 +60,11 @@ public class Message implements Serializable {
         }
     }
 
+    /**
+     * parses a string to FromTile enum ignoring upper or lower-case differences
+     * @param string argument in String format
+     * @return FromTile enum parsed from string parameter
+     */
     private FromTile toFromTileEnum(String string){
         string = string.toUpperCase();
         try {
@@ -60,12 +75,23 @@ public class Message implements Serializable {
         }
     }
 
+    /**
+     * parses a string to Colour enum ignoring upper or lower-case differences
+     * @param string argument in String format
+     * @return FromTile enum parsed from string parameter
+     * @throws IllegalArgumentException 'string' parameter is not a colour
+     */
     private Colour toColourEnum(String string) throws IllegalArgumentException{
         string = string.toUpperCase();
         Colour.valueOf(string);
         return Colour.valueOf(string);
     }
 
+    /**
+     * parses the command string setting all the Message arguments
+     * @param command Command enum that defines the instruction standard structure
+     * @param args list of arguments for the command
+     */
     private void checkNextArgument(Command command, List<String> args){
         switch (command){
             case NULL -> this.standard = false;
@@ -90,6 +116,10 @@ public class Message implements Serializable {
         } //switch end
     }
 
+    /**
+     * parse the USE command structure
+     * @param args String to parse
+     */
     private void useCase(List<String> args){
         int size = args.size();
         //check minimum length for USE commands
@@ -140,6 +170,9 @@ public class Message implements Serializable {
         this.standard = true;
     }
 
+    /**
+     * @return true if the number of argument of each type follows the standard structure
+     */
     private boolean countCheck() {
         int intSize = this.argNum2.size();
         int colSize = this.argColour.size();
@@ -148,55 +181,10 @@ public class Message implements Serializable {
         return intSize == colSize;
     }
 
-    private void useCaseOld(List<String> args) {
-        if(args.size()<2){ //check the minimum number of arguments
-            System.out.println("Not enough arguments (To check how to  use the character use command CHARACTER [character index])");
-        } else {
-            try {
-                setArgNum1(Integer.parseInt(args.get(1))); // first argument must be an int
-            } catch (NumberFormatException e) {
-                return; //if the first argument is not an int the command does not follow the standard structure
-            }
-            if(args.size()>2){
-                try {
-                    argColour.add(toColourEnum(args.get(2))); // see if the second argument is a Colour enum
-                    if(args.size()>3){
-                        //if the second argument is a color there is no need of other arguments
-                        System.out.println("Excess arguments were ignored");
-                    }
-                } catch (IllegalArgumentException a) {
-                    // if the second arg is not a colour
-                    int size = args.size();
-                    if(size>8){
-                        // there aren't commands with more than 8 arguments, if found more the command is cut at the 8th
-                        System.out.println("Excess arguments were ignored");
-                        size=8; //the size of the command is set to 8
-                    } else if ((size==5)||(size==7)){
-                        // commands with 5 or 7 arguments don't follow the standard command structure
-                        System.out.println("Impossible number of arguments");
-                        return;
-                    }
-                    for(int i=2; i<2+(size-2)/2; i++){
-                        try{
-                            this.argNum2.add(Integer.parseInt(args.get(i)));
-                        } catch (NumberFormatException e) {
-                            return;
-                        }
-                    }
-                    for(int i=2+(size-2)/2; i<size; i++){
-                        try{
-                            argColour.add(toColourEnum(args.get(i)));
-                        } catch (IllegalArgumentException e){
-                            return;
-                        }
-                    }
-                    //place all the int arguments into argNum2
-                }
-            } // end of else
-        }
-        this.standard = true;
-    }
-
+    /**
+     * parse the PLACE command structure
+     * @param args String to parse
+     */
     private void placeCase(List<String> args) {
         if(args.size()<4){
             System.out.println("Not enough arguments");
@@ -232,6 +220,10 @@ public class Message implements Serializable {
         }
     }
 
+    /**
+     * parse the structure of commands with one (1) int as argument
+     * @param args String to parse
+     */
     private void oneIntCase(List<String> args) {
         if(args.size()>1){
             try{
@@ -245,12 +237,20 @@ public class Message implements Serializable {
         }
     }
 
+    /**
+     * parse the structure of commands with zero (0) int as argument
+     * @param args String to parse
+     */
     private void noArgumentCase(List<String> args) {
         this.standard = true;
         if(args.size()>1)
             System.out.println("Excess arguments were ignored");
     }
 
+    /**
+     * parse the structure of commands with one (1) String as argument
+     * @param args String to parse
+     */
     private void oneStringCase(List<String> args) {
         if(args.size()>1) {
             this.argString = args.get(1);
@@ -261,6 +261,9 @@ public class Message implements Serializable {
         }
     }
 
+    /**
+     * prints HELP text block
+     */
     private void printHelp() {
         System.out.println("""
                 List of available commands:

@@ -4,16 +4,16 @@ import java.util.*;
 
 public class Game{
     private LinkedList<Player> players; // list of all the active players
-    private int available_coins; // number of all the coins not owned by any player or placed on character cards
-    private LinkedList<Student> bag; // list of all the students
+    private final int available_coins; // number of all the coins not owned by any player or placed on character cards
+    private final LinkedList<Student> bag; // list of all the students
     private final List<Professor> professors; // list of all the professors
-    private List<Island> archipelago; // list of all the islands
+    private final List<Island> archipelago; // list of all the islands
     private LinkedList<Player> turnOrder; // playing order of the turn
     private List<Cloud> clouds; // list of all the clouds
-    private LinkedList<Character> selectedCharacters;
+    private final LinkedList<Character> selectedCharacters;
     private final GameConclusionChecks conclusionChecks;
     private Player activePlayer;
-    private List<Character> characters;
+    private final List<Character> characters;
 
     // constants
     private static final int minimumNumberOfIslands = 3;
@@ -76,7 +76,10 @@ public class Game{
         }
     }
 
-    //Sets up the students on the character card if necessary
+    /**
+     * Sets up the students on the character card if necessary
+     * @param characters
+     */
     private void characterSetupStudents(LinkedList<Character> characters){
         for(Character characterToCheck: characters){
             if(characterToCheck.getCharacterNumber() == characterNeeds4Students1 || characterToCheck.getCharacterNumber() == characterNeeds4Students2){
@@ -91,15 +94,12 @@ public class Game{
         }
     }
 
-    // set up the playing order for the next turn
+    /**
+     * set up the playing order for the next turn
+     */
     public void setTurnOrder(){
         turnOrder = players;
         Collections.sort(turnOrder);
-    }
-
-    //The boolean attribute "turn" of the player in the first position of the queue is set to true
-    public void checkTurn(){
-        turnOrder.peek().setTurn(true);
     }
 
     /**
@@ -190,6 +190,9 @@ public class Game{
         }
     }
 
+    /**
+     * moves Professor pawns to the right school boards if necessary
+     */
     public void checkOwnership(){
         LinkedList<OwnerInfo> numberOfStudents = new LinkedList<>();
         for(Colour colour: Colour.values()){
@@ -240,30 +243,6 @@ public class Game{
             }
         }
         return isUnique;
-    }
-
-    /**
-     * @return true if playerToCheck owns professor of color colour
-     */
-    private boolean ownsProfessor(Colour colour, Player playerToCheck) {
-        for(Professor professorToCheck : playerToCheck.getOwned_professor()) {
-            if (professorToCheck.getColour() == colour) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @return professor of specified color from playerToCheck
-     */
-    private Professor returnProfessor(Colour colour, Player playerToCheck) {
-        for(Professor professorToCheck : playerToCheck.getOwned_professor()) {
-            if (professorToCheck.getColour() == colour) {
-                return professorToCheck;
-            }
-        }
-        return null;
     }
 
     /**
@@ -336,15 +315,6 @@ public class Game{
                 return player;
         }
         return null;
-    }
-
-    /**
-     * method to call when all the players have finished their turn
-     */
-    public void endTurn(){
-        for(Player player: players){
-            player.setFace_up_assistant(null);
-        }
     }
 
     /**
@@ -463,24 +433,11 @@ public class Game{
 
     public LinkedList<Character> getSelectedCharacters() { return selectedCharacters;}
 
-    public void setAvailable_coins(int available_coins) {
-        this.available_coins = available_coins;
-    }
-
     public void setPlayers(LinkedList<Player> players) {
         this.players = players;
     }
 
-    public void setArchipelago(List<Island> archipelago) {
-        this.archipelago = archipelago;
-    }
-
-    public void setSelectedCharacters(LinkedList<Character> selectedCharacters) {
-        this.selectedCharacters = selectedCharacters;
-    }
-
     public static class DistanceMotherNatureException extends Exception{
-        public DistanceMotherNatureException(){}
         public DistanceMotherNatureException(String msg){
             super(msg);
         }
@@ -492,13 +449,5 @@ public class Game{
 
     public Player getActivePlayer() {
         return activePlayer;
-    }
-
-    public void setActivePlayer(Player activePlayer) {
-        this.activePlayer = activePlayer;
-    }
-
-    public List<Character> getAllCharacters() {
-        return characters;
     }
 }

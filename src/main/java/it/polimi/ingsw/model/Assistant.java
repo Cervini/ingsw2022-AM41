@@ -45,7 +45,9 @@ public class Assistant implements Comparable<Assistant>, Serializable {
         return (o.getMovement_points() == this.movement_points) && (o.getValue() == this.value);
     }
 
-    //Function to increase the max movement points by two when character 4 is played
+    /**
+     * increases the max movement points by two when character 4 is played
+     */
     public void add2MovementPoints(){
         movement_points = movement_points + 2;
     }

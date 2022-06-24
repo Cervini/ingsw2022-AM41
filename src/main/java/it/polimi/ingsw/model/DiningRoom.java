@@ -34,7 +34,7 @@ public class DiningRoom implements Tile, Comparable, Serializable {
 
     /**
      * add one student to the DiningRoom
-     * @requires (student != null) && (student.getColor() == this.color)
+     * @throws Exception student.getColour()!=this.colour
      */
     public void putStudent(Student student) throws Exception {
         if (student.getColour() != this.colour) {

@@ -3,42 +3,39 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.communication.messages.Message;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 
 public class Client {
-    private  String SERVER_IP ;
-    private  int SERVER_PORT;
-
+    private final String SERVER_IP ;
+    private final int SERVER_PORT;
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private Thread readThread;
     protected static boolean serverWasOffline = true;
-    private String host;
 
     public Client (String[] args) {
-        if (args == null || args.length <2 ){
+        if (args == null || args.length <2 ){ //check right number of arguments
             throw new IllegalArgumentException("To start client you have to set ip and port number");
         }
-        SERVER_IP = args[0];
-        SERVER_PORT = Integer.parseInt(args[1]);
+        SERVER_IP = args[0]; //set the first argument as SERVER_IP
+        SERVER_PORT = Integer.parseInt(args[1]); //set the second argument as SERVER_PORT
         PingThread ping = new PingThread(SERVER_IP, SERVER_PORT);
-        ping.start();
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+        ping.start(); //start ping thread
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)); //open input stream
         try {
             String writtenString;
             while ((writtenString = stdIn.readLine()) != null ) {
                 if (ping.isServerReachable()) {
-
                     if (serverWasOffline) {
                         // used when Client starts before Server
                         createClientServerSocket();
                     }
                     Message request = new Message(writtenString); // parse the string into message
                     if (request.isStandard()){
+                        assert out != null;
                         out.writeObject(request); // send Message object through output stream
                         out.flush(); // flush output stream
                     }

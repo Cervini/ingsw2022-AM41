@@ -24,9 +24,6 @@ public class Cloud implements Tile, Serializable {
         if (student != null) {
             if (students.size() < maxStudents)
                 students.add(student);
-            /*else {
-                throw new Exception("Cloud is already full!");
-            }*/
         }
     }
 

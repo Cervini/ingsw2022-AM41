@@ -7,9 +7,6 @@ import java.io.*;
 import java.net.Socket;
 
 public class Ping {
-
-    private static final int timeout = 5000;
-
     public boolean ping(String server_ip, int server_port) throws IOException {
         try (Socket socket = new Socket(server_ip, server_port);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); // prepare output stream

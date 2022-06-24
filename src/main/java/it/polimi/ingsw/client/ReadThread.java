@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.communication.GamePack;
 import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 
@@ -10,7 +9,6 @@ import java.io.ObjectInputStream;
 public class ReadThread implements Runnable{
 
     private final ObjectInputStream in; // stream from where the thread reads the objects
-    private String username;
 
     /**
      * @param in inherited stream from where the thread reads the objects

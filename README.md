@@ -5,15 +5,17 @@
 - ###   10660176    Ludovica Cova ([@LudovicaCova](https://github.com/LudovicaCova))<br>ludovica.cova@mail.polimi.it
 - ###   10661539    Davide Fugazza ([@davofuga](https://github.com/davofuga))<br>davide2.fugazza@mail.polimi.it
 
-| Functionality    |                       State                        |
-|:-----------------|:--------------------------------------------------:|
-| Basic rules      | 🟢 |
-| Complete rules   | 🟡 |
-| Socket           | 🟢 |
-| GUI              | 🔴 |
-| CLI              | 🟡 |
-| Multiple games   | 🟡 |
-| Persistence      | 🔴 |
+| Functionality  |                       State                        |
+|:---------------|:--------------------------------------------------:|
+| Basic rules    | 🟢 |
+| Complete rules | 🟢 |
+| Socket         | 🟢 |
+| GUI            | 🔴 |
+| CLI            | 🟢 |
+| Multiple games | 🟢 |
+| Persistence    | 🔴 |
+| 12 Characters  | 🟡 |
+| 4 Players game | 🟢 |
 
 🔴
 🟢
