@@ -11,7 +11,7 @@ public class GamePhase {
     private final Game current_game;
     private Boolean planning_phase = false;
     private Boolean action_phase = false;
-    private final List<ClientHandler> current_players;
+    private List<ClientHandler> current_players;
     private boolean gameEnded = false;
 
     public GamePhase(Game game, List<ClientHandler> players) {
@@ -76,6 +76,9 @@ public class GamePhase {
 
     public List<ClientHandler> getCurrentPlayers() {
         return current_players;
+    }
+    public void setCurrentPlayers(List<ClientHandler> current_players) {
+        this.current_players= current_players ;
     }
 
     public static class WrongPhaseException extends Exception {

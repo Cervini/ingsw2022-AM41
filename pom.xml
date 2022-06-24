@@ -164,7 +164,7 @@
               <manifest>
                 <addClasspath>true</addClasspath>
                 <classpathPrefix>lib/</classpathPrefix>
-                <mainClass> it.polimi.ingsw.server.Server </mainClass>
+                <mainClass> it.polimi.ingsw.Application </mainClass>
               </manifest>
             </archive>
           </configuration>

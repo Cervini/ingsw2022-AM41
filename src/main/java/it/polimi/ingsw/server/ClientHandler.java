@@ -106,7 +106,7 @@ public class ClientHandler implements Runnable{
                 clientSocket.close();
                 this.setPlayerIsOffline(true);
                 LoginController.processLogout(this);
-                clients.remove(this);
+                //clients.remove(this);
                 //System.out.println("Client disconnected, socket closed");
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -174,10 +174,10 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    /*public String onePlayerLeft(ClientHandler player) throws IOException {
+    public String onePlayerLeft(ClientHandler player) throws IOException {
         onePlayerLeft = true;
         String check = "You can continue the game";
-        final Duration timeout = Duration.ofSeconds(20);
+        final Duration timeout = Duration.ofSeconds(120);
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         final Future<String> handler = executor.submit(new Callable() {
@@ -207,7 +207,7 @@ public class ClientHandler implements Runnable{
         onePlayerLeft = false;
         return check;
 
-    }*/
+    }
 
     public boolean getPlayerFirstMove() {
         return isPlayerFirstMove;
@@ -244,7 +244,7 @@ public class ClientHandler implements Runnable{
     public void setAlreadyUpdated(boolean alreadyUpdated) {
         this.alreadyUpdated = alreadyUpdated;
     }
-/*public String checkNumPlayers(ClientHandler player){
+    public String checkNumPlayers(ClientHandler player){
         while(player.sameMatchPlayers().size() == 1){continue;};
         return null;
     }
@@ -253,7 +253,7 @@ public class ClientHandler implements Runnable{
             if(c.isPlayerIsOffline()) sameMatchPlayers().remove(c);
             c.setGame(null);
         }
-    }*/
+    }
     public void setGameAlreadyStarted(boolean gameAlreadyStarted) {
         isGameAlreadyStarted = gameAlreadyStarted;
     }

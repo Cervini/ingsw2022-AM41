@@ -9,18 +9,18 @@ import java.net.UnknownHostException;
 
 
 public class Client {
-    private static  String SERVER_IP ;
-    private static  int SERVER_PORT;
+    private  String SERVER_IP ;
+    private  int SERVER_PORT;
 
-    private static Socket socket;
-    private static ObjectOutputStream out;
-    private static ObjectInputStream in;
-    private static Thread readThread;
+    private Socket socket;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+    private Thread readThread;
     protected static boolean serverWasOffline = true;
-    private static String host;
+    private String host;
 
 
-    public static void main (String[] args) {
+    public Client (String[] args) {
         if (args == null || args.length <2 ){
             throw new IllegalArgumentException("To start client you have to set ip and port number");
         }
@@ -57,7 +57,7 @@ public class Client {
         }
     }
 
-    public static void createClientServerSocket() throws IOException {
+    public void createClientServerSocket() throws IOException {
 
         socket = new Socket(SERVER_IP, SERVER_PORT); // instance server socket
         out = new ObjectOutputStream(socket.getOutputStream()); // prepare output stream

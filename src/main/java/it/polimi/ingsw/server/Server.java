@@ -23,7 +23,9 @@ public class Server {
         return Integer.parseInt(args[0]);
     }
 
-    public static void main(String[] args) {
+
+
+    public Server(String[] args) {
 
         String mode = getMode(args);
         if (mode == "server") {
@@ -32,9 +34,9 @@ public class Server {
         }
     }
 
-    private static final ExecutorService pool = Executors.newCachedThreadPool();
+    private  final ExecutorService pool = Executors.newCachedThreadPool();
 
-    static void startServer(int portNumber) {
+     void startServer(int portNumber) {
         System.out.println("starting server on port " + portNumber);
         ServerSocket serverSocket = null;
         try {

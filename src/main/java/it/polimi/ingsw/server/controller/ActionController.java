@@ -103,7 +103,7 @@ public class ActionController  {
                 for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
                     if(!handler.equals(clientHandler)){
                         handler.updateStatus();
-                        alert(handler, "New round has begun! Turns order (based on previous assistant card value):\n "+ turns + "You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)");
+                        alert(handler, "New round has begun! Turns order (based on previous assistant card value):\n "+ turns + "  You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)");
                         handler.setAlreadyUpdated(true);
                     }
                 }
