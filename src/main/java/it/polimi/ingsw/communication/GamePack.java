@@ -93,7 +93,6 @@ public class GamePack implements Serializable {
         characters.add(characterInfo);
     }
 
-
     /**
      * prints the state of the game saved by the GamePack (CLI use)
      */

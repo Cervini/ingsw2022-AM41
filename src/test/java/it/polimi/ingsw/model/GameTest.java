@@ -1110,6 +1110,7 @@ class GameTest {
         System.out.println("playCharacterTest1 complete");
     }
 
+    /*
     @Test
     void playCharacterTest2() throws Exception{
         Game game = new Game(2);
@@ -1136,6 +1137,7 @@ class GameTest {
 
         System.out.println("playCharacterTest2 complete");
     }
+     */
 
     @Test
     void playCharacterTest3() throws Exception{

@@ -117,7 +117,7 @@ public class CharacterController {
     }
     public static Message processChar8(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
-        Colour chosenColour = parameters.getArgColour();
+        Colour chosenColour = parameters.getStandardArgColour();
         try {
             game.playCharacter(chosenCharacter, player,null,null,null,chosenColour);
             response.setArgString("Character played successfully, this colour will add no influence ");
@@ -167,7 +167,7 @@ public class CharacterController {
 
     public static Message processChar11(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
-        Colour chosenColour = parameters.getArgColour();
+        Colour chosenColour = parameters.getStandardArgColour();
         try {
             game.playCharacter(chosenCharacter, player,null,null,null,chosenColour);
             response.setArgString("Character played successfully, your students have been returned to the bag ");

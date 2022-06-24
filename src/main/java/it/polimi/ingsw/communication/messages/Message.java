@@ -12,11 +12,11 @@ public class Message implements Serializable {
 
     private Command command = Command.NULL;
     private Integer argNum1 = null;
-    private LinkedList<Integer> argNum2 = null;
+    private final LinkedList<Integer> argNum2;
     private String argString = null;
     private FromTile from_tile = FromTile.NULL;
     private ToTile to_tile = ToTile.NULL;
-    private Colour argColour = null;
+    private final LinkedList<Colour> argColour;
     private boolean standard = false; // if true the message has a correct structure
     private GamePack status = null;
 
@@ -24,6 +24,7 @@ public class Message implements Serializable {
         String[] arguments = string.split("\\W+");
         List<String> args = Arrays.stream(arguments).toList();
         this.argNum2 = new LinkedList<>();
+        this.argColour = new LinkedList<>();
         if(args.size()>0)
             this.command = toCommandEnum(args.get(0));
         checkNextArgument(this.command, args);
@@ -89,35 +90,103 @@ public class Message implements Serializable {
         } //switch end
     }
 
-    private void useCase(List<String> args) {
-        if(args.size()<2){
+    private void useCase(List<String> args){
+        int size = args.size();
+        //check minimum length for USE commands
+        if(size<2){
+            System.out.println("Not enough arguments (To check how to  use the character use command INFO [character index])");
+            return;
+        }
+        //the first argument after USE must be an integer
+        try {
+            setArgNum1(Integer.parseInt(args.get(1))); // first argument must be an int
+        } catch (NumberFormatException e) {
+            System.out.println("Impossible command arguments");
+            return; //if the first argument is not an int the command does not follow the standard structure
+        }
+        //parse the other arguments if there are more
+        if(size>2){
+            if(size>8){
+                //since there aren't commands with more than 8 arguments size is cut at 8
+                System.out.println("Excess arguments were ignored");
+                size=8;
+            }
+            try {
+                argColour.add(toColourEnum(args.get(2))); //check if the second argument is a Colour enum
+                if(args.size()>3){
+                    //if the second argument is a color there is no need of other arguments
+                    System.out.println("Excess arguments were ignored");
+                }
+            } catch (IllegalArgumentException a) {
+                //if not a colour for every other argument try to read it as a colour or an integer
+                for(int i=2; i<size; i++){
+                    try{
+                        argNum2.add(Integer.parseInt(args.get(i)));
+                    } catch (NumberFormatException b) {
+                        try{
+                            argColour.add(toColourEnum(args.get(i)));
+                        } catch (IllegalArgumentException c){
+                            System.out.println("Impossible command arguments");
+                            return;
+                        }
+                    }
+                }
+                //check if the number of arguments is ok
+                if(!countCheck())
+                    return;
+            }
+        }
+        //standard is set to true
+        this.standard = true;
+    }
+
+    private boolean countCheck() {
+        int intSize = this.argNum2.size();
+        int colSize = this.argColour.size();
+        if(((intSize==2)||(intSize==1))&&(colSize==0))
+            return true;
+        return intSize == colSize;
+    }
+
+    private void useCaseOld(List<String> args) {
+        if(args.size()<2){ //check the minimum number of arguments
             System.out.println("Not enough arguments (To check how to  use the character use command CHARACTER [character index])");
         } else {
             try {
                 setArgNum1(Integer.parseInt(args.get(1))); // first argument must be an int
             } catch (NumberFormatException e) {
-                return;
+                return; //if the first argument is not an int the command does not follow the standard structure
             }
             if(args.size()>2){
                 try {
-                    argColour = toColourEnum(args.get(2)); // see if the second argument is a Colour enum
+                    argColour.add(toColourEnum(args.get(2))); // see if the second argument is a Colour enum
                     if(args.size()>3){
+                        //if the second argument is a color there is no need of other arguments
                         System.out.println("Excess arguments were ignored");
                     }
                 } catch (IllegalArgumentException a) {
-                    // if not a colour
+                    // if the second arg is not a colour
                     int size = args.size();
                     if(size>8){
+                        // there aren't commands with more than 8 arguments, if found more the command is cut at the 8th
                         System.out.println("Excess arguments were ignored");
-                        size=8;
+                        size=8; //the size of the command is set to 8
                     } else if ((size==5)||(size==7)){
+                        // commands with 5 or 7 arguments don't follow the standard command structure
                         System.out.println("Impossible number of arguments");
                         return;
                     }
-                    for(int i=2; i<size; i++){
+                    for(int i=2; i<2+(size-2)/2; i++){
                         try{
                             this.argNum2.add(Integer.parseInt(args.get(i)));
                         } catch (NumberFormatException e) {
+                            return;
+                        }
+                    }
+                    for(int i=2+(size-2)/2; i<size; i++){
+                        try{
+                            argColour.add(toColourEnum(args.get(i)));
+                        } catch (IllegalArgumentException e){
                             return;
                         }
                     }
@@ -281,8 +350,11 @@ public class Message implements Serializable {
             s=s+" "+argNum1;
         if(this.to_tile!=ToTile.NULL)
             s=s+" "+to_tile.toString();
-        if(argNum2!=null)
-            s=s+" "+argNum2;
+        if(argNum2.size()!=0){
+            for(int i=0; i<argNum2.size(); i++){
+                s=s+" "+argNum2.get(i);
+            }
+        }
         return s;
     }
 
@@ -294,7 +366,11 @@ public class Message implements Serializable {
         return status;
     }
 
-    public Colour getArgColour() {
-        return argColour;
+    public Colour getStandardArgColour() {
+        return argColour.getFirst();
+    }
+
+    public Colour getArgColour(int index){
+        return argColour.get(index);
     }
 }
