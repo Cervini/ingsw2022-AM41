@@ -176,7 +176,7 @@ public class Message implements Serializable {
     private boolean countCheck() {
         int intSize = this.argNum2.size();
         int colSize = this.argColour.size();
-        if(((intSize==2)||(intSize==1))&&(colSize==0))
+        if(((intSize==2)||(intSize==1)||(intSize==4)||(intSize==6))&&(colSize==0))
             return true;
         return intSize == colSize;
     }

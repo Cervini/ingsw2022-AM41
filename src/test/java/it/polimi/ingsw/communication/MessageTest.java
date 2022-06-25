@@ -144,4 +144,20 @@ public class MessageTest {
         assertEquals(msg.getArgColour(2), Colour.RED);
         assertFalse(msg.isStandard());
     }
+
+    @Test
+    void messageConstructorTest13(){
+        String user = "use 2 4 3 2 1 2 3";
+        Message msg = new Message(user);
+
+        assertEquals(msg.getCommand(), Command.USE);
+        assertEquals(msg.getArgNum1(), 2);
+        assertEquals(msg.getArgNum2(0), 4);
+        assertEquals(msg.getArgNum2(1), 3);
+        assertEquals(msg.getArgNum2(2), 2);
+        assertEquals(msg.getArgNum2(3), 1);
+        assertEquals(msg.getArgNum2(4), 2);
+        assertEquals(msg.getArgNum2(5), 3);
+        assertTrue(msg.isStandard());
+    }
 }
