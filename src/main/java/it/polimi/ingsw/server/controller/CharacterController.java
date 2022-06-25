@@ -15,7 +15,7 @@ public class CharacterController {
         LinkedList<Student> chosenStudent = null;
         List<Integer> studentsIndexes = parameters.getArgNum2();
         try {
-            chosenStudent = getStudentsOfCharacter(chosenCharacter,game,studentsIndexes); //gets students placed on character card
+            chosenStudent = getStudentsFromCharacter(chosenCharacter,studentsIndexes); //gets students placed on character card
             int islandNumber = parameters.getSingleArgNum2();
             Island chosenIsland = game.getArchipelago().get(islandNumber); //get chosen island
             response.setArgString("Character played successfully, student placed on island "+islandNumber);
@@ -54,13 +54,14 @@ public class CharacterController {
 
     public static Message processChar3(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
-            try {
-                game.playCharacter(chosenCharacter, player,null,null,null,null);
-                response.setArgString("Character played successfully, you may move Mother Nature up to 2 additional Islands");
+        if (player.getFace_up_assistant()==null) throw new Exception("You have to play an assistant before!");
+        try {
+            game.playCharacter(chosenCharacter, player,null,null,null,null);
+            response.setArgString("Character played successfully, you may move Mother Nature up to 2 additional Islands");
         } catch (Exception e) {
-                throw  new Exception(e.getMessage()); // "Not enough coins" exception
+            throw  new Exception(e.getMessage()); // "Not enough coins" exception
         }
-         return response;
+        return response;
     }
 
     public static Message processChar4(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
@@ -93,8 +94,8 @@ public class CharacterController {
         try {
             List<Integer> studentsFromCharacterIndexes = parameters.getArgNum2().stream().limit(3).collect(Collectors.toList());
             List<Integer> studentsFromEntranceIndexes = parameters.getArgNum2().subList(Math.max(parameters.getArgNum2().size() - 3, 0), parameters.getArgNum2().size());;
-            LinkedList<Student> studentsFromCharacter = getStudentsOfCharacter(chosenCharacter, game,studentsFromCharacterIndexes);
-            LinkedList<Student> studentsFromEntrance = getStudentsOfEntrance(chosenCharacter,player,game, studentsFromEntranceIndexes);
+            LinkedList<Student> studentsFromCharacter = getStudentsFromCharacter(chosenCharacter,studentsFromCharacterIndexes);
+            LinkedList<Student> studentsFromEntrance = getStudentsFromEntrance(player, studentsFromEntranceIndexes);
             game.playCharacter(chosenCharacter, player,studentsFromCharacter,studentsFromEntrance,null,null);
             response.setArgString("Character played successfully, students have been placed in your School board Entrance");
         } catch (NoStudentsException ex ) {
@@ -118,6 +119,7 @@ public class CharacterController {
     public static Message processChar8(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         Colour chosenColour = parameters.getStandardArgColour();
+        if(chosenCharacter==null)  throw new Exception("You have to choose a colour");
         try {
             game.playCharacter(chosenCharacter, player,null,null,null,chosenColour);
             response.setArgString("Character played successfully, this colour will add no influence ");
@@ -129,21 +131,15 @@ public class CharacterController {
 
     public static Message processChar9(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
-        List<Integer> studentsFromCharacterIndexes = parameters.getArgNum2().stream().limit(2).collect(Collectors.toList());
-        List<Integer> studentsFromEntranceIndexes = parameters.getArgNum2().subList(Math.max(parameters.getArgNum2().size() - 2, 0), parameters.getArgNum2().size());
+        List<Integer> studentsFromEntranceIndexes = parameters.getArgNum2();
+        LinkedList<Student> chosenStudentsFromEntrance = getStudentsFromEntrance(player,studentsFromEntranceIndexes);
+        if (chosenStudentsFromEntrance.size() < studentsFromEntranceIndexes.size()){ response.setArgString("Not enough students in your entrance"); return response;}
         try {
-            LinkedList<Student> studentsFromCharacter = getStudentsOfCharacter(chosenCharacter, game,studentsFromCharacterIndexes);
-        } catch (NoStudentsException e) {
-            response.setArgString("Not enough students on this card");
-        }
-        try {
-            LinkedList<Student> studentsFromEntrance = getStudentsOfEntrance(chosenCharacter, player,game, studentsFromEntranceIndexes);
-            game.playCharacter(chosenCharacter, player,null,null,null,null);
+            LinkedList<Student> chosenStudentsFromDining = getStudentsFromDining(player,parameters);
+            game.playCharacter(chosenCharacter, player,chosenStudentsFromEntrance,chosenStudentsFromDining,null,null);
             response.setArgString("Character played successfully, students have been exchanged!");
-        } catch (NoStudentsException e) {
-            response.setArgString("Not enough students in your entrance");
         } catch (Exception e) {
-            throw  new Exception(e.getMessage()); // "Not enough coins" exception
+            throw new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -152,9 +148,8 @@ public class CharacterController {
         Message response = new Message("string");
         LinkedList<Student> chosenStudent = null;
         List<Integer> studentsIndexes = parameters.getArgNum2();
-        //TODO implement processChar10
         try {
-            chosenStudent = getStudentsOfCharacter(chosenCharacter, game,studentsIndexes); //gets students placed on character card
+            chosenStudent = getStudentsFromCharacter(chosenCharacter,studentsIndexes); //gets students placed on character card
             game.playCharacter(chosenCharacter, player,chosenStudent,null,null,null);
             response.setArgString("Character played successfully, student placed in your dining room");
         } catch (NoStudentsException ex) {
@@ -177,31 +172,33 @@ public class CharacterController {
         return response;
     }
 
-    private static LinkedList <Student> getStudentsOfCharacter(Character chosenCharacter, Game game, List parameters) throws NoStudentsException {
+    private static LinkedList <Student> getStudentsFromCharacter(Character chosenCharacter, List parameters) throws NoStudentsException {
         LinkedList <Student>  chosenStudent = new LinkedList<>();
         int numberOfStudents = parameters.size(); //number of chosen students
         for (int i = 0; i < numberOfStudents; i++) {
             chosenStudent.add(chosenCharacter.getStudents().get(i));
         }
-        if (chosenCharacter.getStudents().size() == 0) throw new NoStudentsException("There are no students left");
+        if (chosenStudent.size()<numberOfStudents) throw new NoStudentsException("There are no students left");
         return chosenStudent;
     }
-    private static LinkedList<Student> getStudentsOfEntrance(Character chosenCharacter, Player player, Game game, List parameters) throws NoStudentsException {
+    private static LinkedList<Student> getStudentsFromEntrance(Player player, List parameters) throws NoStudentsException {
         LinkedList<Student> chosenStudents = new LinkedList<>();
         int numberOfStudents = parameters.size(); //number of chosen students
         for (int i = 0; i < numberOfStudents; i++) {
             chosenStudents.add(player.getSchool().getEntrance().get(i));
         }
-        if (chosenCharacter.getStudents().size() == 0) throw new NoStudentsException("There are no students left");
         return chosenStudents;
     }
-    private static LinkedList<Student> getStudentsOfDining(Player player,Game game, List parameters ) throws NoStudentsException {
-        LinkedList chosenStudents = new LinkedList<>();
-        int numberOfStudents = parameters.size(); //number of chosen students
-        for (int i = 0; i < numberOfStudents; i++) {
-            chosenStudents.add(player.getSchool().getDining_rooms().get(i));
-        }
-        //if (chosenCharacter.getStudents().size() == 0) throw new NoStudentsException("There no students left");
+    private static LinkedList<Student> getStudentsFromDining(Player player, Message parameters ) throws NoStudentsException {
+        LinkedList<Student> chosenStudents = new LinkedList<>();
+        Colour firstColour = parameters.getArgColour(0);
+        Colour secondColour = parameters.getArgColour(1);
+        if( player.getSchool().getDining_room(firstColour).getStudents() == 0 && player.getSchool().getDining_room(secondColour).getStudents() == 0) {
+            throw new NoStudentsException("There are no students of chosen colour");}
+        Student firstStudent = new Student(firstColour);
+        chosenStudents.add(firstStudent);
+        Student secondStudent = new Student(secondColour);
+        chosenStudents.add(secondStudent);
         return chosenStudents;
     }
     public static class NoStudentsException extends Exception {

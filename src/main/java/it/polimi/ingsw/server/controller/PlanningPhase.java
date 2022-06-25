@@ -38,11 +38,11 @@ public class PlanningPhase extends GamePhase {
                 throw new PlanningPhase.WrongTurn("First player have to play before your move");
             }
             boolean existPlayerBeforeMeThatHaveToPlay = false; //checks if there are no players before you
-            for (ClientHandler pl : clientHandler.sameMatchPlayers()) {
-                if (pl.getUsername() == player.getPlayer_id()) {
+            for (String id : clientHandler.getCurrentGamePhase().getTurnOrder()) {
+                if (id == player.getPlayer_id()) {
                     break;
                 }
-                boolean playerPlayed = pl.getGame().getPlayer(pl.getUsername()).getFace_up_assistant() != null;
+                boolean playerPlayed = clientHandler.getGame().getPlayer(id).getFace_up_assistant() != null;
                 if (!playerPlayed) {
                     existPlayerBeforeMeThatHaveToPlay = true;
                     break;

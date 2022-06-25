@@ -51,12 +51,14 @@ public class GameController extends BaseController {
             //sends to client turns order
             client.updateStatus();
             for (ClientHandler handler : first_player.sameMatchPlayers()) {
+                handler.getGame().getPlayer(handler.getUsername()).giveCoins(4);
+                handler.getCurrentGamePhase().setTurnOrder(turnOrder);
                 handler.setGameAlreadyStarted(true);
                 if(!handler.equals(client)){
-                alert(handler, "Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n card, type PLAY [x] (type 'HELP' if you need more info)");}
+                alert(handler, "Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)");}
 
             }
-            output.setArgString("Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n card, type PLAY [x] (type 'HELP' if you need more info)");
+            output.setArgString("Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)");
             client.setAlreadyUpdated(true);
         } else {
             output.setArgString("Not enough players, wait some time then retry.");
@@ -179,8 +181,8 @@ public class GameController extends BaseController {
         }
         if (existPlayerBeforeMeThatHaveToPlay) { // there are players before me
             throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
-        }
-            if ( ActionPhase.getCurrentPlayerNextAction().getPlayer() != player) {
+        } else if(client.getCurrentGamePhase().isActionPhase()) {
+            if(ActionPhase.getCurrentPlayerNextAction().getPlayer() != player)
                 throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
             }
 

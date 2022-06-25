@@ -13,6 +13,7 @@ public class GamePhase {
     private Boolean action_phase = false;
     private List<ClientHandler> current_players;
     private boolean gameEnded = false;
+    private List<String> turnOrder= null;
 
     public GamePhase(Game game, List<ClientHandler> players) {
         current_game = game;
@@ -26,7 +27,6 @@ public class GamePhase {
         // TODO: validare che il player che sta facendo la mossa non e' unico presente nel gioco in questo momento
         if (this instanceof ActionPhase) {
             throw new PlanningPhase.WrongPhaseException();
-
         }
         //throw new PlanningPhase.WrongPhaseException("Method playAssistant cannot be called from GamePhase parent class");
     }
@@ -39,7 +39,7 @@ public class GamePhase {
         validateCorrectActionGamePhase("Method validateMoveMotherNature cannot be called from GamePhase parent class");
     }
 
-    public void validateChooseCloud(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction, GameEndedException {
+    public void validateChooseCloud(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction, GameEndedException, ActionPhase.endingGame {
         validateCorrectActionGamePhase("Method validateChooseCloud cannot be called from GamePhase parent class");
     }
 
@@ -115,4 +115,11 @@ public class GamePhase {
         return current_game;
     }
 
+    public void setTurnOrder(List<String> turnOrder) {
+        this.turnOrder = turnOrder;
+    }
+
+    public List<String> getTurnOrder() {
+        return turnOrder;
+    }
 }

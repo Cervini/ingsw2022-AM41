@@ -2,9 +2,6 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.server.Server;
-
-import java.io.ObjectStreamException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**

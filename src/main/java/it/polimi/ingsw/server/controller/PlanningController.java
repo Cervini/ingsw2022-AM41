@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.server.controller.GameController.alert;
 import static java.util.Collections.sort;
-
-
 public class PlanningController extends BaseController {
 
     /**
@@ -31,7 +29,6 @@ public class PlanningController extends BaseController {
         }
 
         try {
-
             GamePhase gamePhase = currentGamePhase.isActionPhase() ?
                     (ActionPhase) currentGamePhase :
                     (PlanningPhase) currentGamePhase;
@@ -41,14 +38,16 @@ public class PlanningController extends BaseController {
             boolean canStartActionPhase = allPlayersHavePlayedAnAssistant(clientHandler);
 
             if(!canStartActionPhase){
-                int previousPlayerIdx = clientHandler.sameMatchPlayers().indexOf(clientHandler);
-                ClientHandler clientHandlerOfNextPlayer = clientHandler.sameMatchPlayers().get(previousPlayerIdx + 1);
+                int previousPlayerIdx = clientHandler.getCurrentGamePhase().getTurnOrder().indexOf(clientHandler.getUsername());
+                String clientHandlerOfNextPlayer = clientHandler.getCurrentGamePhase().getTurnOrder().get(previousPlayerIdx+1);
+                clientHandler.updateStatus();
                 for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
                     if(!handler.equals(clientHandler)){
-                        alert(handler, "Next player is: "+clientHandlerOfNextPlayer.getUsername());
+                        alert(handler, "Next player is: "+clientHandlerOfNextPlayer);
                     }
             }
-            response.setArgString("Next player is: "+clientHandlerOfNextPlayer.getUsername());}
+                clientHandler.setAlreadyUpdated(true);
+                response.setArgString("Next player is: "+clientHandlerOfNextPlayer);}
 
 
             if (canStartActionPhase) {
@@ -64,12 +63,13 @@ public class PlanningController extends BaseController {
                 //sends to client turns order
                 clientHandler.updateStatus();
                 for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
+                    handler.getCurrentGamePhase().setTurnOrder(turnOrder);
                     if(!handler.equals(clientHandler)){
-                    alert(handler, "Action Phase started! Turns order: "+ turns+". First of all move three \n students from your entrance to an island or to the dining room \n " +
+                    alert(handler, "Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
                             "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)");}
                 }
                 clientHandler.setAlreadyUpdated(true);
-                response.setArgString("Action Phase started! Turns order: "+ turns+". First of all move three \n students from your entrance to an island or to the dining room \n " +
+                response.setArgString("Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
                         "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)");
             }
 
@@ -79,6 +79,8 @@ public class PlanningController extends BaseController {
             response.setArgString("It is not your turn");
         } catch (GamePhase.GameEndedException e) {
             response.setArgString("Game already ended");
+        } catch (Exception e){
+            response.setArgString(e.getMessage());
         }
         return response;
     }
@@ -89,7 +91,7 @@ public class PlanningController extends BaseController {
      * @param client  client that sent the request to start the game
      * @return a new STRING message containing the result of the PLAY command
      */
-    private static Message processPlay(Message message, ClientHandler client) {
+    private static Message processPlay(Message message, ClientHandler client) throws Exception {
         Message output = new Message("string"); // prepare the output message
         int index = message.getArgNum1(); // get the argument from the client's message
         try {
@@ -103,12 +105,12 @@ public class PlanningController extends BaseController {
                     if (!checkAllUnique(client)) { // if it's not unique check if any of the other assistants is playable
                         playAssistant(client, index, output); // if not still play the assistant
                     } else {
-                        output.setArgString("Another player has already played this Assistant, try another"); // layer can play one other assistant without trouble
+                        throw new Exception("Another player has already played this Assistant, try another"); // layer can play one other assistant without trouble
                     }
                 }
             }
         } catch (IndexOutOfBoundsException e) {
-            output.setArgString("This Assistant doesn't exist.");
+           throw new Exception("This Assistant doesn't exist.");
         }
         return output;
     }
@@ -144,12 +146,12 @@ public class PlanningController extends BaseController {
     /**
      * play Assistant
      */
-    private static void playAssistant(ClientHandler client, int index, Message output) {
+    private static void playAssistant(ClientHandler client, int index, Message output) throws Exception {
         try {
             client.getGame().getPlayer(client.getUsername()).playAssistant(index);
             output.setArgString("Assistant played");
         } catch (Exception e) {
-            output.setArgString("Can't play this Assistant.");
+            throw new Exception("Can't play this Assistant.");
         }
     }
 

@@ -49,7 +49,7 @@ public class Character implements Serializable {
             case 4 -> {
                 cost = 2;
                 noEntry = maxNoEntry;
-                description = "Place a No Entry tile non an Island of your choice. The first time Mother Nature ends her\nmovement there, put the No Entry tile back onto this card DO NOT calculate influence on that Island, or place any Towers.\nTo use: USE [character index] [island index]";
+                description = "Place a No Entry tile on an Island of your choice. The first time Mother Nature ends her\nmovement there, put the No Entry tile back onto this card DO NOT calculate influence on that Island, or place any Towers.\nTo use: USE [character index] [island index]";
             }
             case 5 -> {
                 cost = 3;
@@ -77,7 +77,7 @@ public class Character implements Serializable {
             }
             case 11 -> {
                 cost = 3;
-                description = "Choose a type of Student: every player (including yourself) must return 3 Students from\ntheir Dining Room to the bag. If any player has fewer tha 3 Students of that type, return as many Students as they have.\nTo use: USE [character index]";
+                description = "Choose a type of Student: every player (including yourself) must return 3 Students from\ntheir Dining Room to the bag. If any player has fewer tha 3 Students of that type, return as many Students as they have.\nTo use: USE [character index] [color to choose]";
             }
         }
     }
