@@ -177,14 +177,13 @@ public class ActionController  {
      */
     public static Message processMove(Message request, ClientHandler client) throws ActionPhase.WrongAction {
         Message output = new Message("string");
-        Game current_game = client.getGame();
-        Player current_player = client.getGame().getPlayer(client.getUsername());
-        GamePhase currentGamePhase = client.getCurrentGamePhase();
-        int mother_nature_movements = request.getArgNum1();
-        TowerColour playerTeam = current_player.getTeam();
+        Game currentGame = client.getGame();
+        Player currentPlayer = client.getGame().getPlayer(client.getUsername());
+        int motherNatureMovements = request.getArgNum1();
+        TowerColour playerTeam = currentPlayer.getTeam();
         try {
-            current_game.moveMotherNature(mother_nature_movements,current_player);
-            if (current_game.getArchipelago().get(request.getArgNum1()).getTower() == playerTeam){
+            currentGame.moveMotherNature(motherNatureMovements,currentPlayer);
+            if (currentGame.getArchipelago().get(request.getArgNum1()).getTower() == playerTeam){
                 output.setArgString("Mother nature moved, you have conquered this island!");
             } else {
                 output.setArgString("Mother nature moved but you can't conquer this island");
@@ -257,14 +256,15 @@ public class ActionController  {
         output.setArgString("Next player is: "+clientHandlerOfNextPlayer);
         for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
             handler.setAlreadyUpdated(true);
-            if (isIsLastRound() && !handler.equals(clientHandler)) {
+            if (isLastRound() && !handler.equals(clientHandler)) {
                     alert(handler, "Next player is: "+clientHandlerOfNextPlayer+". This is the last round");
                     output.setArgString("Next player is: "+clientHandlerOfNextPlayer+". This is the last round");
             } else if (!handler.equals(clientHandler)) {
                     alert(handler, "Next player is: "+clientHandlerOfNextPlayer);
             }
-
+            if(handler.getUsername().equals(clientHandlerOfNextPlayer)) handler.setAlreadyUpdated(false);
         }
+
         return output;
     }
 
@@ -298,7 +298,7 @@ public class ActionController  {
         clientHandler.sameMatchPlayers().forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
         return output;
     }
-    public static boolean isIsLastRound() {
+    public static boolean isLastRound() {
         return isLastRound;
     }
 
