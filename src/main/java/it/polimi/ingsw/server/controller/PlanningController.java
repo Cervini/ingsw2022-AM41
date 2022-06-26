@@ -3,14 +3,13 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Assistant;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.server.ClientHandler;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.server.controller.ActionController.isLastRound;
+import static it.polimi.ingsw.server.controller.ActionController.isIsLastRound;
 import static it.polimi.ingsw.server.controller.ActionController.updateTurns;
 import static it.polimi.ingsw.server.controller.GameController.alert;
 import static java.util.Collections.sort;
@@ -55,12 +54,11 @@ public class PlanningController extends BaseController {
                 String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
                 //sends to client turns order
                 clientHandler.updateStatus();
-                for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
-                    handler.getCurrentGamePhase().setTurnOrder(turnOrder);
-                    if(!handler.equals(clientHandler)){
-                    alert(handler, "Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
-                            "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)");}
-                }
+                List<ClientHandler> players = clientHandler.sameMatchPlayers();
+                players.forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
+                players.remove(clientHandler);
+                players.forEach(p-> alert(p, "Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
+                        "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)"));
                 clientHandler.setAlreadyUpdated(true);
                 response.setArgString("Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
                         "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)");
@@ -92,7 +90,7 @@ public class PlanningController extends BaseController {
                 Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(index); // get the Assistant that the player wants to play
                 if (client.getGame().getPlayer(client.getUsername()).getAssistants().size() == 1) {
                     playAssistant(client, index, output); // if the player has only one assistant play it (no need to make checks)
-                    ActionController.setLastRound(true); //at the end of this round checkWinner will be called
+                    ActionController.setIsLastRound(true); //at the end of this round checkWinner will be called
                 } else {
                     if (uniqueAssistant(client, played)) { // if the assistant is unique between the already played
                         playAssistant(client, index, output); // play the assistant
@@ -146,7 +144,7 @@ public class PlanningController extends BaseController {
         try {
             client.getGame().getPlayer(client.getUsername()).playAssistant(index);
             output.setArgString("Assistant played");
-            if(isLastRound()) output.setArgString("Last assistant played, this is the last round");
+            if(isIsLastRound()) output.setArgString("Last assistant played, this is the last round");
         } catch (Exception e) {
             throw new Exception("Can't play this Assistant.");
         }

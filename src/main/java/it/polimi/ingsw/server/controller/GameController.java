@@ -50,13 +50,11 @@ public class GameController extends BaseController {
             String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
             //sends to client turns order
             client.updateStatus();
-            for (ClientHandler handler : first_player.sameMatchPlayers()) {
-                handler.getCurrentGamePhase().setTurnOrder(turnOrder);
-                handler.setGameAlreadyStarted(true);
-                if(!handler.equals(client)){
-                alert(handler, "Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)");}
-
-            }
+            List<ClientHandler> players = client.sameMatchPlayers();
+            players.forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
+            players.forEach(p-> p.setGameAlreadyStarted(true));
+            players.remove(client);
+            players.forEach(p-> alert(p, "Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)"));
             output.setArgString("Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)");
             client.setAlreadyUpdated(true);
         } else {
@@ -112,6 +110,7 @@ public class GameController extends BaseController {
 
     public static Message info(Message request, ClientHandler clientHandler) {
         Message output = new Message("string");
+        clientHandler.setAlreadyUpdated(true);
         if (clientHandler.getGame() == null) { // if the player is already participating in a game
             output.setArgString("Not playing yet!");
             return output;
@@ -128,7 +127,6 @@ public class GameController extends BaseController {
         int index = request.getArgNum1();
         Player player = client.getGame().getPlayer(client.getUsername());
         Game game = client.getGame();
-
         try {
             validateTurn(client);
             validateCharacter(index, player);
@@ -168,11 +166,11 @@ public class GameController extends BaseController {
 
         Player player = client.getGame().getPlayer(client.getUsername());
         boolean existPlayerBeforeMeThatHaveToPlay = false; //checks if there are no players before you
-        for (ClientHandler pl : client.sameMatchPlayers()) {
-            if (pl.getUsername() == player.getPlayer_id()) {
+        for (String id : client.getCurrentGamePhase().getTurnOrder()) {
+            if (id == player.getPlayer_id()) {
                 break;
             }
-            boolean playerPlayed = pl.getGame().getPlayer(pl.getUsername()).getFace_up_assistant() != null;
+            boolean playerPlayed = client.getGame().getPlayer(id).getFace_up_assistant() != null;
             if (!playerPlayed) {
                 existPlayerBeforeMeThatHaveToPlay = true;
                 break;

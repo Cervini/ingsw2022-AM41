@@ -9,14 +9,13 @@ import static it.polimi.ingsw.server.controller.BaseController.setGamePhaseForAl
 import static it.polimi.ingsw.server.controller.GameController.alert;
 import static java.util.Collections.sort;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 public class ActionController  {
 
-    private static boolean  lastRound = false;
+    private static boolean isLastRound = false;
     public static Message place(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
         Message response = new Message("string");
         if (clientHandler.getGame() == null){
@@ -65,14 +64,15 @@ public class ActionController  {
             response.setArgString("You can now choose a cloud, type CHOOSE [x] (type 'HELP' if you need more info) ");
             clientHandler.setAlreadyUpdated(true);
 
-            if(clientHandler.getGame().getBag().size() > 0){ //game ends at this point only if player places his last tower or only three groups of islands are left
+            Player relevantPlayer =  clientHandler.getGame().getPlayer(clientHandler.getUsername());
+            if( clientHandler.getGame().getBag().size() > 0 && relevantPlayer.getAssistants().size()!=0){ //game ends at this point only if player places his last tower or only three groups of islands are left
             TowerColour winner = clientHandler.getGame().endGame();
             if (winner != null ){
                 Player winnerPlayer = clientHandler.getGame().getPlayers().stream().filter(p->p.getTeam().equals(winner)).findFirst().get();
-                for (ClientHandler player: clientHandler.sameMatchPlayers()) {
-                    player.setGame(null);
-                    alert(player,"The winner is player: " + winnerPlayer.getPlayer_id()+"! You can now start a new game");
-                }
+                List<ClientHandler> players = clientHandler.sameMatchPlayers();
+                players.forEach(p->p.setGame(null));
+                players.remove(clientHandler);
+                players.forEach(p-> alert(p,"The winner is player: " + winnerPlayer.getPlayer_id()+"! You can now start a new game"));
                 response.setArgString("The winner is player: " + winnerPlayer.getPlayer_id()+"! You can now start a new game");
             }
         }
@@ -104,51 +104,20 @@ public class ActionController  {
                 response = processChoose(request, clientHandler); // action
             }
             catch (ActionPhase.endingGame e) { //exception thrown by processChoose, sets last round true since there are no more students available
-                setLastRound(true);
+                setIsLastRound(true);
             } boolean isLastPlayer =
                             gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1; // checks if all players have already played this phase
             if (isLastPlayer) {
-                if (lastRound) {
+                if (isLastRound) { //players have played all assistants or there are no available students
                     response = endGame(clientHandler.getGame(), clientHandler);
-                    for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
-                        handler.setGame(null);
-                        if(!handler.equals(clientHandler)){
-                                    alert(handler, response.getArgString());
-                        }
-                    }
+                    List<ClientHandler> players = clientHandler.sameMatchPlayers();
+                    players.forEach(p->p.setGame(null));
+                    players.remove(clientHandler);
+                    Message finalResponse = response;
+                    players.forEach(p->  alert(p, finalResponse.getArgString()));
                     return response;
-                } else {
-                    sort(currentGamePhase.getCurrentPlayers(),
-                            Comparator.comparingInt((ClientHandler a) -> a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue())); //players sorted by previous assistant value
-                    List<String> turnOrder = currentGamePhase.getCurrentPlayers().stream().map(ClientHandler::getUsername).toList();
-                    //converts list of strings to a string
-                    String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
-                    clientHandler.updateStatus();
-                    for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
-                        handler.getCurrentGamePhase().setTurnOrder(turnOrder);
-                        if (!handler.equals(clientHandler)) {
-                            alert(handler, "A new round has begun! Turns order (based on previous assistant card value):\n " + turns + " .You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)");
-                        }
-                    }
-                    clientHandler.setAlreadyUpdated(true);
-                    response.setArgString("New round has begun! Turns order (based on previous assistant card value):\n " + turns + " .You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)");
-
-                    ClientHandler oldFirstPlayer = currentGamePhase.getCurrentPlayers()
-                            .stream()
-                            .filter(p -> (p.isPlayerFirstMove))
-                            .findAny().orElse(null);
-                    oldFirstPlayer.setPlayerFirstMove(false);
-                    ClientHandler firstPlayer = currentGamePhase.getCurrentPlayers().get(0);
-                    firstPlayer.isPlayerFirstMove = true;
-
-                    GamePhase planningPhase = new PlanningPhase(clientHandler.getGame(), currentGamePhase.getCurrentPlayers()); // new game phase
-                    setGamePhaseForAllPlayers(currentGamePhase.getCurrentPlayers(), planningPhase);
-                    planningPhase.getCurrentPlayers().forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null));
-                    firstPlayer.getGame().startTurn(); //clouds filled
-                    setCharacters(clientHandler.getGame().getPlayers());
-                    for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
-                        handler.getCurrentGamePhase().setTurnOrder(turnOrder);
-                    }
+                } else { //game goes on since there are no winning conditions
+                    response = changePhase(currentGamePhase,clientHandler);
                 }
             } else {
                 ActionPhase actionPhase = (ActionPhase) gamePhase; // action phase updated with the new action expected from the next player
@@ -216,7 +185,6 @@ public class ActionController  {
         try {
             current_game.moveMotherNature(mother_nature_movements,current_player);
             if (current_game.getArchipelago().get(request.getArgNum1()).getTower() == playerTeam){
-                // TODO: even when island is conquered this string is not printed
                 output.setArgString("Mother nature moved, you have conquered this island!");
             } else {
                 output.setArgString("Mother nature moved but you can't conquer this island");
@@ -237,10 +205,13 @@ public class ActionController  {
         Message output = new Message("string");
         Game game = client.getGame();
         boolean isLastRound =  client.getGame().getBag().size() == 0;
+        if(request.getArgNum1() >= game.getClouds().size()){
+            throw new ActionPhase.WrongAction("This cloud doesn't exist, type a number between 0 and "+(game.getClouds().size()-1));
+        }
         if(isLastRound){
             throw new ActionPhase.endingGame("there are no students available");
         }
-        if(game.getClouds().get(request.getArgNum1()).getStudents().size()==0){
+        if( game.getClouds().get(request.getArgNum1()).getStudents().size() == 0 ){
             throw new ActionPhase.WrongAction("Can't choose this cloud, it has been already chosen by another player");
         } else {
             game.chooseCloud(game.getClouds().get(request.getArgNum1()), game.getPlayer(client.getUsername()));
@@ -285,23 +256,55 @@ public class ActionController  {
         clientHandler.updateStatus();
         output.setArgString("Next player is: "+clientHandlerOfNextPlayer);
         for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
-            if (isLastRound() && !handler.equals(clientHandler)) {
+            handler.setAlreadyUpdated(true);
+            if (isIsLastRound() && !handler.equals(clientHandler)) {
                     alert(handler, "Next player is: "+clientHandlerOfNextPlayer+". This is the last round");
                     output.setArgString("Next player is: "+clientHandlerOfNextPlayer+". This is the last round");
             } else if (!handler.equals(clientHandler)) {
                     alert(handler, "Next player is: "+clientHandlerOfNextPlayer);
             }
-                handler.setAlreadyUpdated(true);
+
         }
         return output;
     }
 
-    public static boolean isLastRound() {
-        return lastRound;
+    public static Message changePhase(GamePhase currentGamePhase,ClientHandler clientHandler){
+        Message output = new Message("string");
+        sort(currentGamePhase.getCurrentPlayers(),
+                Comparator.comparingInt((ClientHandler a) -> a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue())); //players sorted by previous assistant value
+        List<String> turnOrder = currentGamePhase.getCurrentPlayers().stream().map(ClientHandler::getUsername).toList();
+        //converts list of strings to a string
+        String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
+        clientHandler.updateStatus();
+        List<ClientHandler> players = clientHandler.sameMatchPlayers();
+        players.remove(clientHandler);
+        players.forEach( p-> alert(p,"A new round has begun! Turns order (based on previous assistant card value):\n " + turns + " .You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)"));
+        clientHandler.setAlreadyUpdated(true);
+        output.setArgString("A new round has begun! Turns order (based on previous assistant card value):\n " + turns + " .You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)");
+        ClientHandler oldFirstPlayer = currentGamePhase.getCurrentPlayers()
+                .stream()
+                .filter(p -> (p.isPlayerFirstMove))
+                .findAny().orElse(null);
+        oldFirstPlayer.setPlayerFirstMove(false);
+        ClientHandler firstPlayer = currentGamePhase.getCurrentPlayers().get(0);
+        firstPlayer.isPlayerFirstMove = true;
+
+        GamePhase planningPhase = new PlanningPhase(clientHandler.getGame(), currentGamePhase.getCurrentPlayers()); // new game phase
+        setGamePhaseForAllPlayers(currentGamePhase.getCurrentPlayers(), planningPhase);
+        planningPhase.getCurrentPlayers().forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null));
+        firstPlayer.getGame().startTurn(); //clouds filled
+        setCharacters(clientHandler.getGame().getPlayers());
+
+        clientHandler.sameMatchPlayers().forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
+        return output;
+    }
+    public static boolean isIsLastRound() {
+        return isLastRound;
     }
 
-    public static void setLastRound(boolean lastRound) {
-        ActionController.lastRound = lastRound;
+    public static void setIsLastRound(boolean isLastRound) {
+        ActionController.isLastRound = isLastRound;
     }
+
 
 }
