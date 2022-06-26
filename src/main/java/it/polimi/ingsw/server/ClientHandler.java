@@ -174,7 +174,7 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    public String onePlayerLeft(ClientHandler player) throws IOException {
+    /*public String onePlayerLeft(ClientHandler player) throws IOException {
         onePlayerLeft = true;
         String check = "You can continue the game";
         final Duration timeout = Duration.ofSeconds(120);
@@ -211,7 +211,18 @@ public class ClientHandler implements Runnable{
     public boolean getPlayerFirstMove() {
         return isPlayerFirstMove;
     }
+     public String checkNumPlayers(ClientHandler player){
+        while(player.sameMatchPlayers().size() == 1){continue;};
+        return null;
+    }
+    private void gameEndedWithOnePlayer(ClientHandler player) throws IOException {
+        for ( ClientHandler c : player.clients ) {
+            if(c.isPlayerIsOffline()) sameMatchPlayers().remove(c);
+            c.setGame(null);
+        }
+    }
 
+    */
     public void setPlayerFirstMove(boolean playerFirstMove) {
         this.isPlayerFirstMove = playerFirstMove;
     }
@@ -222,14 +233,6 @@ public class ClientHandler implements Runnable{
 
     public GamePhase getCurrentGamePhase() {
         return currentGamePhase;
-    }
-
-    public String getPhase() {
-        if(currentGamePhase.isPlanningPhase())
-            return "PLANNING PHASE";
-        else {
-            return game.getActivePlayer().getPlayer_id();
-        }
     }
 
      public boolean isPlayerIsOffline() {
@@ -243,16 +246,7 @@ public class ClientHandler implements Runnable{
     public void setAlreadyUpdated(boolean alreadyUpdated) {
         this.alreadyUpdated = alreadyUpdated;
     }
-    public String checkNumPlayers(ClientHandler player){
-        while(player.sameMatchPlayers().size() == 1){continue;};
-        return null;
-    }
-    private void gameEndedWithOnePlayer(ClientHandler player) throws IOException {
-        for ( ClientHandler c : player.clients ) {
-            if(c.isPlayerIsOffline()) sameMatchPlayers().remove(c);
-            c.setGame(null);
-        }
-    }
+
     public void setGameAlreadyStarted(boolean gameAlreadyStarted) {
         isGameAlreadyStarted = gameAlreadyStarted;
     }
