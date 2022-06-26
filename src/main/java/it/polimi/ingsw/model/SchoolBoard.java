@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class SchoolBoard implements Tile, Serializable {
 
     private final LinkedList<Student> entrance; // list of students at the entrance section of the School_board
@@ -16,6 +15,7 @@ public class SchoolBoard implements Tile, Serializable {
     private Assistant face_up_assistant;
     private List<Professor> owned_professor; // list of all the currently owned professors
     private final int entrance_max;
+
     /**
      * default constructor sets up School_board with 8 towers
      */

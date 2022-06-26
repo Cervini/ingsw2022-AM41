@@ -50,3 +50,5 @@ public class Main extends Application  {
         return client;
     }
 }
+
+// --module-path "C:\Program Files\JetBrains\openjfx-18.0.1_windows-x64_bin-sdk\javafx-sdk-18.0.1\lib" --add-modules=javafx.base,javafx.controls,javafx.graphics,javafx.media
