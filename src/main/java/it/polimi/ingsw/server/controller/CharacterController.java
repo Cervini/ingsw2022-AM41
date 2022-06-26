@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.messages.Message;
+import it.polimi.ingsw.communication.messages.ToTile;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.Character;
 
@@ -12,12 +13,14 @@ public class CharacterController {
 
     public static Message processChar0(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
-        LinkedList<Student> chosenStudent = null;
+        LinkedList<Student> chosenStudent = new LinkedList<>();
         List<Integer> studentsIndexes = parameters.getArgNum2();
         try {
             chosenStudent = getStudentsFromCharacter(chosenCharacter,studentsIndexes); //gets students placed on character card
             int islandNumber = parameters.getSingleArgNum2();
             Island chosenIsland = game.getArchipelago().get(islandNumber); //get chosen island
+            if( islandNumber >= game.getArchipelago().size())
+                throw new Exception("Not existing island, please retry");
             response.setArgString("Character played successfully, student placed on island "+islandNumber);
             game.playCharacter(chosenCharacter, player,chosenStudent,null,chosenIsland,null);
         } catch (NoStudentsException ex) {
@@ -42,6 +45,8 @@ public class CharacterController {
     public static Message processChar2(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         int islandNumber = parameters.getSingleArgNum2();
+        if( islandNumber >= game.getArchipelago().size())
+            throw new Exception("Not existing island, please retry");
         Island chosenIsland = game.getArchipelago().get(islandNumber);
         try {
             response.setArgString("Character played successfully, mother nature has been placed on island "+islandNumber);
@@ -67,6 +72,8 @@ public class CharacterController {
     public static Message processChar4(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         int islandNumber = parameters.getSingleArgNum2();
+        if( islandNumber >= game.getArchipelago().size())
+            throw new Exception("Not existing island, please retry");
         Island chosenIsland = game.getArchipelago().get(islandNumber);
         try {
             response.setArgString("Character played successfully, no-entry tile has been placed on island "+islandNumber);
@@ -178,7 +185,7 @@ public class CharacterController {
         for (int i = 0; i < numberOfStudents; i++) {
             chosenStudent.add(chosenCharacter.getStudents().get(i));
         }
-        if (chosenStudent.size()<numberOfStudents) throw new NoStudentsException("There are no students left");
+        if (chosenStudent.size() < numberOfStudents) throw new NoStudentsException("There are no students left");
         return chosenStudent;
     }
     private static LinkedList<Student> getStudentsFromEntrance(Player player, List parameters) throws NoStudentsException {
@@ -187,6 +194,7 @@ public class CharacterController {
         for (int i = 0; i < numberOfStudents; i++) {
             chosenStudents.add(player.getSchool().getEntrance().get(i));
         }
+        if (chosenStudents.size()<numberOfStudents) throw new NoStudentsException("There are no students left");
         return chosenStudents;
     }
     private static LinkedList<Student> getStudentsFromDining(Player player, Message parameters ) throws NoStudentsException {
@@ -208,6 +216,5 @@ public class CharacterController {
             super(msg);
         }
     }
-
 
 }
