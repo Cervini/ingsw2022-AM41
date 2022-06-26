@@ -1246,4 +1246,22 @@ class GameTest {
 
         System.out.println("moveMotherNatureTest22 complete");
     }
+
+    @Test
+    void mergeTest10() throws Exception{
+        Game game = new Game(2);
+
+        game.getPlayers().getFirst().playAssistant(2);
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getArchipelago().get(0).setTower(game.getPlayers().getFirst().getTeam());
+        game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
+        game.moveMotherNature(1, game.getPlayers().getFirst());
+
+        assertEquals(11, game.getArchipelago().size());
+    }
 }

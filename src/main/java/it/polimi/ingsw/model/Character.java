@@ -159,7 +159,7 @@ public class Character implements Serializable {
                 modifiedGame = effect1(game, studentList1.getFirst(), island);
             }
             case 1 -> {
-                effect2(game, player);
+                effect2(player);
             }
             case 2 -> {
                 modifiedGame = effect3(game, island);
@@ -171,16 +171,16 @@ public class Character implements Serializable {
                 modifiedGame = effect5(game, island);
             }
             case 5 -> {
-                effect6(game);
+                //Doesn't do anything at this time, it's effect is activated at the end of the turn
             }
             case 6 -> {
                 modifiedGame = effect7(game, player, studentList1, studentList2);
             }
             case 7 -> {
-                effect8(game, player);
+                effect8(player);
             }
             case 8 -> {
-                effect9(game, colour);
+                effect9(colour);
             }
             case 9 -> {
                 modifiedGame = effect10(game, player, studentList1, studentList2);
@@ -214,10 +214,9 @@ public class Character implements Serializable {
 
     /**Character 2 (case 1)
      * @requires game != null && player != null
-     * @param game is the current situation of the match that is going to be modified by the character
      * @param player is the player that activated the effect of the character
      */
-    private void effect2(Game game, Player player) throws Exception{
+    private void effect2(Player player) {
         memoryPlayer = player;
     }
 
@@ -226,7 +225,7 @@ public class Character implements Serializable {
      * @param game is the current situation of the match that is going to be modified by the character
      * @param island island on which it has to be calculated the influence, even if mother nature is not there
      */
-    private Game effect3(Game game, Island island) throws Exception{
+    private Game effect3(Game game, Island island) {
         game = characterFunctions.checkInfluenceOnSpecificIsland(game, island);
         return game;
     }
@@ -259,13 +258,6 @@ public class Character implements Serializable {
             getNoEntry();
         }
         return game;
-    }
-
-    /**Character 6 (case 5)
-     * @requires game != null
-     * @param game is the current situation of the match that is going to be modified by the character
-     */
-    private void effect6(Game game) throws Exception{
     }
 
     /**Character 7 (case 6)
@@ -302,20 +294,18 @@ public class Character implements Serializable {
 
     /**Character 8 (case 7)
      * @requires game != null && player != null
-     * @param game is the current situation of the match that is going to be modified by the character
      * @param player is the player that activated the effect of the character
      */
-    private void effect8(Game game, Player player) throws Exception{
+    private void effect8(Player player) {
         memoryPlayer = player;
     }
 
     /**Character 9 (case 8)
      * @requires game !=  null && colour != null
-     * @param game is the current situation of the match that is going to be modified by the character
      * @param colour is the colour selected by the player that will not affect the influence calculations
      *               during this round
      */
-    private void effect9(Game game, Colour colour) throws Exception{
+    private void effect9(Colour colour) {
         memoryColour = colour;
     }
 

@@ -149,6 +149,7 @@ public class Game{
         } else {
             throw new DistanceMotherNatureException("Can't move Mother Nature this far!");
         }
+        mergeCheck();
     }
 
     /**
@@ -400,6 +401,18 @@ public class Game{
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    //TODO test & comment
+    private void mergeCheck() {
+        for(int i = 0; i < archipelago.size() - 1; i++){
+            if(archipelago.get(i).getColour() != null && archipelago.get(i+1).getColour() != null) {
+                if (archipelago.get(i).getColour().equals(archipelago.get(i + 1).getColour())) {
+                    merge(archipelago.get(i), archipelago.get(i + 1));
+                    i--;
+                }
+            }
         }
     }
 
