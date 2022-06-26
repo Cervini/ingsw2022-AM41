@@ -57,6 +57,7 @@ public class GameController extends BaseController {
             players.forEach(p-> alert(p, "Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)"));
             output.setArgString("Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)");
             client.setAlreadyUpdated(true);
+            //client.sameMatchPlayers().forEach(p->p.getGame().getPlayer(p.getUsername()).giveCoins(4));
         } else {
             output.setArgString("Not enough players, wait some time then retry.");
         }
@@ -111,6 +112,10 @@ public class GameController extends BaseController {
     public static Message info(Message request, ClientHandler clientHandler) {
         Message output = new Message("string");
         clientHandler.setAlreadyUpdated(true);
+        if( request.getArgNum1() > 2 ) {
+            output.setArgString("Non existing character, please retry");
+            return output;
+        }
         if (clientHandler.getGame() == null) { // if the player is already participating in a game
             output.setArgString("Not playing yet!");
             return output;
@@ -150,8 +155,9 @@ public class GameController extends BaseController {
             response.setArgString("You have already played a character during this round, wait for the next round");
         } catch (NonExistentCharacterException ex) {
             response.setArgString("There is no such character");
-        }catch (Exception notEnoughCoins) {
-            response.setArgString(notEnoughCoins.getMessage());
+        } catch (Exception e) {
+            player.setPlayedCharacterNumber(-1);
+            response.setArgString(e.getMessage());
         }
 
         return response;

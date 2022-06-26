@@ -70,9 +70,11 @@ public class ActionController  {
             if (winner != null ){
                 Player winnerPlayer = clientHandler.getGame().getPlayers().stream().filter(p->p.getTeam().equals(winner)).findFirst().get();
                 List<ClientHandler> players = clientHandler.sameMatchPlayers();
-                players.forEach(p->p.setGame(null));
+                players
+                        .forEach(p->p.setGame(null));
                 players.remove(clientHandler);
-                players.forEach(p-> alert(p,"The winner is player: " + winnerPlayer.getPlayer_id()+"! You can now start a new game"));
+                players
+                        .forEach(p-> alert(p,"The winner is player: " + winnerPlayer.getPlayer_id()+"! You can now start a new game"));
                 response.setArgString("The winner is player: " + winnerPlayer.getPlayer_id()+"! You can now start a new game");
             }
         }
@@ -111,10 +113,12 @@ public class ActionController  {
                 if (isLastRound) { //players have played all assistants or there are no available students
                     response = endGame(clientHandler.getGame(), clientHandler);
                     List<ClientHandler> players = clientHandler.sameMatchPlayers();
-                    players.forEach(p->p.setGame(null));
+                    players
+                            .forEach(p->p.setGame(null));
                     players.remove(clientHandler);
                     Message finalResponse = response;
-                    players.forEach(p->  alert(p, finalResponse.getArgString()));
+                    players
+                            .forEach(p->  alert(p, finalResponse.getArgString()));
                     return response;
                 } else { //game goes on since there are no winning conditions
                     response = changePhase(currentGamePhase,clientHandler);
@@ -238,7 +242,8 @@ public class ActionController  {
     }
 
     private static void setCharacters(List<Player> players){
-        players.forEach(player -> player.setPlayedCharacterNumber(-1));
+        players
+                .forEach(player -> player.setPlayedCharacterNumber(-1));
     }
     private static Message endGame(Game current_game, ClientHandler client) {
         Message output= new Message("string");
@@ -278,7 +283,8 @@ public class ActionController  {
         clientHandler.updateStatus();
         List<ClientHandler> players = clientHandler.sameMatchPlayers();
         players.remove(clientHandler);
-        players.forEach( p-> alert(p,"A new round has begun! Turns order (based on previous assistant card value):\n " + turns + " .You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)"));
+        players
+                .forEach( p-> alert(p,"A new round has begun! Turns order (based on previous assistant card value):\n " + turns + " .You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)"));
         clientHandler.setAlreadyUpdated(true);
         output.setArgString("A new round has begun! Turns order (based on previous assistant card value):\n " + turns + " .You can now play an assistant, type PLAY [x] (type 'HELP' if you need more info)");
         ClientHandler oldFirstPlayer = currentGamePhase.getCurrentPlayers()
@@ -291,11 +297,13 @@ public class ActionController  {
 
         GamePhase planningPhase = new PlanningPhase(clientHandler.getGame(), currentGamePhase.getCurrentPlayers()); // new game phase
         setGamePhaseForAllPlayers(currentGamePhase.getCurrentPlayers(), planningPhase);
-        planningPhase.getCurrentPlayers().forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null));
+        planningPhase.getCurrentPlayers()
+                .forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null));
         firstPlayer.getGame().startTurn(); //clouds filled
         setCharacters(clientHandler.getGame().getPlayers());
 
-        clientHandler.sameMatchPlayers().forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
+        clientHandler.sameMatchPlayers()
+                .forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
         return output;
     }
     public static boolean isLastRound() {

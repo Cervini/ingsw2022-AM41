@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.server.controller.ActionController.isIsLastRound;
+import static it.polimi.ingsw.server.controller.ActionController.isLastRound;
 import static it.polimi.ingsw.server.controller.ActionController.updateTurns;
 import static it.polimi.ingsw.server.controller.GameController.alert;
 import static java.util.Collections.sort;
@@ -55,9 +55,11 @@ public class PlanningController extends BaseController {
                 //sends to client turns order
                 clientHandler.updateStatus();
                 List<ClientHandler> players = clientHandler.sameMatchPlayers();
-                players.forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
+                players
+                        .forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
                 players.remove(clientHandler);
-                players.forEach(p-> alert(p, "Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
+                players
+                        .forEach(p-> alert(p, "Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
                         "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)"));
                 clientHandler.setAlreadyUpdated(true);
                 response.setArgString("Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
@@ -144,7 +146,7 @@ public class PlanningController extends BaseController {
         try {
             client.getGame().getPlayer(client.getUsername()).playAssistant(index);
             output.setArgString("Assistant played");
-            if(isIsLastRound()) output.setArgString("Last assistant played, this is the last round");
+            if(isLastRound()) output.setArgString("Last assistant played, this is the last round");
         } catch (Exception e) {
             throw new Exception("Can't play this Assistant.");
         }

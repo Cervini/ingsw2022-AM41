@@ -32,7 +32,7 @@ public class Character implements Serializable {
         switch (characterNumber){
             case 0 -> {
                 cost = 1;
-                description = "Take 1 student from this card and place it on an island of your choice.\nTo use: USE [character index] [student index] [island index]";
+                description = "Take 1 student from this card and place it on an island of your choice.\nTo use: USE [character index] [island index] [student index]";
             }
             case 1 -> {
                 cost = 2;
@@ -44,7 +44,7 @@ public class Character implements Serializable {
             }
             case 3 -> {
                 cost = 1;
-                description = "You may move Mother Nature up to 2 additional Islands than is indicated by the Assistant\ncard you've played.\nTo use: USE [character index] [student index] [island index]";
+                description = "You may move Mother Nature up to 2 additional Islands than is indicated by the Assistant\ncard you've played.\nTo use: USE [character index] [student index] ";
             }
             case 4 -> {
                 cost = 2;
@@ -69,7 +69,7 @@ public class Character implements Serializable {
             }
             case 9 -> {
                 cost = 1;
-                description = "You may exchange up to 2 Students between your Entrance and your Dining Room.\nTo use: USE [character index] [entrance student index]x2 [dining room color] [dining room student index]";
+                description = "You may exchange up to 2 Students between your Entrance and your Dining Room.\nTo use: USE [character index] [entrance student index]x2 [first dining room color] [second dining room color]";
             }
             case 10 -> {
                 cost = 2;
