@@ -223,7 +223,6 @@ public class ClientHandler implements Runnable{
     }
 
     */
-
     public void setPlayerFirstMove(boolean playerFirstMove) {
         this.isPlayerFirstMove = playerFirstMove;
     }

@@ -48,7 +48,6 @@ public class LoginController {
 
 
     public static Message processLogout(ClientHandler client) {
-
         Message output = new Message("string");
 
         client.setUsername("new client");

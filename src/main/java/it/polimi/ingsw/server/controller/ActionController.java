@@ -76,8 +76,6 @@ public class ActionController  {
                 response.setArgString("The winner is player: " + winnerPlayer.getPlayer_id()+"! You can now start a new game");
             }
         }
-
-
         } catch (GamePhase.WrongTurn e) {
             response.setArgString("Wrong turn");
         } catch (GamePhase.WrongPhaseException e) {
