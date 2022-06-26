@@ -65,15 +65,17 @@ public class ActionController  {
             response.setArgString("You can now choose a cloud, type CHOOSE [x] (type 'HELP' if you need more info) ");
             clientHandler.setAlreadyUpdated(true);
 
-            //player places his last tower or only three groups of islands are left
+            if(clientHandler.getGame().getBag().size() > 0){ //game ends at this point only if player places his last tower or only three groups of islands are left
             TowerColour winner = clientHandler.getGame().endGame();
             if (winner != null ){
                 Player winnerPlayer = clientHandler.getGame().getPlayers().stream().filter(p->p.getTeam().equals(winner)).findFirst().get();
                 for (ClientHandler player: clientHandler.sameMatchPlayers()) {
                     player.setGame(null);
-                    alert(player,"The winner is player: " + winnerPlayer.getPlayer_id()+"!");
+                    alert(player,"The winner is player: " + winnerPlayer.getPlayer_id()+"! You can now start a new game");
                 }
+                response.setArgString("The winner is player: " + winnerPlayer.getPlayer_id()+"! You can now start a new game");
             }
+        }
 
 
         } catch (GamePhase.WrongTurn e) {
@@ -108,8 +110,8 @@ public class ActionController  {
             } boolean isLastPlayer =
                             gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1; // checks if all players have already played this phase
             if (isLastPlayer) {
-                if(lastRound) {
-                    response = endGame(clientHandler.getGame(),currentGamePhase, clientHandler);
+                if (lastRound) {
+                    response = endGame(clientHandler.getGame(), clientHandler);
                     for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
                         handler.setGame(null);
                         if(!handler.equals(clientHandler)){
@@ -117,7 +119,6 @@ public class ActionController  {
                         }
                     }
                     return response;
-
                 } else {
                     sort(currentGamePhase.getCurrentPlayers(),
                             Comparator.comparingInt((ClientHandler a) -> a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue())); //players sorted by previous assistant value
@@ -244,10 +245,6 @@ public class ActionController  {
         if(game.getClouds().get(request.getArgNum1()).getStudents().size()==0){
             throw new ActionPhase.WrongAction("Can't choose this cloud, it has been already chosen by another player");
         } else {
-            if(client.getGame().getBag().size()==0)      {
-                output.setArgString("No students available");
-                return output;
-            }
             game.chooseCloud(game.getClouds().get(request.getArgNum1()), game.getPlayer(client.getUsername()));
                 output.setArgString("Students moved to your School Board");
 
@@ -275,11 +272,11 @@ public class ActionController  {
     private static void setCharacters(List<Player> players){
         players.forEach(player -> player.setPlayedCharacterNumber(-1));
     }
-    private static Message endGame(Game current_game, GamePhase currentGamePhase, ClientHandler client) {
-        Message output= null;
+    private static Message endGame(Game current_game, ClientHandler client) {
+        Message output= new Message("string");
         TowerColour winnerColour = client.getGame().endGame();
         Player winner = current_game.getPlayers().stream().filter(p -> p.getTeam().equals(winnerColour)).findFirst().get();
-        output.setArgString("The winner is player: "+ winner.getPlayer_id()+"!");
+        output.setArgString("The winner is player: "+ winner.getPlayer_id()+"! You can now start a new game");
         return output;
     }
 
