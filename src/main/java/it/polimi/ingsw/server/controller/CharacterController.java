@@ -13,18 +13,19 @@ public class CharacterController {
     public static Message processChar0(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         LinkedList<Student> chosenStudent = new LinkedList<>();
-        int indexOfChosenStudent = parameters.getArgNum1();
+        int indexOfChosenStudent = parameters.getArgNum2(0);
+        if( indexOfChosenStudent >= chosenCharacter.getStudents().size() ) throw new Exception("Not existing island, please retry");
         chosenStudent.add(chosenCharacter.getStudents().get(indexOfChosenStudent));
         try {
-            int islandNumber = parameters.getArgNum2(0);
-            Island chosenIsland = game.getArchipelago().get(islandNumber); //get chosen island
+            int islandNumber = parameters.getArgNum2(1);
             if( islandNumber >= game.getArchipelago().size()) throw new Exception("Not existing island, please retry");
+            Island chosenIsland = game.getArchipelago().get(islandNumber); //get chosen island
             response.setArgString("Character played successfully, student placed on island "+islandNumber);
             game.playCharacter(chosenCharacter, player,chosenStudent,null,chosenIsland,null);
         } catch (NoStudentsException ex) {
             response.setArgString("No students on this card");
         } catch (Exception e) {
-            throw  new Exception(e.getMessage()); // "Not enough coins" exception
+            throw new Exception(e.getMessage()); // "Not enough coins" exception
         }
         return response;
     }
@@ -152,7 +153,8 @@ public class CharacterController {
     public static Message processChar10(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         LinkedList<Student> chosenStudent = new LinkedList<>();
-        int indexOfChosenStudent = parameters.getArgNum1();
+        int indexOfChosenStudent = parameters.getArgNum2(0);
+        if( indexOfChosenStudent >= chosenCharacter.getStudents().size() ) throw new Exception("Not existing student, please retry");
         chosenStudent.add(chosenCharacter.getStudents().get(indexOfChosenStudent));
         try {
             game.playCharacter(chosenCharacter, player,chosenStudent,null,null,null);
