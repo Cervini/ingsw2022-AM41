@@ -344,6 +344,7 @@ public class Game{
         }else{
             throw new Exception("Not enough coins to play Character " + playedCharacter.getCharacterNumber() + ". You need " + (playedCharacter.getCost() - player.getCoins()) + " more to play it!");
         }
+        mergeCheck();
     }
 
     /**Used to find the character that holds the "noEntry" cards, it works only if there's one
@@ -404,7 +405,7 @@ public class Game{
         }
     }
 
-    //TODO test & comment
+    //Used to check if there are two or more islands close to each other with the same tower on them
     private void mergeCheck() {
         for(int i = 0; i < archipelago.size() - 1; i++){
             if(archipelago.get(i).getColour() != null && archipelago.get(i+1).getColour() != null) {

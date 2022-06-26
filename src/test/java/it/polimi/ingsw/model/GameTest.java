@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.awt.event.HierarchyBoundsAdapter;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -1263,5 +1264,49 @@ class GameTest {
         game.moveMotherNature(1, game.getPlayers().getFirst());
 
         assertEquals(11, game.getArchipelago().size());
+    }
+
+    @Test
+    void mergeTest11() throws Exception{
+        Game game = new Game(2);
+        Character character = new Character(2);
+
+        if(!game.getSelectedCharacters().contains(character)){
+            game.getSelectedCharacters().removeFirst();
+            game.getSelectedCharacters().add(character);
+        }
+        game.getPlayers().getFirst().playAssistant(2);
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getArchipelago().get(0).setTower(game.getPlayers().getFirst().getTeam());
+        game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
+        game.moveMotherNature(2, game.getPlayers().getFirst());
+        game.getPlayers().getFirst().giveCoins(10);
+        game.playCharacter(character, game.getPlayers().getFirst(), null, null, game.getArchipelago().get(1), null);
+
+        assertEquals(11, game.getArchipelago().size());
+    }
+
+    @Test
+    void mergeTest12() throws Exception{
+        Game game = new Game(2);
+
+        game.getPlayers().getFirst().playAssistant(2);
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.checkOwnership();
+        game.getArchipelago().get(0).setTower(game.getPlayers().getFirst().getTeam());
+        game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(1).putStudent(new Student(Colour.RED));
+        game.getArchipelago().get(2).setTower(game.getPlayers().getFirst().getTeam());
+        game.moveMotherNature(1, game.getPlayers().getFirst());
+
+        assertEquals(10, game.getArchipelago().size());
     }
 }
