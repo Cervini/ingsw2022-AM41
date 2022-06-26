@@ -51,7 +51,6 @@ public class GameController extends BaseController {
             //sends to client turns order
             client.updateStatus();
             for (ClientHandler handler : first_player.sameMatchPlayers()) {
-                handler.getGame().getPlayer(handler.getUsername()).giveCoins(4);
                 handler.getCurrentGamePhase().setTurnOrder(turnOrder);
                 handler.setGameAlreadyStarted(true);
                 if(!handler.equals(client)){

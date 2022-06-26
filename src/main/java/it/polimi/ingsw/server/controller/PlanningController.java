@@ -3,12 +3,15 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Assistant;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.server.ClientHandler;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.server.controller.ActionController.isLastRound;
+import static it.polimi.ingsw.server.controller.ActionController.updateTurns;
 import static it.polimi.ingsw.server.controller.GameController.alert;
 import static java.util.Collections.sort;
 public class PlanningController extends BaseController {
@@ -37,19 +40,9 @@ public class PlanningController extends BaseController {
 
             boolean canStartActionPhase = allPlayersHavePlayedAnAssistant(clientHandler);
 
-            if(!canStartActionPhase){
-                int previousPlayerIdx = clientHandler.getCurrentGamePhase().getTurnOrder().indexOf(clientHandler.getUsername());
-                String clientHandlerOfNextPlayer = clientHandler.getCurrentGamePhase().getTurnOrder().get(previousPlayerIdx+1);
-                clientHandler.updateStatus();
-                for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
-                    if(!handler.equals(clientHandler)){
-                        alert(handler, "Next player is: "+clientHandlerOfNextPlayer);
-                    }
+            if (!canStartActionPhase ) {
+                response = updateTurns(clientHandler);
             }
-                clientHandler.setAlreadyUpdated(true);
-                response.setArgString("Next player is: "+clientHandlerOfNextPlayer);}
-
-
             if (canStartActionPhase) {
                 List<ClientHandler> sameMatchPlayers = clientHandler.sameMatchPlayers();
 
@@ -94,24 +87,27 @@ public class PlanningController extends BaseController {
     private static Message processPlay(Message message, ClientHandler client) throws Exception {
         Message output = new Message("string"); // prepare the output message
         int index = message.getArgNum1(); // get the argument from the client's message
-        try {
-            Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(index); // get the Assistant that the player wants to play
-            if (client.getGame().getPlayer(client.getUsername()).getAssistants().size() == 1) {
-                playAssistant(client, index, output); // if the player has only one assistant play it (no need to make checks)
-            } else {
-                if (uniqueAssistant(client, played)) { // if the assistant is unique between the already played
-                    playAssistant(client, index, output); // play the assistant
+
+            try {
+                Assistant played = client.getGame().getPlayer(client.getUsername()).getAssistants().get(index); // get the Assistant that the player wants to play
+                if (client.getGame().getPlayer(client.getUsername()).getAssistants().size() == 1) {
+                    playAssistant(client, index, output); // if the player has only one assistant play it (no need to make checks)
+                    ActionController.setLastRound(true); //at the end of this round checkWinner will be called
                 } else {
-                    if (!checkAllUnique(client)) { // if it's not unique check if any of the other assistants is playable
-                        playAssistant(client, index, output); // if not still play the assistant
+                    if (uniqueAssistant(client, played)) { // if the assistant is unique between the already played
+                        playAssistant(client, index, output); // play the assistant
                     } else {
-                        throw new Exception("Another player has already played this Assistant, try another"); // layer can play one other assistant without trouble
+                        if (!checkAllUnique(client)) { // if it's not unique check if any of the other assistants is playable
+                            playAssistant(client, index, output); // if not still play the assistant
+                        } else {
+                            throw new Exception("Another player has already played this Assistant, try another"); // layer can play one other assistant without trouble
+                        }
                     }
                 }
+            } catch (IndexOutOfBoundsException e) {
+                throw new Exception("This Assistant doesn't exist.");
             }
-        } catch (IndexOutOfBoundsException e) {
-           throw new Exception("This Assistant doesn't exist.");
-        }
+
         return output;
     }
 
@@ -150,6 +146,7 @@ public class PlanningController extends BaseController {
         try {
             client.getGame().getPlayer(client.getUsername()).playAssistant(index);
             output.setArgString("Assistant played");
+            if(isLastRound()) output.setArgString("Last assistant played, this is the last round");
         } catch (Exception e) {
             throw new Exception("Can't play this Assistant.");
         }
@@ -167,6 +164,7 @@ public class PlanningController extends BaseController {
         sameMatchPlayers.stream()
                 .forEach(player -> player.setCurrentGamePhase(gamePhase));
     }
+
 
 }
 

@@ -39,7 +39,7 @@ public class GamePhase {
         validateCorrectActionGamePhase("Method validateMoveMotherNature cannot be called from GamePhase parent class");
     }
 
-    public void validateChooseCloud(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction, GameEndedException, ActionPhase.endingGame {
+    public void validateChooseCloud(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction, GameEndedException {
         validateCorrectActionGamePhase("Method validateChooseCloud cannot be called from GamePhase parent class");
     }
 
