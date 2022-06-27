@@ -104,7 +104,7 @@ public class GameController extends BaseController {
             client.getOut().writeObject(alert);
             client.getOut().flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("A user has logged out");
         }
     }
 

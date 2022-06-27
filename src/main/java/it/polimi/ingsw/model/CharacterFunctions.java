@@ -53,7 +53,7 @@ public class CharacterFunctions {
     }
 
     //Function of character 8
-    public Game checkInfluenceWithBonus(Game game, Player player) throws Exception{
+    public Game checkInfluenceWithBonus(Game game, Player player) {
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){
@@ -66,7 +66,7 @@ public class CharacterFunctions {
     }
 
     //Function of character 9
-    public Game checkInfluenceWithoutColour(Game game, Colour colourToExclude) throws Exception{
+    public Game checkInfluenceWithoutColour(Game game, Colour colourToExclude) {
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
         if(!game.getArchipelago().get(islandIndex).getNo_entry()){

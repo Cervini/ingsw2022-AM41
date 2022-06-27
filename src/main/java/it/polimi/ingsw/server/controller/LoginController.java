@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.ClientHandler;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 
 import static it.polimi.ingsw.server.controller.GameController.alert;
 
@@ -46,14 +47,13 @@ public class LoginController {
         return output;
     }
 
-
     public static Message processLogout(ClientHandler client) {
         Message output = new Message("string");
 
         client.setUsername("new client");
-        client.getClients().remove(client);
         output.setArgString("Logout successful");
 
+        try{
         if(!client.isAvailable()){
             for(ClientHandler player: client.sameMatchPlayers()){
                 player.setGame(null);
@@ -63,10 +63,16 @@ public class LoginController {
                     player.getOut().writeObject(alert);
                     player.getOut().flush();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         }
+        client.getClients().remove(client);
+        } catch(Exception e){
+            System.out.println("All users have logged out");
+        }
+
+
         return output;
         }
 

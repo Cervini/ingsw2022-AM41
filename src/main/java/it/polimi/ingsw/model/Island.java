@@ -160,7 +160,7 @@ public class Island implements Tile, Serializable {
     }
 
     //Same function as above, but it gets called when the power of character 8 is active
-    public void conquerCheck(LinkedList<Player> players, Player cardPlayer, int additionalInfluence) throws Exception{
+    public void conquerCheck(LinkedList<Player> players, Player cardPlayer, int additionalInfluence) {
         int[] influenceArray = new int[players.size()];
         int cardPlayerIndex;
         int maxIndex = 0;
@@ -180,7 +180,7 @@ public class Island implements Tile, Serializable {
     }
 
     //Same function as above, but it gets called when the power of character 9 is active
-    public void conquerCheck(LinkedList<Player> players, Colour colourToExclude) throws Exception{
+    public void conquerCheck(LinkedList<Player> players, Colour colourToExclude) {
         int[] influenceArray = new int[players.size()];
         int maxIndex = 0;
         influenceArray[0] = influence(players.get(0), colourToExclude);

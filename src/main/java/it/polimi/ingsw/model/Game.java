@@ -392,7 +392,6 @@ public class Game{
 
     //Used to run influence check with a character effect active and change the owner of the island if possible
     private void specialCheck() {
-        try {
             for(Character character: selectedCharacters){
                 if(character.getCharacterNumber() == characterPlayer().getPlayedCharacterNumber()){
                     character.activateEffect(this);
@@ -400,9 +399,6 @@ public class Game{
                     return;
                 }
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     //Used to check if there are two or more islands close to each other with the same tower on them

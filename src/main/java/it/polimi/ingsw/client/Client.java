@@ -6,7 +6,6 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
 public class Client {
     private final String SERVER_IP ;
     private final int SERVER_PORT;
@@ -17,7 +16,7 @@ public class Client {
     protected static boolean serverWasOffline = true;
 
     public Client (String[] args) {
-        if (args == null || args.length <2 ){ //check right number of arguments
+        if (args == null || args.length <2 ) { //check right number of arguments
             throw new IllegalArgumentException("To start client you have to set ip and port number");
         }
         SERVER_IP = args[0]; //set the first argument as SERVER_IP

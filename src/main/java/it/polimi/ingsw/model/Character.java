@@ -376,7 +376,7 @@ public class Character implements Serializable {
      * the right time to activate these characters' effect
      * @param game is the current situation of the match that is going to be modified by the character
      */
-    public Game activateEffect(Game game) throws Exception{
+    public Game activateEffect(Game game){
         switch (characterNumber){
             case 1 -> {
                 game = characterFunctions.checkInfluenceWithModifiedBoard(game, memoryPlayer);

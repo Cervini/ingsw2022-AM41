@@ -160,6 +160,7 @@ public class ClientHandler implements Runnable{
         Message status = new Message("status");
         status.setStandard(true);
         GamePack gamePack = new GamePack(game, this);
+        try{
         for(ClientHandler clientHandler: sameMatchPlayers()){
             //Send Game status if the client is currently in a game
             gamePack.updateGamePack(game, clientHandler);
@@ -169,9 +170,13 @@ public class ClientHandler implements Runnable{
                 clientHandler.getOut().flush();
                 clientHandler.getOut().reset();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("A user has logged out");
+
             }
         }
+        }  catch(Exception e){
+        System.out.println("users have logged out");
+    }
     }
 
     /*public String onePlayerLeft(ClientHandler player) throws IOException {
