@@ -186,7 +186,7 @@ public class Message implements Serializable {
      * @param args String to parse
      */
     private void placeCase(List<String> args) {
-        if(args.size()<4){
+        if(args.size()<5){
             System.out.println("Not enough arguments");
         } else {
             this.from_tile = toFromTileEnum(args.get(1));
@@ -226,6 +226,8 @@ public class Message implements Serializable {
      */
     private void oneIntCase(List<String> args) {
         if(args.size()>1){
+            if(args.size()>2)
+                System.out.println("Excess arguments were ignored");
             try{
                 setArgNum1((Integer.parseInt(args.get(1))));
                 this.standard = true;
@@ -254,6 +256,7 @@ public class Message implements Serializable {
     private void oneStringCase(List<String> args) {
         if(args.size()>1) {
             this.argString = args.get(1);
+
             this.standard = true;
         }
         else {

@@ -51,7 +51,7 @@ public class PlanningController extends BaseController {
                 setGamePhaseForAllPlayers(sameMatchPlayers, actionPhase);
                 List <String> turnOrder = sameMatchPlayers.stream().map(ClientHandler::getUsername).toList();
                 //converts list of strings to a string
-                String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
+                String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(", "));
                 //sends to client turns order
                 clientHandler.updateStatus();
                 List<ClientHandler> players = clientHandler.sameMatchPlayers();
@@ -59,7 +59,7 @@ public class PlanningController extends BaseController {
                         .forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
                 players.remove(clientHandler);
                 players
-                        .forEach(p-> alert(p, "Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
+                        .forEach(p-> alert(p, "Action Phase started! Turns order: "+ turns +". First of all move three \n  students from your entrance to an island or to the dining room \n " +
                         "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)"));
                 clientHandler.setAlreadyUpdated(true);
                 response.setArgString("Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
