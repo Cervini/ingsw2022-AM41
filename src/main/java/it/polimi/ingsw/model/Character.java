@@ -146,6 +146,7 @@ public class Character implements Serializable {
      * @param studentList2 it's function depends on whether the characterNumber is 6 or 9
      * @param island is the island on which the character effect will have consequences
      * @param colour is the colour selected by the player that the character will consider differently
+     * @return value is  the modified situation of the game
      */
     public Game effect(Game game, Player player, LinkedList<Student> studentList1, LinkedList<Student> studentList2, Island island, Colour colour) throws Exception{
         Game modifiedGame = null;
@@ -202,6 +203,7 @@ public class Character implements Serializable {
      * @param game is the current situation of the match that is going to be modified by the character
      * @param selectedStudent is the student that has to be moved from this character to the island
      * @param island is the island to which selectedStudent is going to be moved
+     * @return value is  the modified situation of the game
      */
     private Game effect1(Game game, Student selectedStudent, Island island){
         int indexOfIslandToEdit;
@@ -224,6 +226,7 @@ public class Character implements Serializable {
      * @requires game != null && island != null
      * @param game is the current situation of the match that is going to be modified by the character
      * @param island island on which it has to be calculated the influence, even if mother nature is not there
+     * @return value is  the modified situation of the game
      */
     private Game effect3(Game game, Island island) {
         game = characterFunctions.checkInfluenceOnSpecificIsland(game, island);
@@ -236,6 +239,7 @@ public class Character implements Serializable {
      *          (\old(player.getFace_up_assistant().getMovement_points()) + 2)
      * @param game is the current situation of the match that is going to be modified by the character
      * @param player is the player that activated the effect of the character
+     * @return value is  the modified situation of the game
      */
     private Game effect4(Game game, Player player){
         int playerIndex = game.getPlayers().indexOf(player);
@@ -275,6 +279,7 @@ public class Character implements Serializable {
      * @param studentsSelectedFromCharacter students that are going to be moved from this character to
      *                                      the player's entrance
      * @throws Exception if studentsSelectedFromCharacter and studentsSelectedFromPlayer are not the same size
+     * @return value is  the modified situation of the game
      */
     private Game effect7(Game game, Player player, LinkedList<Student> studentsSelectedFromPlayer, LinkedList<Student> studentsSelectedFromCharacter) throws Exception{
         int playerIndex;
@@ -318,6 +323,7 @@ public class Character implements Serializable {
      * @param player is the player that activated the effect of the character
      * @param studentsInEntrance students to move from the player's entrance to its dining room
      * @param studentsInDiningRoom students to move from the player's dining room to its entrance
+     * @return value is  the modified situation of the game
      */
     private Game effect10(Game game, Player player, LinkedList<Student> studentsInEntrance, LinkedList<Student> studentsInDiningRoom) throws Exception{
         int playerIndex;
@@ -344,6 +350,7 @@ public class Character implements Serializable {
      * @param game is the current situation of the match that is going to be modified by the character
      * @param player is the player that activated the effect of the character
      * @param student is the student to be moved from this character to the player's dining room
+     * @return value is  the modified situation of the game
      */
     private Game effect11(Game game, Player player, Student student) throws Exception{
         students.remove(student);
@@ -357,6 +364,7 @@ public class Character implements Serializable {
      * @ensures game.getBag().size() >= \old(game.getBag().size())
      * @param game is the current situation of the match that is going to be modified by the character
      * @param colour is the colour of the 3 students that will be removed from each player's dining room
+     * @return value is  the modified situation of the game
      */
     private Game effect12(Game game, Colour colour) throws Exception{
         for(Player playerToCheck: game.getPlayers()) {
@@ -375,6 +383,7 @@ public class Character implements Serializable {
      * at another time during the game phase. This function is automatically called by the game when it's
      * the right time to activate these characters' effect
      * @param game is the current situation of the match that is going to be modified by the character
+     * @return value is  the modified situation of the game
      */
     public Game activateEffect(Game game){
         switch (characterNumber){

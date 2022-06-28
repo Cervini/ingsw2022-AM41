@@ -7,8 +7,16 @@ public class CharacterFunctions {
     private static final int additionalInfluence = 2;
     private static final int noEntryCharacterNumber = 4;
 
-
-    //Function of character 2
+    /**Function of character 2
+     * @requires game != null && player != null
+     * @ensures \forall int i; i>= 0 && i < game.getPlayers().size();
+     *              \old(game.getPlayers().get(i).getOwned_professor()).equals(game.getPlayers().get(i).getOwned_professor()) &&
+     *          game.getPlayers().size() == \old(game.getPlayers().size()) &&
+     *          game.getBag().size() == \old(game.getBag().size())
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param player is the player that activated the effect of the character
+     * @return value is  the modified situation of the game
+     */
     public Game checkInfluenceWithModifiedBoard(Game game, Player player) {
         ArrayList<SchoolBoard> schoolBoardsBackup = new ArrayList<>();
         int islandIndex;
@@ -25,7 +33,15 @@ public class CharacterFunctions {
         return game;
     }
 
-    //Function of character 3
+    /**Function of character 3
+     * @requires game != null && island != null
+     * @ensures game.getPlayers().size() == \old(game.getPlayers().size()) &&
+     *          game.getBag().size() == \old(game.getBag().size()) &&
+     *          game.getArchipelago().size() <= \old(game.getArchipelago().size())
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param island on which it has to be calculated the influence, even if mother nature is not there
+     * @return value is  the modified situation of the game
+     */
     public Game checkInfluenceOnSpecificIsland(Game game, Island island) {
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(island);
@@ -38,7 +54,14 @@ public class CharacterFunctions {
         return game;
     }
 
-    //Function of character 6
+    /**Function of character 6
+     * @requires game != null
+     * @ensures game.getPlayers().size() == \old(game.getPlayers().size()) &&
+     *          game.getBag().size() == \old(game.getBag().size()) &&
+     *          game.getArchipelago().size() <= \old(game.getArchipelago().size())
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @return value is  the modified situation of the game
+     */
     public Game checkInfluenceWithoutTowers(Game game) {
         int islandIndex;
         boolean noTowers = true;
@@ -52,7 +75,15 @@ public class CharacterFunctions {
         return game;
     }
 
-    //Function of character 8
+    /**Function of character 8
+     * @requires game != null && player != null
+     * @ensures game.getPlayers().size() == \old(game.getPlayers().size()) &&
+     *          game.getBag().size() == \old(game.getBag().size()) &&
+     *          game.getArchipelago().size() <= \old(game.getArchipelago().size())
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param player is the player that activated the effect of the character
+     * @return value is  the modified situation of the game
+     */
     public Game checkInfluenceWithBonus(Game game, Player player) {
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
@@ -65,7 +96,16 @@ public class CharacterFunctions {
         return game;
     }
 
-    //Function of character 9
+    /**Function of character 9
+     * @requires game != null && colourToExclude != null
+     * @ensures game.getPlayers().size() == \old(game.getPlayers().size()) &&
+     *          game.getBag().size() == \old(game.getBag().size()) &&
+     *          game.getArchipelago().size() <= \old(game.getArchipelago().size())
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param colourToExclude is the colour selected by the player that will not affect the influence calculations
+     *                        during this round
+     * @return value is  the modified situation of the game
+     */
     public Game checkInfluenceWithoutColour(Game game, Colour colourToExclude) {
         int islandIndex;
         islandIndex = game.getArchipelago().indexOf(game.motherNaturePosition());
@@ -78,7 +118,17 @@ public class CharacterFunctions {
         return game;
     }
 
-    //Used by checkInfluenceWithModifiedBoard to edit the SchoolBoards as Character 2 requires
+    /**Used by checkInfluenceWithModifiedBoard to edit the SchoolBoards as Character 2 requires
+     * @requires game != null && cardPlayer != null
+     * @ensures \forall Player player; game.getPlayers().contains(player);
+     *              !player.equals(cardPlayer) => \forall Colour colour; ;
+     *                  (playerToCheck.hasProfessor(colour) && !game.getPlayers().get(cardPlayerIndex).hasProfessor(colour)
+     *                  && playerToCheck.getSchool().getDining_room(colour).getStudents() <= cardPlayer.getSchool().getDining_room(colour).getStudents())
+     *                  => cardPlayer.hasProfessor(colour)
+     * @param game is the current situation of the match that is going to be modified by the character
+     * @param cardPlayer is the player that activated the effect of the character
+     * @return value is  the modified situation of the game
+     */
     private Game changeOwnership(Game game, Player cardPlayer){
         int cardPlayerIndex;
         Professor professorToRemove;
@@ -96,7 +146,12 @@ public class CharacterFunctions {
         return game;
     }
 
-    //Used to find the character that holds the "noEntry" cards, it works only if there's one
+    /**Used to find the character that holds the "noEntry" cards, it works only if there's one
+     * @requires characters != null
+     * @ensures characters.equals(\old(characters.size()))
+     * @param characters is the list of selected characters for this game
+     * @return value is the index of the character that has the power to place no entry cards
+     */
     private int findNoEntryCharacter(LinkedList<Character> characters){
         for(Character characterToCheck: characters){
             if(characterToCheck.getCharacterNumber() == noEntryCharacterNumber){

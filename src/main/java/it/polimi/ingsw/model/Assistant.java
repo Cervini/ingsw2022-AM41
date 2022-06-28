@@ -46,7 +46,7 @@ public class Assistant implements Comparable<Assistant>, Serializable {
     }
 
     /**
-     * increases the max movement points by two when character 4 is played
+     * Increases the max movement points by two when character 4 is played
      */
     public void add2MovementPoints(){
         movement_points = movement_points + 2;
