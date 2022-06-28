@@ -1,23 +1,22 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.server.ClientHandler;
 
 import java.util.List;
 
 public class GamePhase {
 
-    private final Game current_game;
-    private Boolean planning_phase = false;
-    private Boolean action_phase = false;
-    private List<ClientHandler> current_players;
+    private final Game currentGame;
+    private Boolean planningPhase = false;
+    private Boolean actionPhase = false;
+    private List<ClientHandler> currentPlayers;
     private boolean gameEnded = false;
     private List<String> turnOrder= null;
 
     public GamePhase(Game game, List<ClientHandler> players) {
-        current_game = game;
-        current_players = players;
+        currentGame = game;
+        currentPlayers = players;
     }
 
     public void validatePlayAssistant(ClientHandler player) throws PlanningPhase.WrongPhaseException, PlanningPhase.WrongTurn, GameEndedException {
@@ -59,26 +58,26 @@ public class GamePhase {
     }
 
     public Boolean isPlanningPhase() {
-        return planning_phase;
+        return planningPhase;
     }
 
     public Boolean isActionPhase() {
-        return action_phase;
+        return actionPhase;
     }
 
     public void setPlanningPhase(Boolean isPlanningPhase) {
-        this.planning_phase = isPlanningPhase;
+        this.planningPhase = isPlanningPhase;
     }
 
     public void setActionPhase(Boolean isActionPhase) {
-        this.action_phase = isActionPhase;
+        this.actionPhase = isActionPhase;
     }
 
     public List<ClientHandler> getCurrentPlayers() {
-        return current_players;
+        return currentPlayers;
     }
     public void setCurrentPlayers(List<ClientHandler> current_players) {
-        this.current_players= current_players ;
+        this.currentPlayers = current_players ;
     }
 
     public static class WrongPhaseException extends Exception {
@@ -111,8 +110,8 @@ public class GamePhase {
         this.gameEnded = gameEnded;
     }
 
-    public Game getCurrent_game() {
-        return current_game;
+    public Game getCurrentGame() {
+        return currentGame;
     }
 
     public void setTurnOrder(List<String> turnOrder) {

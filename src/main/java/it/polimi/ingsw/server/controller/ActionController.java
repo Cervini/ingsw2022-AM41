@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 public class ActionController  {
 
-    private static boolean isLastRound = false;
     public static Message place(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
         Message response = new Message("string");
         if (clientHandler.getGame() == null){
@@ -105,12 +104,12 @@ public class ActionController  {
                 gamePhase.validateChooseCloud(clientHandler); // check if action is allowed
                 response = processChoose(request, clientHandler); // action
             }
-            catch (ActionPhase.endingGame e) { //exception thrown by processChoose, sets last round true since there are no more students available
-                setIsLastRound(true);
+            catch (ActionPhase.EndingGame e) { //exception thrown by processChoose, sets last round true since there are no more students available
+                clientHandler.getGame().setLastRound(true);
             } boolean isLastPlayer =
                             gamePhase.getCurrentPlayers().indexOf(clientHandler) == gamePhase.getCurrentPlayers().size() - 1; // checks if all players have already played this phase
             if (isLastPlayer) {
-                if (isLastRound) { //players have played all assistants or there are no available students
+                if (clientHandler.getGame().isLastRound()) { //players have played all assistants or there are no available students
                     response = endGame(clientHandler.getGame(), clientHandler);
                     List<ClientHandler> players = clientHandler.sameMatchPlayers();
                     players
@@ -204,7 +203,7 @@ public class ActionController  {
      * @param client  client that sent the request to start the game
      * @return a new STRING message containing the action result
      */
-    private static Message processChoose(Message request, ClientHandler client) throws ActionPhase.WrongAction, ActionPhase.endingGame {
+    private static Message processChoose(Message request, ClientHandler client) throws ActionPhase.WrongAction, ActionPhase.EndingGame {
         Message output = new Message("string");
         Game game = client.getGame();
         boolean isLastRound =  client.getGame().getBag().size() == 0;
@@ -212,7 +211,7 @@ public class ActionController  {
             throw new ActionPhase.WrongAction("This cloud doesn't exist, type a number between 0 and "+(game.getClouds().size()-1));
         }
         if(isLastRound){
-            throw new ActionPhase.endingGame("there are no students available");
+            throw new ActionPhase.EndingGame("there are no students available");
         }
         if( game.getClouds().get(request.getArgNum1()).getStudents().size() == 0 ){
             throw new ActionPhase.WrongAction("Can't choose this cloud, it has been already chosen by another player");
@@ -261,9 +260,14 @@ public class ActionController  {
         output.setArgString("Next player is: "+clientHandlerOfNextPlayer);
         for (ClientHandler handler : clientHandler.sameMatchPlayers()) {
             handler.setAlreadyUpdated(true);
-            if (isLastRound() && !handler.equals(clientHandler)) {
+            if (clientHandler.getGame().isLastRound() && !handler.equals(clientHandler)) {
+                if(clientHandler.getGame().getBag().size() == 0){
+                    alert(handler, "Next player is: "+clientHandlerOfNextPlayer+". This is the last round since there are no students left.");
+                    output.setArgString("Next player is: "+clientHandlerOfNextPlayer+". This is the last round since there are no students left.");
+                } else {
                     alert(handler, "Next player is: "+clientHandlerOfNextPlayer+". This is the last round");
                     output.setArgString("Next player is: "+clientHandlerOfNextPlayer+". This is the last round");
+                }
             } else if (!handler.equals(clientHandler)) {
                     alert(handler, "Next player is: "+clientHandlerOfNextPlayer);
             }
@@ -306,13 +310,7 @@ public class ActionController  {
                 .forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
         return output;
     }
-    public static boolean isLastRound() {
-        return isLastRound;
-    }
 
-    public static void setIsLastRound(boolean isLastRound) {
-        ActionController.isLastRound = isLastRound;
-    }
 
 
 }

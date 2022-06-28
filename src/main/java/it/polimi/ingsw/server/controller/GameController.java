@@ -185,7 +185,7 @@ public class GameController extends BaseController {
         if (existPlayerBeforeMeThatHaveToPlay) { // there are players before me
             throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
         } else if(client.getCurrentGamePhase().isActionPhase()) {
-            if(ActionPhase.getCurrentPlayerNextAction().getPlayer() != player)
+            if(client.getGame().getCurrentPlayerNextAction().getPlayer() != player)
                 throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
             }
 

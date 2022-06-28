@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.server.controller.PlayerAction;
+
 import java.util.*;
 
 public class Game{
@@ -13,6 +15,8 @@ public class Game{
     private final LinkedList<Character> selectedCharacters;
     private final GameConclusionChecks conclusionChecks;
     private Player activePlayer;
+    private boolean isLastRound = false;
+    private PlayerAction currentPlayerNextAction;
     private final List<Character> characters;
 
     // constants
@@ -459,5 +463,20 @@ public class Game{
 
     public Player getActivePlayer() {
         return activePlayer;
+    }
+
+    public boolean isLastRound() {
+        return isLastRound;
+    }
+
+    public void setLastRound(boolean lastRound) {
+        isLastRound = lastRound;
+    }
+    public PlayerAction getCurrentPlayerNextAction() {
+        return currentPlayerNextAction;
+    }
+
+    public void setCurrentPlayerNextAction(PlayerAction currentPlayerNextAction) {
+        this.currentPlayerNextAction = currentPlayerNextAction;
     }
 }
