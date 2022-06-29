@@ -14,7 +14,7 @@
 | CLI            | 🟢 |
 | Multiple games | 🟢 |
 | Persistence    | 🔴 |
-| 12 Characters  | 🟡 |
+| 12 Characters  | 🟢 |
 | 4 Players game | 🟢 |
 
 🔴
