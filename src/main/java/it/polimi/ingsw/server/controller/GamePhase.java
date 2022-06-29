@@ -35,7 +35,6 @@ public class GamePhase {
         if (gameEnded){
             throw new GameEndedException("Game already ended");
         }
-        // TODO: validare che il player che sta facendo la mossa non e' unico presente nel gioco in questo momento
         if (this instanceof ActionPhase) {
             throw new PlanningPhase.WrongPhaseException();
         }

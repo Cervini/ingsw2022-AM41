@@ -35,7 +35,7 @@ public class PlayerAction {
     /**
      *sets next action for the current player
      */
-    public void setNextAction() {
+    public void setNextAction() {//predefined sequence of action during action phase
         this.action = this.action == ActionType.MOVE_STUDENT ?
                 ActionType.MOVE_MOTHER_NATURE : ActionType.CHOOSE_CLOUD;
     }

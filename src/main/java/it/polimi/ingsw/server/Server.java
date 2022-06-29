@@ -15,14 +15,21 @@ public class Server {
     static String getMode(String[] args) {
         return "server";
     }
-
+    /**
+     *
+     * @param args passed by starting Application
+     * @return port chosen
+     */
     static int getPort(String[] args) {
         if (args == null || args.length < 1) throw new IllegalArgumentException("You have to set port number to start server");
         return Integer.parseInt(args[0]);
     }
 
 
-
+    /**
+     *constructor called by Application
+     * @param args passed once Application has started
+     */
     public Server(String[] args) {
         String mode = getMode(args);
         if (mode == "server") {
@@ -32,7 +39,10 @@ public class Server {
     }
 
     private  final ExecutorService pool = Executors.newCachedThreadPool();
-
+    /**
+     *accepts new connections and puts clientThread in a pool
+     * @param portNumber chosen once Application starts
+     */
      void startServer(int portNumber) {
         System.out.println("starting server on port " + portNumber);
         ServerSocket serverSocket = null;

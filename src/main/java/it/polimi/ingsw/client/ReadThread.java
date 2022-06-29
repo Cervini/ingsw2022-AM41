@@ -29,7 +29,7 @@ public class ReadThread implements Runnable{
                 }
             } catch (IOException | ClassNotFoundException e) {
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     //ex.printStackTrace();
                 }

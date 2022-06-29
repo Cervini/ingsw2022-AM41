@@ -36,32 +36,30 @@ public class PlanningController extends BaseController {
                     (ActionPhase) currentGamePhase :
                     (PlanningPhase) currentGamePhase;
             gamePhase.validatePlayAssistant(clientHandler); // check if move is allowed
-            response = processPlay(request, clientHandler); // process move
+            response = processPlay(request, clientHandler); // processes move by modifying the model
 
-            boolean canStartActionPhase = allPlayersHavePlayedAnAssistant(clientHandler);
+            boolean canStartActionPhase = allPlayersHavePlayedAnAssistant(clientHandler); //if all players have played an assistant action phase can start
 
-            if (!canStartActionPhase ) {
-                response = updateTurns(clientHandler);
+            if (!canStartActionPhase ) {//still planning phase
+                response = updateTurns(clientHandler);// all players are notified about turns
             }
             if (canStartActionPhase) {
                 List<ClientHandler> sameMatchPlayers = clientHandler.sameMatchPlayers();
 
                 sort(sameMatchPlayers,
                         Comparator.comparingInt((ClientHandler a) -> a.getGame().getPlayer(a.getUsername()).getFace_up_assistant().getValue()));
-                GamePhase actionPhase = new ActionPhase(clientHandler.getGame(), sameMatchPlayers);
-                setGamePhaseForAllPlayers(sameMatchPlayers, actionPhase);
-                List <String> turnOrder = sameMatchPlayers.stream().map(ClientHandler::getUsername).toList();
-                //converts list of strings to a string
-                String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(", "));
-                //sends to client turns order
+                GamePhase actionPhase = new ActionPhase(clientHandler.getGame(), sameMatchPlayers);//sorts players by the previously chosen assistant values
+                setGamePhaseForAllPlayers(sameMatchPlayers, actionPhase);//sets the same game phase for all players
+                List <String> turnOrder = sameMatchPlayers.stream().map(ClientHandler::getUsername).toList();//list with usernames of players previously sorted
+                String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(", ")); //converts list of strings to a string
                 clientHandler.updateStatus();
                 List<ClientHandler> players = clientHandler.sameMatchPlayers();
                 players
-                        .forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
+                        .forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));//sets same turns order for all players
                 players.remove(clientHandler);
                 players
                         .forEach(p-> alert(p, "Action Phase started! Turns order: "+ turns +". First of all move three \n  students from your entrance to an island or to the dining room \n " +
-                        "type 'PLACE [x] [DINING/ISLAND] [*/y]' (type 'HELP' if you need more info)"));
+                        "type 'PLACE [x] [DINING/ISLAND] [*/y]' (type 'HELP' if you need more info)"));//notifies all players about turns order
                 clientHandler.setAlreadyUpdated(true);
                 response.setArgString("Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
                         "type 'PLACE [x] [DINING/ISLAND] [*/y]' (type 'HELP' if you need more info)");
@@ -162,7 +160,7 @@ public class PlanningController extends BaseController {
      * @return boolean
      */
     private static boolean allPlayersHavePlayedAnAssistant(ClientHandler client) {
-        for (ClientHandler c : client.sameMatchPlayers()) {
+        for (ClientHandler c : client.sameMatchPlayers()) {//for all players involved in the same match
             if (c.getGame().getPlayer(c.getUsername()).getFace_up_assistant() == null) return false;
         }
         return true;

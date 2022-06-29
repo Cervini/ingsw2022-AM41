@@ -14,6 +14,10 @@ public class PingThread implements Runnable{
     private boolean isServerReachable;
     Ping ping = new Ping();
 
+    /**
+     * @param ipAddress passed by Client constructor
+     * @param portNumber passed by Client constructor
+     */
     public PingThread(String ipAddress, int portNumber){
         this.ipAddress = ipAddress;
         this.portNumber = portNumber;
@@ -24,7 +28,7 @@ public class PingThread implements Runnable{
         try{
             while (true){ //loop
                 isServerReachable = ping.ping(ipAddress, portNumber);
-                Thread.sleep(2000);
+                Thread.sleep(1000);
                 if (!isServerReachable) {
                     System.out.println("Server is not available, please wait..");
                     serverWasOffline = true;
@@ -38,6 +42,9 @@ public class PingThread implements Runnable{
         System.out.println("Server connection lost");
     }
 
+    /**
+     *starts pingThread
+     */
     public void start(){
         if(pingThread == null){
             pingThread = new Thread(this, threadName);

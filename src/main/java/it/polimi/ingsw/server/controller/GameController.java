@@ -35,8 +35,8 @@ public class GameController extends BaseController {
 
             Random randomIndex = new Random();
             ClientHandler first_player = client.sameMatchPlayers().get(randomIndex.nextInt(client.sameMatchPlayers().size()));//during the first round the first player is randomly chosen
-            Collections.swap(client.getClients(),0,client.getClients().indexOf(first_player));
-            first_player.isPlayerFirstMove = true;
+            Collections.swap(client.getClients(),0,client.getClients().indexOf(first_player));//swaps first player and player placed in first position of clients list
+            first_player.isPlayerFirstMove = true;//sets first player's first move true
             List<ClientHandler> sameMatchPlayers = first_player.sameMatchPlayers();
             GamePhase gamePhase = new PlanningPhase(game, sameMatchPlayers);
             setGamePhaseForAllPlayers(sameMatchPlayers, gamePhase); //all players have the same GamePhase attribute
@@ -45,16 +45,16 @@ public class GameController extends BaseController {
             output.setArgString("Game of " + available + " started");
             setAsPlaying(message.getArgNum1(), game, client.getClients()); // set the other available client as players
             //puts each player username in a list
-            List <String> turnOrder = client.sameMatchPlayers().stream().map(ClientHandler::getUsername).toList();
+            List <String> turnOrder = client.sameMatchPlayers().stream().map(ClientHandler::getUsername).toList();//create a list with turns order
             //converts list of strings to a string
-            String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
+            String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));//converts the previous list in a string (which is sent to the players)
             //sends to client turns order
             client.updateStatus();
             List<ClientHandler> players = client.sameMatchPlayers();
-            players.forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));
+            players.forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder));//sets same turns order for all players
             players.forEach(p-> p.setGameAlreadyStarted(true));
             players.remove(client);
-            players.forEach(p-> alert(p, "Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)"));
+            players.forEach(p-> alert(p, "Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)"));//notifies all players about turns order
             output.setArgString("Planning phase has started! Turns order: "+ turns +". You can now play an assistant\n  card, type PLAY [x] (type 'HELP' if you need more info)");
             client.setAlreadyUpdated(true);
             //client.sameMatchPlayers().forEach(p->p.getGame().getPlayer(p.getUsername()).giveCoins(4));
@@ -81,7 +81,7 @@ public class GameController extends BaseController {
     private static void setAsPlaying(int numberOfPlayers, Game game, List<ClientHandler> clients) {
         int count = 1;
         for (ClientHandler handler : clients) {
-            if (handler.isAvailable()) {
+            if (handler.isAvailable()) {//clients whose game is still null
                 handler.setGame(game);
                 game.getPlayers().get(count).setPlayer_id(handler.getUsername());
                 //alert(handler, "Game of " + numberOfPlayers + " started");
@@ -139,15 +139,15 @@ public class GameController extends BaseController {
      * @return message containing the action result
      */
     public static Message character(Message request, ClientHandler client, List clients) {
-        Message response = new Message("string");
-        int index = request.getArgNum1();
+        Message response = new Message("string");// set up output message
+        int index = request.getArgNum1();//gets index of chosen character (displayed)
         Player player = client.getGame().getPlayer(client.getUsername());
         Game game = client.getGame();
         try {
             validateTurn(client);
-            validateCharacter(index, player);
-            Character chosenCharacter = client.getGame().getSelectedCharacters().get(index); //get chosen Character
-            int characterIndex = chosenCharacter.getCharacterNumber();
+            validateCharacter(index, player);//validates if this character exists
+            Character chosenCharacter = client.getGame().getSelectedCharacters().get(index); //gets chosen Character
+            int characterIndex = chosenCharacter.getCharacterNumber();//gets corresponding index of chosen character
             switch (characterIndex){
                 case 0 -> response = CharacterController.processChar0(player, request,game, chosenCharacter);
                 case 1 -> response = CharacterController.processChar1(player, request,game,chosenCharacter);
@@ -182,8 +182,8 @@ public class GameController extends BaseController {
      * @throws NonExistentCharacterException  thrown in case of the player has played a non existent charcter
      */
     private static void validateCharacter(int index, Player player) throws alreadyPlayedACharacterException, NonExistentCharacterException {
-        if( index < 0 || index > 2) throw new NonExistentCharacterException();
-        if (player.getPlayedCharacterNumber() != -1) throw new alreadyPlayedACharacterException();
+        if( index < 0 || index > 2) throw new NonExistentCharacterException(); //only three characters are randomly chosen during a match
+        if (player.getPlayedCharacterNumber() != -1) throw new alreadyPlayedACharacterException();//checks if the player has already played a character
 
     }
 
@@ -193,14 +193,14 @@ public class GameController extends BaseController {
      * @throws GamePhase.WrongTurn thrown in case of wrong turn
      */
     private static void validateTurn(ClientHandler client) throws GamePhase.WrongTurn {
-
+        //in case of planning phase
         Player player = client.getGame().getPlayer(client.getUsername());
         boolean existPlayerBeforeMeThatHaveToPlay = false; //checks if there are no players before you
         for (String id : client.getCurrentGamePhase().getTurnOrder()) {
             if (id == player.getPlayer_id()) {
                 break;
             }
-            boolean playerPlayed = client.getGame().getPlayer(id).getFace_up_assistant() != null;
+            boolean playerPlayed = client.getGame().getPlayer(id).getFace_up_assistant() != null; //there is a player before me who has to play
             if (!playerPlayed) {
                 existPlayerBeforeMeThatHaveToPlay = true;
                 break;
@@ -208,8 +208,9 @@ public class GameController extends BaseController {
         }
         if (existPlayerBeforeMeThatHaveToPlay) { // there are players before me
             throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
-        } else if(client.getCurrentGamePhase().isActionPhase()) {
-            if(client.getGame().getCurrentPlayerNextAction().getPlayer() != player)
+        } else if (client.getCurrentGamePhase().isActionPhase()) {
+            //in case of action phase
+            if(client.getGame().getCurrentPlayerNextAction().getPlayer() != player) //checks if current player corresponds to the player who sent the command
                 throw new PlanningPhase.WrongTurn("You have to wait your turn to play this character");
             }
 

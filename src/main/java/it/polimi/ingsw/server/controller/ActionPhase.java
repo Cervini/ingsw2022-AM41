@@ -20,7 +20,7 @@ public class ActionPhase extends GamePhase {
         setActionPhase(true);
 
         Player firstPlayer = players.get(0).getGame().getPlayer(players.get(0).getUsername());
-        game.setCurrentPlayerNextAction( new PlayerAction(firstPlayer, PlayerAction.ActionType.MOVE_STUDENT));
+        game.setCurrentPlayerNextAction( new PlayerAction(firstPlayer, PlayerAction.ActionType.MOVE_STUDENT));//sets current player's next action (which is the first one) move student
         //currentPlayerNextAction = new PlayerAction(firstPlayer, PlayerAction.ActionType.MOVE_STUDENT);
     }
 
@@ -109,7 +109,7 @@ public class ActionPhase extends GamePhase {
      */
     public void validatePlayerTurn(ClientHandler clientHandler) throws WrongTurn {
         Player playerThatTryTheMove = clientHandler.getGame().getPlayer(clientHandler.getUsername());
-        if (getCurrentGame().getCurrentPlayerNextAction().getPlayer() != playerThatTryTheMove) {
+        if (getCurrentGame().getCurrentPlayerNextAction().getPlayer() != playerThatTryTheMove) {//compares player who sent the command with the player who has to perform the next action
             throw new WrongTurn();
         }
     }
@@ -122,7 +122,7 @@ public class ActionPhase extends GamePhase {
     public boolean alreadyMovedThreeStudents(ClientHandler player){
 
         int entranceSize = player.getGame().getPlayer(player.getUsername()).getSchool().getEntranceSize();
-        switch (player.sameMatchPlayers().size()) {
+        switch (player.sameMatchPlayers().size()) {//depends on the number of players involved in a match
             case 2, 4 -> { if(entranceSize == 4)  return true ;}
             case 3 -> { if(entranceSize == 5)  return true ;}
         }

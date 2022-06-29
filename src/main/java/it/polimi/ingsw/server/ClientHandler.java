@@ -15,7 +15,6 @@ import java.util.List;
 
 public class ClientHandler implements Runnable{
     private String username = "new client";
-    private static int numberOfConnected=0;
     private Socket clientSocket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
@@ -62,8 +61,6 @@ public class ClientHandler implements Runnable{
             while(true) {
                 request = (Message) in.readObject();// read object from input stream and cast it into Message
                 if(request.getCommand()!=Command.PING) { // if it's not a PING message
-                    numberOfConnected++;
-                    System.out.println("Number of connected players: "+ numberOfConnected);
                     // parsing of not PING commands
                     Message response = null;// flush output stream
                     // send through output stream the msg in String form
@@ -158,7 +155,6 @@ public class ClientHandler implements Runnable{
     public List<ClientHandler> sameMatchPlayers(){
         List<ClientHandler> same = new LinkedList<>();
         for(ClientHandler client: clients){
-            // TODO: verificare se OK la modifica fatta .. !client.isPlayerIsOffline()
             if(!client.isPlayerIsOffline() && client.getGame()==this.game){
                 same.add(client);
             }

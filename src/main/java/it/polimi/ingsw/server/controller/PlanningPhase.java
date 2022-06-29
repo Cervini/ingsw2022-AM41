@@ -37,18 +37,18 @@ public class PlanningPhase extends GamePhase {
             throw new PlanningPhase.WrongTurn("Player already played his assistant card");
         }
 
-        if (!isFirstPlayer) {
-            ClientHandler firstPlayerHandler = clientHandler.sameMatchPlayers()
+        if (!isFirstPlayer) {//if the player who sent the command is not the first one
+            ClientHandler firstPlayerHandler = clientHandler.sameMatchPlayers()//gets the first player (the clienthandler whose isPlayerFirstMove is set true)
                     .stream()
                     .filter(p -> p.isPlayerFirstMove)
                     .findFirst()
                     .get();
             Player firstPlayer = game.getPlayer(firstPlayerHandler.getUsername());
             boolean firstPlayerPlayed = firstPlayer.getFace_up_assistant() != null;
-            if (!firstPlayerPlayed) {
+            if (!firstPlayerPlayed) {//if first player has not played an assistant yet
                 throw new PlanningPhase.WrongTurn("First player have to play before your move");
             }
-            boolean existPlayerBeforeMeThatHaveToPlay = false; //checks if there are no players before you
+            boolean existPlayerBeforeMeThatHaveToPlay = false; //checks if there are no players whose face up assistant is null before you
             for (String id : clientHandler.getCurrentGamePhase().getTurnOrder()) {
                 if (id == player.getPlayer_id()) {
                     break;
