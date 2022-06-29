@@ -7,13 +7,24 @@ import it.polimi.ingsw.server.ClientHandler;
 import java.util.List;
 
 public class PlanningPhase extends GamePhase {
-
+    /**
+     *constructor of Planning Phase
+     * @param game current game
+     * @param players involved in the same match
+     */
     public PlanningPhase(Game game, List<ClientHandler> players) {
         super(game, players);
         setPlanningPhase(true);
         setActionPhase(false);
     }
 
+    /**
+     *validates if clientHandler has already played an assistant
+     * If clientHandler is not the first player, it checks whether any other player has to play an assistant before it
+     * @param clientHandler client who sent the command
+     * @throws WrongPhaseException thrown in case of wrong phase
+     * @throws WrongTurn rhrown in case of wrong turn
+     */
     @Override
     public void validatePlayAssistant(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn {
 

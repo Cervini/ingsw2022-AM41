@@ -15,6 +15,10 @@ public class Client {
     private Thread readThread;
     protected static boolean serverWasOffline = true;
 
+    /**
+     *Constructor of client, starts a pingThread and keeps reading client requests while checking server is not offline
+     * @param args parameters passed by starting Application
+     */
     public Client (String[] args) {
         if (args == null || args.length <2 ) { //check right number of arguments
             throw new IllegalArgumentException("To start client you have to set ip and port number");
@@ -50,6 +54,9 @@ public class Client {
         }
     }
 
+    /**
+     *creates socket with parameters passed by Client constructor and sets serverWasOffline false
+     */
     public void createClientServerSocket() throws IOException {
 
         socket = new Socket(SERVER_IP, SERVER_PORT); // instance server socket

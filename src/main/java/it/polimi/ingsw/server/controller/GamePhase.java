@@ -14,11 +14,23 @@ public class GamePhase {
     private boolean gameEnded = false;
     private List<String> turnOrder= null;
 
+    /**
+     * constructor of GamePhase
+     * @param game current game
+     * @param players players involved in the same match
+     */
     public GamePhase(Game game, List<ClientHandler> players) {
         currentGame = game;
         currentPlayers = players;
     }
 
+    /**
+     *validates both turn and phase
+     * @param player who sent the command
+     * @throws PlanningPhase.WrongPhaseException thrown in case of wrong phase
+     * @throws PlanningPhase.WrongTurn thrown in case of wrong turn
+     * @throws GameEndedException thrown in case of ended game
+     */
     public void validatePlayAssistant(ClientHandler player) throws PlanningPhase.WrongPhaseException, PlanningPhase.WrongTurn, GameEndedException {
         if (gameEnded){
             throw new GameEndedException("Game already ended");
@@ -30,14 +42,38 @@ public class GamePhase {
         //throw new PlanningPhase.WrongPhaseException("Method playAssistant cannot be called from GamePhase parent class");
     }
 
+    /**
+     *validates turn, phase and action type
+     * @param player who sent the command
+     * @throws WrongPhaseException thrown in case of wrong phase
+     * @throws WrongTurn thrown in case of wrong turn
+     * @throws ActionPhase.WrongAction thrown in case of wrong action
+     * @throws GameEndedException thrown in case of ended game
+     */
     public void validatePlaceStudent(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction, GameEndedException {
         validateCorrectActionGamePhase("Method validatePlaceStudent cannot be called from GamePhase parent class");
     }
 
+    /**
+     *validates turn, phase and action type
+     * @param player who sent the command
+     * @throws WrongPhaseException thrown in case of wrong phase
+     * @throws WrongTurn thrown in case of wrong turn
+     * @throws ActionPhase.WrongAction thrown in case of wrong action
+     * @throws GameEndedException thrown in case of ended game
+     */
     public void validateMoveMotherNature(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction, GameEndedException {
         validateCorrectActionGamePhase("Method validateMoveMotherNature cannot be called from GamePhase parent class");
     }
 
+    /**
+     *validates turn, phase and action type
+     * @param player who sent the command
+     * @throws WrongPhaseException thrown in case of wrong phase
+     * @throws WrongTurn thrown in case of wrong turn
+     * @throws ActionPhase.WrongAction thrown in case of wrong action
+     * @throws GameEndedException thrown in case of ended game
+     */
     public void validateChooseCloud(ClientHandler player) throws WrongPhaseException, WrongTurn, ActionPhase.WrongAction, GameEndedException {
         validateCorrectActionGamePhase("Method validateChooseCloud cannot be called from GamePhase parent class");
     }
@@ -46,11 +82,17 @@ public class GamePhase {
         validateCorrectActionGamePhase("Method validateMoveMotherNature cannot be called from GamePhase parent class");
     }
 
+    /**
+     *validates gamePhase
+     * @param msg server response
+     * @throws WrongPhaseException thrown in case of wrong phase
+     * @throws WrongTurn thrown in case of wrong turn
+     * @throws GameEndedException thrown in case of ended game
+     */
     private void validateCorrectActionGamePhase(String msg) throws WrongPhaseException, WrongTurn, GameEndedException {
         if (gameEnded){
             throw new GameEndedException("Game already ended");
         }
-        // TODO: validare che il player che sta facendo la mossa non e' unico presente nel gioco in questo momento
         if (this instanceof PlanningPhase) {
             throw new WrongPhaseException();
         }

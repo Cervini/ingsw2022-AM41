@@ -10,15 +10,24 @@ import java.util.stream.Collectors;
 
 public class CharacterController {
 
+    /**
+     *collects one student(chosen by the player) placed on character 0 and puts it on an island (chosen by the player)
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar0(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
-        Message response = new Message("string");
+        Message response = new Message("string");// set up output message
         LinkedList<Student> chosenStudent = new LinkedList<>();
         int indexOfChosenStudent = parameters.getArgNum2(0);
         if( indexOfChosenStudent >= chosenCharacter.getStudents().size() ) throw new Exception("Not existing island, please retry");
         chosenStudent.add(chosenCharacter.getStudents().get(indexOfChosenStudent));
         try {
             int islandNumber = parameters.getArgNum2(1);
-            if( islandNumber >= game.getArchipelago().size()) throw new Exception("Not existing island, please retry");
+            if(islandNumber >= game.getArchipelago().size()) throw new Exception("Not existing island, please retry");
             Island chosenIsland = game.getArchipelago().get(islandNumber); //get chosen island
             response.setArgString("Character played successfully, student placed on island "+islandNumber);
             game.playCharacter(chosenCharacter, player,chosenStudent,null,chosenIsland,null);
@@ -30,6 +39,15 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     *
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar1(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         try {
@@ -41,6 +59,15 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     * picks an island as if mother nature were on it and computes influence
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar2(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         int islandNumber = parameters.getSingleArgNum2();
@@ -56,6 +83,15 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     *calls model method
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar3(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         if (player.getFace_up_assistant()==null) throw new Exception("You have to play an assistant before!");
@@ -68,6 +104,15 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     *picks an island (chosen by an index) and calls model method
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar4(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         int islandNumber = parameters.getSingleArgNum2();
@@ -84,6 +129,15 @@ public class CharacterController {
 
     }
 
+    /**
+     *calls model method
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar5(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         try {
@@ -95,6 +149,15 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     *picks 3 students placed on character and 3 students placed in schoolboard entrance and exchanges them
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar6(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         try {
@@ -112,6 +175,15 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     *calls model method
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar7(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         try {
@@ -122,6 +194,16 @@ public class CharacterController {
         }
         return response;
     }
+
+    /**
+     * parses colour chosen by the player and calls model method
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar8(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         Colour chosenColour = parameters.getStandardArgColour();
@@ -135,6 +217,15 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     *collects 2 students from schoolboard entrance and 2 students from dining room and exchanges them
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar9(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         List<Integer> studentsFromEntranceIndexes = parameters.getArgNum2();
@@ -150,6 +241,15 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     *collects one students placed on this character and calls model method
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar10(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         LinkedList<Student> chosenStudent = new LinkedList<>();
@@ -167,6 +267,15 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     *parses colour chosen by the player and call model method
+     * @param player player who sent the command
+     * @param parameters related to character usage
+     * @param game current game
+     * @param chosenCharacter chosen by the player
+     * @return message containing the action result
+     * @throws Exception thrown in case player has not enough coins to play this character
+     */
     public static Message processChar11(Player player, Message parameters, Game game, Character chosenCharacter) throws Exception {
         Message response = new Message("string");
         Colour chosenColour = parameters.getStandardArgColour();
@@ -179,6 +288,13 @@ public class CharacterController {
         return response;
     }
 
+    /**
+     *collects students placed on character card
+     * @param chosenCharacter chosen by the player
+     * @param parameters related to character usage
+     * @return message containing the action result
+     * @throws Exception thrown if there no students left
+     */
     private static LinkedList <Student> getStudentsFromCharacter(Character chosenCharacter, List<Integer> parameters) throws Exception {
         try {
             LinkedList <Student>  chosenStudents = new LinkedList<>();
@@ -189,6 +305,13 @@ public class CharacterController {
             throw new Exception("There is no such student");
         }
     }
+
+    /**
+     *collects students placed in player's entrance
+     * @param parameters related to character usage
+     * @return message containing the action result
+     * @throws Exception thrown if there are no students left
+     */
     private static LinkedList<Student> getStudentsFromEntrance(Player player, List<Integer> parameters) throws Exception {
         LinkedList<Student> chosenStudents = new LinkedList<>();
         try {
@@ -199,6 +322,14 @@ public class CharacterController {
             throw new Exception("There is/are no such student/s");
         }
     }
+
+    /**
+     *
+     * @param player who sent the command
+     * @param parameters related to character usage
+     * @return message containing the action result
+     * @throws NoStudentsException thrown if there are no students left
+     */
     private static LinkedList<Student> getStudentsFromDining(Player player, Message parameters ) throws NoStudentsException {
         LinkedList<Student> chosenStudents = new LinkedList<>();
         Colour firstColour = parameters.getArgColour(0);
@@ -211,6 +342,7 @@ public class CharacterController {
         chosenStudents.add(secondStudent);
         return chosenStudents;
     }
+
     public static class NoStudentsException extends Exception {
         public NoStudentsException() {}
 

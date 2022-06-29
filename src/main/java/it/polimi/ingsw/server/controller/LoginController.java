@@ -47,6 +47,10 @@ public class LoginController {
         return output;
     }
 
+    /**
+     * @param client who has logged out
+     * @return a new STRING message containing the result of the LOGOUT command
+     */
     public static Message processLogout(ClientHandler client) {
         Message output = new Message("string");
 

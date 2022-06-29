@@ -9,6 +9,11 @@ public class ActionPhase extends GamePhase {
 
     //private static PlayerAction currentPlayerNextAction;
 
+    /**
+     * constructor of ActionPhase, sets action phase true and sets next action for current player
+     * @param game current game
+     * @param players involved in a match
+     */
     public ActionPhase(Game game, List<ClientHandler> players) {
         super(game, players);
         setPlanningPhase(false);
@@ -19,21 +24,31 @@ public class ActionPhase extends GamePhase {
         //currentPlayerNextAction = new PlayerAction(firstPlayer, PlayerAction.ActionType.MOVE_STUDENT);
     }
 
+    /**
+     *validates turn, phase and action type (move student, move mother nature or choose cloud)
+     * @param clientHandler who sent the command
+     * @throws WrongPhaseException thrown in case of wrong phase
+     * @throws WrongTurn thrown in case of wrong turn
+     * @throws WrongAction thrown in case of wrong action
+     */
     @Override
     public void validatePlaceStudent(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction {
         // 1. check turn
         //if (clientHandler.isPlayerFirstMove) throw new WrongTurn();
         validatePlayerTurn(clientHandler);
-
         // 2. check if 3 students have been already moved
         if (alreadyMovedThreeStudents(clientHandler)) {
             //2.1 if true -> player has to move mother nature
             throw new WrongAction("You already moved all students, move Mother Nature now");
         }
-
-
     }
 
+    /**
+     *validates turn, phase and action type (move student, move mother nature, choose a cloud)
+     * @param clientHandler who sent the command
+     * @throws WrongTurn thrown in case of wrong turn
+     * @throws WrongAction thrown in case of wrong action
+     */
     @Override
     public void validateMoveMotherNature(ClientHandler clientHandler) throws WrongTurn, WrongAction {
         validatePlayerTurn(clientHandler); //check turn
@@ -45,9 +60,15 @@ public class ActionPhase extends GamePhase {
                 throw new WrongAction("Before move Mother Nature you have to move three students from your schoolboard");
             }
         }
-
     }
 
+    /**
+     *validates turn, phase and action type (move student, move mother nature, choose a cloud)
+     * @param clientHandler who sent the command
+     * @throws WrongPhaseException thrown in case of wrong phase
+     * @throws WrongTurn thrown in case of wrong turn
+     * @throws WrongAction thrown in case of wrong action
+     */
     @Override
     public void validateChooseCloud(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction{
         validatePlayerTurn(clientHandler);
@@ -57,16 +78,23 @@ public class ActionPhase extends GamePhase {
         }
 
     }
+
     @Override
     public void validateUse(ClientHandler clientHandler) throws WrongPhaseException, WrongTurn, WrongAction {
         validatePlayerTurn(clientHandler);
     }
 
-
+    /**
+     * this sets current player's next action (e.g. move mother nature -> choose a cloud)
+     */
     public void setNextActionForCurrentPlayer() {
         getCurrentGame().getCurrentPlayerNextAction().setNextAction();
     }
 
+    /**
+     *sets next player and its first action
+     * @param clientHandlerOfPreviousPlayer
+     */
     public void setNextPlayerAndFirstAction(ClientHandler clientHandlerOfPreviousPlayer) {
         int previousPlayerIdx = this.getCurrentPlayers().indexOf(clientHandlerOfPreviousPlayer);
         ClientHandler clientHandlerOfNextPlayer = this.getCurrentPlayers().get(previousPlayerIdx + 1);
@@ -74,6 +102,11 @@ public class ActionPhase extends GamePhase {
         getCurrentGame().setCurrentPlayerNextAction(new PlayerAction(nextPlayer, PlayerAction.ActionType.MOVE_STUDENT));
     }
 
+    /**
+     *validates a turn comparing CurrentPlayerNextAction and clientHandler who sent the command
+     * @param clientHandler who sent the command
+     * @throws WrongTurn thrown in case of wrong turn
+     */
     public void validatePlayerTurn(ClientHandler clientHandler) throws WrongTurn {
         Player playerThatTryTheMove = clientHandler.getGame().getPlayer(clientHandler.getUsername());
         if (getCurrentGame().getCurrentPlayerNextAction().getPlayer() != playerThatTryTheMove) {
@@ -84,6 +117,7 @@ public class ActionPhase extends GamePhase {
     /**
      * checks if the player can complete PLACE command
      * @param player who sent the command PLACE
+     * return true if the player has already moved 3/4 students (depending on the number of players involved)
      */
     public boolean alreadyMovedThreeStudents(ClientHandler player){
 

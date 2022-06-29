@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class GameController extends BaseController {
 
-    /**
+    /** collects available players and puts them in the same match, sets first player randomly chosen and notifies all players
      * @param message message containing the command
      * @param client  client that sent the request to start the game
      * @return a new STRING message containing the result of the START command
@@ -73,9 +73,10 @@ public class GameController extends BaseController {
 
 
     /**
-     * @param numberOfPlayers
-     * @param game
-     * @param clients         Set the first 'NumberOfPlayers' available clients as playing the 'game' instance
+     * Set the first 'NumberOfPlayers' available clients as playing the 'game' instance
+     * @param numberOfPlayers involved in this match
+     * @param game game
+     * @param clients
      */
     private static void setAsPlaying(int numberOfPlayers, Game game, List<ClientHandler> clients) {
         int count = 1;
@@ -93,7 +94,6 @@ public class GameController extends BaseController {
 
     /**
      * sends a STRING message to client
-     *
      * @param client  recipient of the message
      * @param message string displayed
      */
@@ -108,7 +108,12 @@ public class GameController extends BaseController {
         }
     }
 
-
+    /**
+     *sends information about a character
+     * @param request client request
+     * @param clientHandler who sent the command effect
+     * @return server response
+     */
     public static Message info(Message request, ClientHandler clientHandler) {
         Message output = new Message("string");
         clientHandler.setAlreadyUpdated(true);
@@ -126,7 +131,13 @@ public class GameController extends BaseController {
         return output;
     }
 
-
+    /**
+     *handles character usage
+     * @param request client request
+     * @param client client who sent the command
+     * @param clients players involved in the same match
+     * @return message containing the action result
+     */
     public static Message character(Message request, ClientHandler client, List clients) {
         Message response = new Message("string");
         int index = request.getArgNum1();
@@ -163,11 +174,24 @@ public class GameController extends BaseController {
         return response;
     }
 
+    /**
+     *validates whether a character
+     * @param index character index
+     * @param player player who sent the command
+     * @throws alreadyPlayedACharacterException thrown in case of the player has already played a character during a round
+     * @throws NonExistentCharacterException  thrown in case of the player has played a non existent charcter
+     */
     private static void validateCharacter(int index, Player player) throws alreadyPlayedACharacterException, NonExistentCharacterException {
         if( index < 0 || index > 2) throw new NonExistentCharacterException();
         if (player.getPlayedCharacterNumber() != -1) throw new alreadyPlayedACharacterException();
 
     }
+
+    /**
+     *validates whether a player can play a character
+     * @param client who sent the command
+     * @throws GamePhase.WrongTurn thrown in case of wrong turn
+     */
     private static void validateTurn(ClientHandler client) throws GamePhase.WrongTurn {
 
         Player player = client.getGame().getPlayer(client.getUsername());
@@ -190,6 +214,7 @@ public class GameController extends BaseController {
             }
 
     }
+
     public static class alreadyPlayedACharacterException extends Exception {
         public alreadyPlayedACharacterException() {}
     }

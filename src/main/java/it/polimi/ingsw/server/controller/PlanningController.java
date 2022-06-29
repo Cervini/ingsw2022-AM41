@@ -15,11 +15,12 @@ import static java.util.Collections.sort;
 
 public class PlanningController extends BaseController {
 
-    /**
+    /**first it validates gamePhase, then it processes the request.
+     * If it is the last player of planning phase  it sorts turns, sets game phase for all players and notifies them
      * @param request contains client's command
      * @param clientHandler contains client reference
      * @param currentGamePhase contains client's GamePhase attribute
-     * @return server response
+     * @return message containing the action result
      */
     public static Message play(Message request, ClientHandler clientHandler, GamePhase currentGamePhase) {
 
@@ -80,7 +81,9 @@ public class PlanningController extends BaseController {
 
 
     /**
-     * @param message message containing the command
+     * processes command checking whether any other player has played the same assistant
+     * If there is only one assistant left it processes the command in any case
+     * @param message message containing the command in any case
      * @param client  client that sent the request to start the game
      * @return a new STRING message containing the result of the PLAY command
      */
@@ -117,14 +120,15 @@ public class PlanningController extends BaseController {
     private static boolean uniqueAssistant(ClientHandler client, Assistant assistant) {
         for (ClientHandler player : client.sameMatchPlayers()) { // for each of the players of the game
             Assistant other = client.getGame().getPlayer(player.getUsername()).getSchool().getFace_up_assistant(); // get the last played assistant
-            if(other == null)
-                break;
-            if (other.equals(assistant)){ // if the played assistant is equal to the one tha player wants to play
+            //if(other == null)
+                //break;
+            if (other != null && other.equals(assistant)){ // if the played assistant is equal to the one tha player wants to play
                 return false; // the assistant is not unique
             }
         }
         return true; // the assistant is unique
     }
+
 
     /**
      * @param client player whose assistant are checked
@@ -152,6 +156,11 @@ public class PlanningController extends BaseController {
         }
     }
 
+    /**
+     *checks whether all players have played an assistant
+     * @param client in order to retrieve players involved in the same mathc
+     * @return boolean
+     */
     private static boolean allPlayersHavePlayedAnAssistant(ClientHandler client) {
         for (ClientHandler c : client.sameMatchPlayers()) {
             if (c.getGame().getPlayer(c.getUsername()).getFace_up_assistant() == null) return false;
@@ -159,7 +168,11 @@ public class PlanningController extends BaseController {
         return true;
     }
 
-
+    /**
+     *sets same game phase for all players
+     * @param sameMatchPlayers involved in the same match
+     * @param gamePhase next game phase
+     */
     protected static void setGamePhaseForAllPlayers(List<ClientHandler> sameMatchPlayers, GamePhase gamePhase) {
         sameMatchPlayers.stream()
                 .forEach(player -> player.setCurrentGamePhase(gamePhase));

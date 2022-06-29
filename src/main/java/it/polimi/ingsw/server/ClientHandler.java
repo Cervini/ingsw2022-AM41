@@ -5,20 +5,17 @@ import it.polimi.ingsw.communication.messages.Command;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.server.controller.*;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.*;
 
 public class ClientHandler implements Runnable{
     private String username = "new client";
-
+    private static int numberOfConnected=0;
     private Socket clientSocket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
@@ -31,13 +28,23 @@ public class ClientHandler implements Runnable{
     private boolean alreadyUpdated = false;
     private static boolean isGameAlreadyStarted = false;
 
+    /**
+     *constructor of ClientHandler
+     * @param clientSocket socket previously created
+     * @param clients connected clients
+     */
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clients = clients;
         initializeClientServerConnection(clientSocket);
         //System.out.println("Connection completed!");
     }
 
+    /**
+     *initializes in and out stream
+     * @param clientSocket relevant socket
+     */
     public void initializeClientServerConnection(Socket clientSocket) {
+
         this.clientSocket= clientSocket;
         try {
             in = new ObjectInputStream(clientSocket.getInputStream());
@@ -55,6 +62,8 @@ public class ClientHandler implements Runnable{
             while(true) {
                 request = (Message) in.readObject();// read object from input stream and cast it into Message
                 if(request.getCommand()!=Command.PING) { // if it's not a PING message
+                    numberOfConnected++;
+                    System.out.println("Number of connected players: "+ numberOfConnected);
                     // parsing of not PING commands
                     Message response = null;// flush output stream
                     // send through output stream the msg in String form
@@ -71,9 +80,9 @@ public class ClientHandler implements Runnable{
                             case START -> response = GameController.start(request, this, clients);
                             case PLAY -> response = PlanningController.play(request, this, currentGamePhase);
                             case MOVE -> response = ActionController.move(request, this, currentGamePhase);
-                            case PLACE -> response = ActionController.place(request, this, currentGamePhase);
+                            case PLACE -> response =  ActionController.place(request, this, currentGamePhase);
                             case EFFECT -> response = GameController.info(request, this);
-                            case CHOOSE -> response = ActionController.choose(request, this, currentGamePhase);
+                            case CHOOSE -> response =  ActionController.choose(request, this, currentGamePhase);
                             case USE -> response = GameController.character(request,this, sameMatchPlayers());
                             case NULL -> response = new Message("NULL");
                         }
@@ -142,6 +151,10 @@ public class ClientHandler implements Runnable{
         return game == null;
     }
 
+    /**
+     *creates a new list of clientHandler involved in the same match
+     * @return list of clientHandler
+     */
     public List<ClientHandler> sameMatchPlayers(){
         List<ClientHandler> same = new LinkedList<>();
         for(ClientHandler client: clients){
