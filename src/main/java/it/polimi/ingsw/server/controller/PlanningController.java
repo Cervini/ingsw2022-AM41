@@ -60,10 +60,10 @@ public class PlanningController extends BaseController {
                 players.remove(clientHandler);
                 players
                         .forEach(p-> alert(p, "Action Phase started! Turns order: "+ turns +". First of all move three \n  students from your entrance to an island or to the dining room \n " +
-                        "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)"));
+                        "type 'PLACE [x] [DINING/ISLAND] [*/y]' (type 'HELP' if you need more info)"));
                 clientHandler.setAlreadyUpdated(true);
                 response.setArgString("Action Phase started! Turns order: "+ turns+". First of all move three \n  students from your entrance to an island or to the dining room \n " +
-                        "type 'PLACE ENTRANCE [x] [DINING/ISLAND] [y]' (type 'HELP' if you need more info)");
+                        "type 'PLACE [x] [DINING/ISLAND] [*/y]' (type 'HELP' if you need more info)");
             }
 
         } catch (GamePhase.WrongPhaseException e) {

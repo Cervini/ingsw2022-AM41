@@ -16,6 +16,7 @@ public class GamePack implements Serializable {
     private final List<Assistant> assistants;
     private final List<Cloud> clouds;
     private final LinkedList<CharacterInfo> characters;
+    private int coins;
 
     /**
      * Packs the information that need to be showed to client
@@ -36,6 +37,7 @@ public class GamePack implements Serializable {
         for(Character character: game.getSelectedCharacters()){
             getCharInfo(characters, character);
         }
+        coins = game.getPlayer(client.getUsername()).getCoins();
     }
 
     /**
@@ -57,6 +59,7 @@ public class GamePack implements Serializable {
         for(Character character: game.getSelectedCharacters()){
             getCharInfo(characters, character);
         }
+        coins = game.getPlayer(client.getUsername()).getCoins();
     }
 
     /**
@@ -77,6 +80,7 @@ public class GamePack implements Serializable {
         for(Character character: game.getSelectedCharacters()){
             getCharInfo(characters, character);
         }
+        coins = game.getPlayers().getFirst().getCoins();
     }
 
     /**
@@ -106,7 +110,13 @@ public class GamePack implements Serializable {
         printSchoolBoards();
         System.out.println("---------------------------------");
         printClientAssistants();
+        printCoins();
         System.out.println("---------------------------------");
+    }
+
+    private void printCoins() {
+        System.out.println("----------\n" +
+                "Available coins: " + coins);
     }
 
     private void printCharacters() {

@@ -12,7 +12,6 @@ public class Player implements Comparable{
     private final LinkedList<Assistant> assistants; // list of not yet played assistant cards
     private final TowerColour team; // color of the player's towers, determines the team in 4 player mode
     private boolean turn; // if true it's the player's turn
-    private int coins; // number of owned coins
     private final SchoolBoard school; // School_board associated with the player
     private final boolean tower_holder; // used to check winners and the end of the game is set true if the player hold the towers for the team
     private int dining_coins; // number of coins obtained by adding students in the dining rooms
@@ -22,11 +21,11 @@ public class Player implements Comparable{
     public Player(TowerColour team) {
         this.team = team;
         this.turn = false;
-        this.coins = 1;
         this.assistants = new LinkedList<>();
         //set up assistants deck
         deck_setup();
         this.school = new SchoolBoard(this);
+        setCoins(1);
         this.tower_holder = true;
         this.dining_coins = 0;
         this.playedCharacterNumber = -1;
@@ -36,11 +35,11 @@ public class Player implements Comparable{
     public Player(TowerColour team, int nTowers, int max_entrance) {
         this.team = team;
         this.turn = false;
-        this.coins = 1;
         this.assistants = new LinkedList<>();
         //set up assistants deck
         deck_setup();
         this.school = new SchoolBoard(nTowers, this, max_entrance);
+        setCoins(1);
         this.tower_holder = nTowers != 0;
         this.dining_coins = 0;
         this.playedCharacterNumber = -1;
@@ -79,13 +78,13 @@ public class Player implements Comparable{
             entitled += room.getGiven_coins();
         }
         int difference = entitled - this.dining_coins;
-        this.coins += difference;
+        setCoins(getCoins()+difference);
         this.dining_coins = entitled;
     }
 
     public void spend(int price) throws Exception {
-        if(coins>=price)
-            coins -= price;
+        if(this.getCoins()>=price)
+            setCoins(getCoins()-price);
         else {
             throw new Exception("Not enough coins!");
         }
@@ -120,7 +119,7 @@ public class Player implements Comparable{
     }
 
     public int getCoins() {
-        return coins;
+        return this.school.getCoins();
     }
 
     public SchoolBoard getSchool() {
@@ -192,17 +191,23 @@ public class Player implements Comparable{
         return professorRemoved;
     }
 
+
+
     public void addProfessor(Professor professor){
         school.getOwned_professor().add(professor);
     }
 
-    public void giveCoins(int numberOfCoins) { coins = coins + numberOfCoins; }
+    public void giveCoins(int numberOfCoins) { this.school.setCoins(getCoins() + numberOfCoins); }
 
-    public void setPlayedCharacterNumber(int playedCharaterNumber){
-        this.playedCharacterNumber = playedCharaterNumber;
+    public void setPlayedCharacterNumber(int playedCharacterNumber){
+        this.playedCharacterNumber = playedCharacterNumber;
     }
 
     public int getPlayedCharacterNumber(){
         return playedCharacterNumber;
+    }
+
+    public void setCoins(int coins){
+        this.school.setCoins(coins);
     }
 }

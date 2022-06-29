@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.graphics.Main;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -48,6 +46,7 @@ public class Server {
         }
         List<ClientHandler> clients = new LinkedList<>();
         System.out.println("Accepting..");
+        int oldSize = -1;
 
         while(true){
             Socket clientSocket;
@@ -60,7 +59,10 @@ public class Server {
             }
             ClientHandler clientThread = new ClientHandler(clientSocket, clients);
             pool.execute(clientThread);
-            System.out.println("Number of connected players: " + clients.size());
+            if(clients.size()!=oldSize){
+                System.out.println("Number of connected players: " + clients.size());
+                oldSize = clients.size();
+            }
         }
         pool.shutdown();
     }

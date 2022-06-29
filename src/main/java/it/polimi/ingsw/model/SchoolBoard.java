@@ -15,6 +15,7 @@ public class SchoolBoard implements Tile, Serializable {
     private Assistant face_up_assistant;
     private List<Professor> owned_professor; // list of all the currently owned professors
     private final int entrance_max;
+    private int coins; // number of owned coins by the owner
 
     /**
      * default constructor sets up School_board with 8 towers
@@ -179,4 +180,12 @@ public class SchoolBoard implements Tile, Serializable {
     }
 
     public void putProfessor(Professor professor){ this.owned_professor.add(professor); }
+
+    public int getCoins() {
+        return coins;
+    }
+
+    public void setCoins(int coins) {
+        this.coins = coins;
+    }
 }

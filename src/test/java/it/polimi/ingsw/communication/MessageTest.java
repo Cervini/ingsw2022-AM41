@@ -1,7 +1,6 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.communication.messages.Command;
-import it.polimi.ingsw.communication.messages.FromTile;
 import it.polimi.ingsw.communication.messages.Message;
 import it.polimi.ingsw.communication.messages.ToTile;
 import it.polimi.ingsw.model.Colour;
@@ -26,11 +25,9 @@ public class MessageTest {
 
     @Test
     public void messageConstructorTest03(){
-        String user = "place entrance 4 island 6";
+        String user = "place 4 island 6";
         Message msg = new Message(user);
-
         assertEquals(msg.getCommand(), Command.PLACE);
-        assertEquals(msg.getFrom_tile(), FromTile.ENTRANCE);
         assertEquals(msg.getArgNum1(), 4);
         assertEquals(msg.getTo_tile(), ToTile.ISLAND);
         assertEquals(msg.getSingleArgNum2(), 6);
@@ -158,6 +155,17 @@ public class MessageTest {
         assertEquals(msg.getArgNum2(3), 1);
         assertEquals(msg.getArgNum2(4), 2);
         assertEquals(msg.getArgNum2(5), 3);
+        assertTrue(msg.isStandard());
+    }
+
+    @Test
+    void messageConstructorTest14(){
+        String user = "place 4 dining";
+        Message msg = new Message(user);
+        assertEquals(msg.getCommand(), Command.PLACE);
+        assertEquals(msg.getArgNum1(), 4);
+        assertEquals(msg.getTo_tile(), ToTile.DINING);
+        assertNull(msg.getArgString());
         assertTrue(msg.isStandard());
     }
 }

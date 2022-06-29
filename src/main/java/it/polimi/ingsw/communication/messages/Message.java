@@ -14,7 +14,6 @@ public class Message implements Serializable {
     private Integer argNum1 = null;
     private final LinkedList<Integer> argNum2;
     private String argString = null;
-    private FromTile from_tile = FromTile.NULL;
     private ToTile to_tile = ToTile.NULL;
     private final LinkedList<Colour> argColour;
     private boolean standard = false; // if true the message has a correct structure
@@ -57,21 +56,6 @@ public class Message implements Serializable {
             return ToTile.valueOf(string);
         } catch (IllegalArgumentException e){
             return ToTile.NULL;
-        }
-    }
-
-    /**
-     * parses a string to FromTile enum ignoring upper or lower-case differences
-     * @param string argument in String format
-     * @return FromTile enum parsed from string parameter
-     */
-    private FromTile toFromTileEnum(String string){
-        string = string.toUpperCase();
-        try {
-            FromTile.valueOf(string);
-            return FromTile.valueOf(string);
-        } catch (IllegalArgumentException e){
-            return FromTile.NULL;
         }
     }
 
@@ -185,38 +169,34 @@ public class Message implements Serializable {
      * parse the PLACE command structure
      * @param args String to parse
      */
-    private void placeCase(List<String> args) {
-        if(args.size()<5){
+    private void placeCase(List<String> args){
+        if(args.size()<3){
             System.out.println("Not enough arguments");
         } else {
-            this.from_tile = toFromTileEnum(args.get(1));
-            if(this.from_tile == FromTile.NULL)
-                return;
             try{
-                setArgNum1((Integer.parseInt(args.get(2))));
+                setArgNum1((Integer.parseInt(args.get(1))));
             } catch (NumberFormatException e){
                 System.out.println("Impossible argument");
                 return;
             }
-            this.to_tile = toToTileEnum(args.get(3));
+            this.to_tile = toToTileEnum(args.get(2));
             if(this.to_tile == ToTile.NULL)
                 return;
             if(this.to_tile == ToTile.DINING){
                 this.standard = true;
-                if(args.size()>4)
+                if(args.size()>3)
                     System.out.println("Excess arguments were ignored");
                 return;
-            } else {
-                if(args.size()<5)
-                    System.out.println("Not enough arguments");
             }
-            try{
-                setArgNum2((Integer.parseInt(args.get(4))));
-            } catch (NumberFormatException e){
-                System.out.println("Impossible argument");
-                return;
+            if(this.to_tile == ToTile.ISLAND){
+                try{
+                    setArgNum2((Integer.parseInt(args.get(3))));
+                } catch (NumberFormatException e){
+                    System.out.println("Impossible argument");
+                    return;
+                }
+                this.standard = true;
             }
-            this.standard = true;
         }
     }
 
@@ -275,7 +255,7 @@ public class Message implements Serializable {
                 LOGOUT: log out and disrupt the match if already in one
                 START [x]: start a new game with x players
                 PLAY [x]: play character with x as index, indexes are indicated next to the Assistant's attributes.
-                PLACE ENTRANCE [x] [DINING/ISLAND] [y]: move the student in the x position (in the school board),\s
+                PLACE [x] [DINING/ISLAND] [*/y]: move the student in the x position (in the school board),\s
                                                         from to either the island number y or the dining room of the \s
                                                         right color.
                 MOVE [x]: move mother nature of x positions.
@@ -321,10 +301,6 @@ public class Message implements Serializable {
         return argString;
     }
 
-    public FromTile getFrom_tile() {
-        return from_tile;
-    }
-
     public ToTile getTo_tile() {
         return to_tile;
     }
@@ -347,18 +323,16 @@ public class Message implements Serializable {
             return "invalid command";
         String s = "";
         if((command!=Command.NULL)&&(command!=Command.STRING))
-            s=command.toString();
+            s=command.toString()+" ";
         if(argString!=null)
-            s=s+" "+argString;
-        if(this.from_tile!=FromTile.NULL)
-            s=s+" "+from_tile.toString();
+            s=s+argString+" ";
         if(argNum1!=null)
-            s=s+" "+argNum1;
+            s=s+argNum1+" ";
         if(this.to_tile!=ToTile.NULL)
-            s=s+" "+to_tile.toString();
+            s=s+to_tile.toString()+" ";
         if(argNum2.size()!=0){
             for(int i=0; i<argNum2.size(); i++){
-                s=s+" "+argNum2.get(i);
+                s=s+argNum2.get(i)+" ";
             }
         }
         return s;
