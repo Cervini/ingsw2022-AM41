@@ -32,7 +32,7 @@ public class Character implements Serializable {
         switch (characterNumber){
             case 0 -> {
                 cost = 1;
-                description = "Take 1 student from this card and place it on an island of your choice.\nTo use: USE [character index] [island index] [student index]";
+                description = "Take 1 student from this card and place it on an island of your choice.\nTo use: USE [character index] [student index] [island index]";
             }
             case 1 -> {
                 cost = 2;
