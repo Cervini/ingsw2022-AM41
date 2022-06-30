@@ -3,6 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.communication.messages.Message;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -24,7 +25,11 @@ public class Client {
             throw new IllegalArgumentException("To start client you have to set ip and port number");
         }
         SERVER_IP = args[0]; //set the first argument as SERVER_IP
-        SERVER_PORT = Integer.parseInt(args[1]); //set the second argument as SERVER_PORT
+        try {
+            SERVER_PORT = Integer.parseInt(args[1]); //set the second argument as SERVER_PORT
+        } catch (NumberFormatException e){
+            throw new IllegalArgumentException("Impossible port");
+        }
         PingThread ping = new PingThread(SERVER_IP, SERVER_PORT);
         ping.start(); //start ping thread
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)); //open input stream
