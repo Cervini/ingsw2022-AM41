@@ -49,4 +49,11 @@ class GamePackTest {
         GamePack pack = new GamePack(game);
         pack.printPack();
     }
+
+    @Test
+    void printPack3() {
+        Game game = new Game(3);
+        GamePack pack = new GamePack(game);
+        pack.printPack();
+    }
 }

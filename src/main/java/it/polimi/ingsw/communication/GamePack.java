@@ -294,7 +294,7 @@ public class GamePack implements Serializable {
     }
 
     public static final String RESET = "\u001B[0m";
-    public static final String BLACK = "\u001B[30m";
+    public static final String BLACK = "\u001B[47m\033[1;30m";
     public static final String RED = "\033[1;91m";
     public static final String GREEN = "\033[1;92m";
     public static final String YELLOW = "\033[1;93m";

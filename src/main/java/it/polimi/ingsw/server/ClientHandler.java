@@ -170,23 +170,73 @@ public class ClientHandler implements Runnable{
         status.setStandard(true);
         GamePack gamePack = new GamePack(game, this);
         try{
-            for(ClientHandler clientHandler: sameMatchPlayers()){
-                //Send Game status if the client is currently in a game
-                gamePack.updateGamePack(game, clientHandler);
-                status.setStatus(gamePack);
-                try {
-                    clientHandler.getOut().writeObject(status);
-                    clientHandler.getOut().flush();
-                    clientHandler.getOut().reset();
-                } catch (IOException e) {
-                    System.out.println("A user has logged out");
-                }
+        for(ClientHandler clientHandler: sameMatchPlayers()){
+            //Send Game status if the client is currently in a game
+            gamePack.updateGamePack(game, clientHandler);
+            status.setStatus(gamePack);
+            try {
+                clientHandler.getOut().writeObject(status);
+                clientHandler.getOut().flush();
+                clientHandler.getOut().reset();
+            } catch (IOException e) {
+                System.out.println("A user has logged out");
+
             }
+        }
         }  catch(Exception e){
-            System.out.println("users have logged out");
+        System.out.println("users have logged out");
+    }
+    }
+
+    /*public String onePlayerLeft(ClientHandler player) throws IOException {
+        onePlayerLeft = true;
+        String check = "You can continue the game";
+        final Duration timeout = Duration.ofSeconds(120);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        final Future<String> handler = executor.submit(new Callable() {
+            @Override
+            public String call() throws Exception {
+
+                String check = checkNumPlayers(player);
+                // notificare unico giocatore rimasto che lui e' il vincitore
+                // TODO: marcare il game ended = true
+                // TODO: bloccare tutte le mosse per unico giocatore rimasto (validazione nella fase del gioco)
+                return check;
+            }
+        } );
+
+        try {
+            handler.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+        } catch (TimeoutException | InterruptedException | ExecutionException e) {
+            if (player.sameMatchPlayers().size() == 1) {
+                gameEndedWithOnePlayer(player);
+                check = "Game ended because all players left, you are the winner! \n You can now begin a new match!";
+            }
+            else { return check; }
+        }
+        executor.shutdownNow();
+        //player.getCurrentGamePhase().setGameEnded(true);
+        onePlayerLeft = false;
+        return check;
+
+    }
+
+    public boolean getPlayerFirstMove() {
+        return isPlayerFirstMove;
+    }
+     public String checkNumPlayers(ClientHandler player){
+        while(player.sameMatchPlayers().size() == 1){continue;};
+        return null;
+    }
+    private void gameEndedWithOnePlayer(ClientHandler player) throws IOException {
+        for ( ClientHandler c : player.clients ) {
+            if(c.isPlayerIsOffline()) sameMatchPlayers().remove(c);
+            c.setGame(null);
         }
     }
 
+    */
     public void setPlayerFirstMove(boolean playerFirstMove) {
         this.isPlayerFirstMove = playerFirstMove;
     }

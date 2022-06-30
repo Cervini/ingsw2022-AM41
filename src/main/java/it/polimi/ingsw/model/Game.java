@@ -14,6 +14,7 @@ public class Game{
     private List<Cloud> clouds; // list of all the clouds
     private final LinkedList<Character> selectedCharacters;
     private final GameConclusionChecks conclusionChecks;
+    private Player activePlayer;
     private boolean isLastRound = false;
     private PlayerAction currentPlayerNextAction;
     private final List<Character> characters;
@@ -79,8 +80,9 @@ public class Game{
         }
     }
 
-    /**Sets up the students on the character card if necessary
-     * @param characters is the list of characters active during this game
+    /**
+     * Sets up the students on the character card if necessary
+     * @param characters
      */
     private void characterSetupStudents(LinkedList<Character> characters){
         for(Character characterToCheck: characters){
@@ -267,6 +269,9 @@ public class Game{
      * @param player player whose entrance is going to be filled
      */
     public void chooseCloud(Cloud cloud, Player player)  {
+        /*for(Student s: cloud.getStudents()){
+            player.getSchool().putStudent(s);
+            cloud.removeStudent(s); }*/
         Iterator<Student> students = cloud.getStudents().iterator();
         while(students.hasNext()){
             Student student = students.next();
@@ -376,9 +381,7 @@ public class Game{
         return null;
     }
 
-    /**Used to see if any of characters 2, 6, 8, 9 is being played this turn
-     * @return true if during this turn any of characters 2, 6, 8, 9 is active
-     */
+    //Used to see if any of characters 2, 6, 8, 9 is being played this turn
     private boolean specialCharacterActive(){
         if(characterPlayer() == null){
             return false;
@@ -452,6 +455,14 @@ public class Game{
         public DistanceMotherNatureException(String msg){
             super(msg);
         }
+    }
+
+    public GameConclusionChecks getConclusionChecks() {
+        return conclusionChecks;
+    }
+
+    public Player getActivePlayer() {
+        return activePlayer;
     }
 
     public boolean isLastRound() {

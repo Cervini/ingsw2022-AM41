@@ -27,7 +27,7 @@ public class Server {
 
 
     /**
-     *constructor called by Application
+     * constructor called by Application
      * @param args passed once Application has started
      */
     public Server(String[] args) {
@@ -40,7 +40,7 @@ public class Server {
 
     private  final ExecutorService pool = Executors.newCachedThreadPool();
     /**
-     *accepts new connections and puts clientThread in a pool
+     * accepts new connections and puts clientThread in a pool
      * @param portNumber chosen once Application starts
      */
      void startServer(int portNumber) {
