@@ -25,7 +25,7 @@
 
     java -jar Application.jar server chosen port
 
-    e.g. java -jar [file path] server 1234
+    e.g. java -jar Application.jar server 1234
 
 Server will automatically print its ip address (e.g. Server opened at: 192.168.1.1).
 
@@ -33,4 +33,4 @@ Server will automatically print its ip address (e.g. Server opened at: 192.168.1
 
     java -jar Application.jar client server ip address chosen port
 
-    e.g. java -jar [file path] client 192.168.1.1 1234
+    e.g. java -jar Application.jar client 192.168.1.1 1234
