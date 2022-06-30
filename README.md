@@ -20,3 +20,17 @@
 🔴
 🟢
 🟡
+
+* To start the server, choose a port (e.g. 1234) and use the command:
+
+    java -jar Application.jar server chosen port
+
+    e.g. java -jar [file path] server 1234
+
+Server will automatically print its ip address (e.g. Server opened at: 192.168.1.1).
+
+* To start the client, use the command:
+
+    java -jar Application.jar client server ip address chosen port
+
+    e.g. java -jar [file path] client 192.168.1.1 1234
