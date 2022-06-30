@@ -8,8 +8,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client {
-    private final String SERVER_IP ;
-    private final int SERVER_PORT;
+    private String SERVER_IP ;
+    private int SERVER_PORT;
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
@@ -22,9 +22,23 @@ public class Client {
      */
     public Client (String[] args) {
         if (args == null || args.length <2 ) { //check right number of arguments
-            throw new IllegalArgumentException("To start client you have to set ip and port number");
+            try{
+                System.out.println("""
+                        Wrong parameters!
+                        In order to start the client type "client [server ip] [port]"
+                        \tex. java -jar [file path] client 127.28.240.1 1234
+                        """);
+                return;
+            }catch (Exception e){
+                throw new IllegalArgumentException("To start client you have to set ip and port number");
+            }
         }
+
         SERVER_IP = args[0]; //set the first argument as SERVER_IP
+        if(SERVER_IP.length()<7 || SERVER_IP.length()>15){
+            System.out.println("Not valid ip address!");
+            System.exit(0);
+        }
         try {
             SERVER_PORT = Integer.parseInt(args[1]); //set the second argument as SERVER_PORT
         } catch (NumberFormatException e){

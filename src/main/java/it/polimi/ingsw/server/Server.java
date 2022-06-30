@@ -16,13 +16,20 @@ public class Server {
         return "server";
     }
     /**
-     *
      * @param args passed by starting Application
      * @return port chosen
      */
-    static int getPort(String[] args) {
+    private int getPort(String[] args) {
+        int port;
         if (args == null || args.length < 1) throw new IllegalArgumentException("You have to set port number to start server");
-        return Integer.parseInt(args[0]);
+        try{
+            port = Integer.parseInt(args[0]);
+        }catch (Exception e){
+            System.out.println("The port value must be a number!");
+            System.exit(0);
+            port = 0;
+        }
+        return port;
     }
 
 
@@ -32,7 +39,7 @@ public class Server {
      */
     public Server(String[] args) {
         String mode = getMode(args);
-        if (mode == "server") {
+        if (mode.equals("server")) {
             int port = getPort(args);
             startServer(port);
         }
