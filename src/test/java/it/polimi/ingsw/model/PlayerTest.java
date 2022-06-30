@@ -55,7 +55,7 @@ public class PlayerTest {
                 e.printStackTrace();
             }
         }
-        player.coin_check();
+        //player.coin_check();
         // should not have earned any coins
         assertEquals(player.getCoins(), 1);
 
@@ -65,7 +65,7 @@ public class PlayerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        player.coin_check();
+        //player.coin_check();
 
         // should have earned another coin
         assertEquals(player.getCoins(), 2);
@@ -128,7 +128,7 @@ public class PlayerTest {
             e.printStackTrace();
         }
 
-        player.coin_check();
+        //player.coin_check();
 
         // should have earned another coin
         assertEquals(player.getCoins(), 3);

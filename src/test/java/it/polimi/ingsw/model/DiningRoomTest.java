@@ -11,8 +11,9 @@ public class DiningRoomTest {
 
     @Test
     public void addRightStudentTest(){
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
         Student pinkStudent = new Student(Colour.PINK);
-        DiningRoom room = new DiningRoom(Colour.PINK);
+        DiningRoom room = new DiningRoom(Colour.PINK, p);
         assertEquals(room.getStudents(),0);
         try{
             room.putStudent(pinkStudent);
@@ -25,7 +26,8 @@ public class DiningRoomTest {
     @Test
     public void addWrongStudentTest(){
         Student redStudent = new Student(Colour.RED);
-        DiningRoom room = new DiningRoom(Colour.GREEN);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room = new DiningRoom(Colour.GREEN, p);
         assertEquals(room.getStudents(),0);
         try{
             room.putStudent(redStudent);
@@ -38,7 +40,8 @@ public class DiningRoomTest {
     @Test
     public void gainCoinTest(){
         Student pinkStudent = new Student(Colour.PINK);
-        DiningRoom room = new DiningRoom(Colour.PINK);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room = new DiningRoom(Colour.PINK, p);
         assertEquals(room.getStudents(),0);
         assertEquals(room.getGiven_coins(), 0);
         for(int i=0; i<3; i++){
@@ -55,7 +58,8 @@ public class DiningRoomTest {
     @Test
     public void reGainCoinTest(){
         Student pinkStudent = new Student(Colour.PINK);
-        DiningRoom room = new DiningRoom(Colour.PINK);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room = new DiningRoom(Colour.PINK, p);
         assertEquals(room.getStudents(),0);
         for(int i=0; i<3; i++){
             try{
@@ -81,8 +85,9 @@ public class DiningRoomTest {
 
     @Test
     public void removeStudentTest() {
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
         Student pinkStudent = new Student(Colour.PINK);
-        DiningRoom room = new DiningRoom(Colour.PINK);
+        DiningRoom room = new DiningRoom(Colour.PINK, p);
         try {
             room.putStudent(pinkStudent);
         } catch (Exception e) {
@@ -100,7 +105,8 @@ public class DiningRoomTest {
     @Test
     public void removeStudentFromEmptyTest() {
         Student pinkStudent = new Student(Colour.PINK);
-        DiningRoom room = new DiningRoom(Colour.PINK);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room = new DiningRoom(Colour.PINK, p);
         try {
             room.removeStudent(pinkStudent);
         } catch (Exception e) {
@@ -111,22 +117,25 @@ public class DiningRoomTest {
 
     @Test
     public void notEqualsTest(){
-        DiningRoom room1 = new DiningRoom(Colour.BLUE);
-        DiningRoom room2 = new DiningRoom(Colour.PINK);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room1 = new DiningRoom(Colour.BLUE, p);
+        DiningRoom room2 = new DiningRoom(Colour.PINK, p);
         assertFalse(room1.equals(room2));
     }
 
     @Test
     public void equalsTest(){
-        DiningRoom room1 = new DiningRoom(Colour.BLUE);
-        DiningRoom room2 = new DiningRoom(Colour.BLUE);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room1 = new DiningRoom(Colour.BLUE, p);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE, p);
         assertTrue(room1.equals(room2));
     }
 
     @Test
     public void numberEqualsTest(){
-        DiningRoom room1 = new DiningRoom(Colour.BLUE);
-        DiningRoom room2 = new DiningRoom(Colour.BLUE);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room1 = new DiningRoom(Colour.BLUE, p);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE, p);
         Student s1 = new Student(Colour.BLUE);
         try {
             room1.putStudent(s1);
@@ -139,8 +148,9 @@ public class DiningRoomTest {
 
     @Test
     public void numberNotEqualsTest(){
-        DiningRoom room1 = new DiningRoom(Colour.BLUE);
-        DiningRoom room2 = new DiningRoom(Colour.BLUE);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room1 = new DiningRoom(Colour.BLUE, p);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE, p);
         Student s1 = new Student(Colour.BLUE);
         try {
             room1.putStudent(s1);
@@ -152,7 +162,8 @@ public class DiningRoomTest {
 
     @Test
     public void fullRoomTest(){
-        DiningRoom room = new DiningRoom(Colour.BLUE);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room = new DiningRoom(Colour.BLUE, p);
         for(int i=0; i<11; i++){
             try {
                 room.putStudent(new Student(Colour.BLUE));
@@ -165,15 +176,17 @@ public class DiningRoomTest {
 
     @Test
     public void compareTestEquals(){
-        DiningRoom room1 = new DiningRoom(Colour.BLUE);
-        DiningRoom room2 = new DiningRoom(Colour.BLUE);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room1 = new DiningRoom(Colour.BLUE, p);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE, p);
         assertEquals(room1.compareTo(room2), 0);
     }
 
     @Test
     public void compareTestMore(){
-        DiningRoom room1 = new DiningRoom(Colour.PINK);
-        DiningRoom room2 = new DiningRoom(Colour.BLUE);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room1 = new DiningRoom(Colour.PINK, p);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE, p);
         boolean greater = false;
         if(room1.compareTo(room2)>0)
             greater = true;
@@ -182,8 +195,9 @@ public class DiningRoomTest {
 
     @Test
     public void compareTestLess(){
-        DiningRoom room1 = new DiningRoom(Colour.PINK);
-        DiningRoom room2 = new DiningRoom(Colour.BLUE);
+        SchoolBoard p = new SchoolBoard(new Player(TowerColour.WHITE, 8, 7));
+        DiningRoom room1 = new DiningRoom(Colour.PINK, p);
+        DiningRoom room2 = new DiningRoom(Colour.BLUE, p);
         boolean lesser = false;
         if(room2.compareTo(room1)<0)
             lesser = true;

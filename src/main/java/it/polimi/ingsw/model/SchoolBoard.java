@@ -26,7 +26,7 @@ public class SchoolBoard implements Tile, Serializable {
         this.owned_professor = new ArrayList<>();
         /* initialize a dining_room for every color */
         for(Colour colour : Colour.values()){
-            dining_rooms.add(new DiningRoom(colour));
+            dining_rooms.add(new DiningRoom(colour, this));
         }
         this.towers = 8;
         this.owner = owner.getPlayer_id();
@@ -46,7 +46,7 @@ public class SchoolBoard implements Tile, Serializable {
         this.dining_rooms = new ArrayList<>(5);
         /* initialize a dining_room for every color */
         for(Colour colour : Colour.values()){
-            dining_rooms.add(new DiningRoom(colour));
+            dining_rooms.add(new DiningRoom(colour, this));
         }
         this.towers = towers;
         this.owner = owner.getPlayer_id();
@@ -193,4 +193,6 @@ public class SchoolBoard implements Tile, Serializable {
     public int getTowers() {
         return towers;
     }
+
+    public void giveCoin(){ coins = coins + 1;}
 }

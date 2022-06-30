@@ -1297,4 +1297,17 @@ class GameTest {
 
         assertEquals(4, game.getSelectedCharacters().get(game.getSelectedCharacters().indexOf(character)).getNoEntryNumber());
     }
+
+    @Test
+    void coinTest() throws Exception{
+        Game game = new Game(2);
+        int initialNumberOfCoins = game.getPlayers().getFirst().getCoins();
+
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+        game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
+
+        assertTrue(initialNumberOfCoins < game.getPlayers().getFirst().getCoins());
+    }
 }

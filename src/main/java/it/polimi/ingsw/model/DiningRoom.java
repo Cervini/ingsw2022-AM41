@@ -6,11 +6,13 @@ public class DiningRoom implements Tile, Comparable, Serializable {
     private final Colour colour; // color of the students stored in the Dining_room
     private int students; // number of students currently in the Dining_room
     private int given_coins; // number of coins already given to the player by this Dining_room
+    private SchoolBoard schoolBoard; // schoolBoard that includes this Dining Room
 
-    public DiningRoom(Colour colour) {
+    public DiningRoom(Colour colour, SchoolBoard schoolBoard) {
         this.colour = colour;
         this.students = 0;
         this.given_coins = 0;
+        this.schoolBoard = schoolBoard;
     }
 
     public Colour getColour() {
@@ -44,6 +46,7 @@ public class DiningRoom implements Tile, Comparable, Serializable {
                 this.students++;
                 if (this.students % 3 == 0) {
                     given_coins = students / 3;
+                    schoolBoard.giveCoin();
                 }
             } else {
                 throw new Exception("Dining room is already full!");

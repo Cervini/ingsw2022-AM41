@@ -61,19 +61,6 @@ public class Player implements Comparable{
         }
     }
 
-    /**Method called after moving a student from entrance to dining room,
-     * checks if the player in entitled to gain a coin
-     */
-    public void coin_check(){
-        int entitled = 0; // debt is the difference between the earned and given coins
-        for(DiningRoom room: school.getDining_rooms()){
-            entitled += room.getGiven_coins();
-        }
-        int difference = entitled - this.dining_coins;
-        setCoins(getCoins()+difference);
-        this.dining_coins = entitled;
-    }
-
     /**Uses the coins of this player, if there are enough
      * @param price coins to deduct
      * @throws Exception when there are not enough coins

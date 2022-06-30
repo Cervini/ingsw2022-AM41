@@ -13,11 +13,11 @@ public class SchoolBoardTest {
     public void testConstructor(){
         SchoolBoard s = new SchoolBoard(new Player(TowerColour.BLACK));
         ArrayList<DiningRoom> m = new ArrayList<DiningRoom>();
-        m.add(new DiningRoom(Colour.RED));
-        m.add(new DiningRoom(Colour.GREEN));
-        m.add(new DiningRoom(Colour.BLUE));
-        m.add(new DiningRoom(Colour.YELLOW));
-        m.add(new DiningRoom(Colour.PINK));
+        m.add(new DiningRoom(Colour.RED, s));
+        m.add(new DiningRoom(Colour.GREEN, s));
+        m.add(new DiningRoom(Colour.BLUE, s));
+        m.add(new DiningRoom(Colour.YELLOW, s));
+        m.add(new DiningRoom(Colour.PINK, s));
 
         Collections.sort(m);
         Collections.sort(s.getDining_rooms());
