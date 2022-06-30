@@ -173,11 +173,6 @@ class GameConclusionChecksTest {
     }
 
     @Test
-    void endBecauseAvailableAssistantsFinishedTest1() {
-        //TODO
-    }
-
-    @Test
     void endBecauseAvailableTowersFinishedTest1() throws Exception{
         GameConclusionChecks check = new GameConclusionChecks();
         Game game = new Game(2);

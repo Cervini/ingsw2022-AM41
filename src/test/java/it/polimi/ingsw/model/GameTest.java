@@ -99,27 +99,6 @@ class GameTest {
     }
 
     @Test
-    void checkTurnTest1() {
-        /*Game game = new Game(2);
-        Player player1;
-        Player player2;
-
-        player1 = game.getPlayers().getFirst();
-        player2 = game.getPlayers().getLast();
-
-        //TODO check
-        player1.setFace_up_assistant();
-        player2.setFace_up_assistant();
-
-        game.setTurnOrder();
-        game.checkTurn();
-
-        assertTrue(game.getTurnOrder().getFirst().isTurn());
-
-        System.out.println("checkTurnTest1 complete");*/
-    }
-
-    @Test
     void endGameTest1() throws Exception {
         Game game = new Game(2);
 
@@ -149,25 +128,6 @@ class GameTest {
 
         assertEquals(game.endGame(), game.getPlayers().getFirst().getTeam());
     }
-
-    @Test
-    void endGameTest4() throws Exception {
-        /*Game game = new Game(2);
-
-        game.getArchipelago().get(0).setTower(TowerColour.BLACK);
-        while(game.endGame() == null){
-            game.getArchipelago().get(1).setTower(TowerColour.BLACK);
-            game.merge(game.getArchipelago().get(0), game.getArchipelago().get(1));
-        }
-
-        //TODO fix checkWinner
-
-        assertTrue(game.endGame().equals(TowerColour.BLACK) && game.getArchipelago().size() == 3);
-
-        System.out.println("endGameTest4 complete");*/
-    }
-
-    //TODO add endGameTest5 and endGameTest6
 
     @Test
     void endGameTest7() throws Exception {
@@ -1312,5 +1272,29 @@ class GameTest {
         game.moveMotherNature(1, game.getPlayers().getFirst());
 
         assertEquals(10, game.getArchipelago().size());
+    }
+
+    @Test
+    void noEntryTest1() throws Exception{
+        Game game = new Game(3);
+        Character character = new Character(4);
+        Character character1 = new Character(2);
+
+        if(!game.getSelectedCharacters().contains(character)){
+            game.getSelectedCharacters().removeFirst();
+            game.getSelectedCharacters().addLast(character);
+        }
+        if(!game.getSelectedCharacters().contains(character1)){
+            game.getSelectedCharacters().removeFirst();
+            game.getSelectedCharacters().add(character1);
+        }
+        game.getPlayers().getFirst().giveCoins(5);
+        game.getPlayers().getLast().giveCoins(5);
+        game.getPlayers().getFirst().playAssistant(2);
+        game.getPlayers().getLast().playAssistant(3);
+        game.playCharacter(character, game.getPlayers().getFirst(), null, null, game.getArchipelago().get(1), null);
+        game.playCharacter(character1, game.getPlayers().getFirst(), null, null, game.getArchipelago().get(1), null);
+
+        assertEquals(4, game.getSelectedCharacters().get(game.getSelectedCharacters().indexOf(character)).getNoEntryNumber());
     }
 }

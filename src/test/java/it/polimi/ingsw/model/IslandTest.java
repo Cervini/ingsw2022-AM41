@@ -134,8 +134,6 @@ class IslandTest {
         assertEquals(island.influence(player), 0);
     }
 
-    //TODO improve conquerCheck testing
-
     @Test
     void conquerCheckTest1() throws Exception{
         Game game = new Game(2);
