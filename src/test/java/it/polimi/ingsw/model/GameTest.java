@@ -1275,6 +1275,10 @@ class GameTest {
             game.getSelectedCharacters().removeFirst();
             game.getSelectedCharacters().add(character);
         }
+
+        for(Island island: game.getArchipelago()){
+            island.getStudents().clear();
+        }
         game.getPlayers().getFirst().playAssistant(2);
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));
         game.getPlayers().getFirst().getSchool().getDining_room(Colour.RED).putStudent(new Student(Colour.RED));

@@ -21,7 +21,10 @@ public class Island implements Tile, Serializable {
         this.students = new ArrayList<>();
     }
 
-    // This function merges this island with the island it gets as a parameter
+    /**This function merges this island with the island it gets as a parameter
+     * @param islandToMerge island that will merge with this one
+     * @return true if the merge is completed correctly
+     */
     public boolean mergeIslands(Island islandToMerge){
         setIsland_size(island_size + islandToMerge.getIsland_size());
         setMother_nature(mother_nature || islandToMerge.isMother_nature());
@@ -30,8 +33,7 @@ public class Island implements Tile, Serializable {
         return true;
     }
 
-    /**
-     * changes the color of the towers on the island if the player can and does conquer the island
+    /**Changes the color of the towers on the island if the player can and does conquer the island
      * removing towers from the conquering team and giving towers back to the conquered team
      * @param players list of all the players
      */
@@ -51,7 +53,7 @@ public class Island implements Tile, Serializable {
         }
     }
 
-    /**
+    /**Computes the influence value of a player
      * @param player player whose influence is calculated
      * @return influence player has on the island
      */
@@ -85,8 +87,7 @@ public class Island implements Tile, Serializable {
     }
 
 
-    /**
-     * Process the conquer event, change the tower color of the island and gives back the tower to the players if necessary
+    /**Process the conquer event, change the tower color of the island and gives back the tower to the players if necessary
      * @param player conquering player
      * @param players list of all game players
      */
@@ -111,7 +112,11 @@ public class Island implements Tile, Serializable {
         }
     }
 
-    //Check that there the highest influence is absolute
+    /**Checks that the highest influence is absolute
+     * @param value possible highest influence
+     * @param array array containing the influence of each player
+     * @return true if value is the only higher influence
+     */
     private boolean onlyOne(int value, int[] array){
         int count = 0;
         for(int valueToCheck: array){
@@ -122,22 +127,10 @@ public class Island implements Tile, Serializable {
         return count == 1;
     }
 
-    public TowerColour getColour(){
-        return tower;
-    }
-
-    @Override
-    public void putStudent(Student student) {
-        if(student != null)
-            students.add(student);
-    }
-
-    @Override
-    public void removeStudent(Student student) throws Exception {
-        throw new Exception("Students can't be removed from islands");
-    }
-
-    //Same function as above, but it gets called when the power of character 6 is active
+    /**Same function as above, but it gets called when the power of character 6 is active
+     * @param players list of players participating this game
+     * @param noTowers boolean value that decides if tower has to be taken in consideration for influence calculations
+     */
     public void conquerCheck(LinkedList<Player> players, boolean noTowers) {
         int backupTowers = island_size;
         if(noTowers){
@@ -159,7 +152,11 @@ public class Island implements Tile, Serializable {
         }
     }
 
-    //Same function as above, but it gets called when the power of character 8 is active
+    /**Same function as above, but it gets called when the power of character 8 is active
+     * @param players list of players participating this game
+     * @param cardPlayer player who activated the character
+     * @param additionalInfluence is the int value that must be added to the influence of cardPlayer
+     */
     public void conquerCheck(LinkedList<Player> players, Player cardPlayer, int additionalInfluence) {
         int[] influenceArray = new int[players.size()];
         int cardPlayerIndex;
@@ -179,7 +176,10 @@ public class Island implements Tile, Serializable {
         }
     }
 
-    //Same function as above, but it gets called when the power of character 9 is active
+    /**Same function as above, but it gets called when the power of character 9 is active
+     * @param players player whose influence is calculated
+     * @param colourToExclude everything regarding this colour is ignored during this influence calculations
+     */
     public void conquerCheck(LinkedList<Player> players, Colour colourToExclude) {
         int[] influenceArray = new int[players.size()];
         int maxIndex = 0;
@@ -196,7 +196,11 @@ public class Island implements Tile, Serializable {
         }
     }
 
-    //Same function as above, but it gets called when the power of character 9 is active
+    /**Same function as above, but it gets called when the power of character 9 is active
+     * @param player player whose influence is calculated
+     * @param colour everything regarding this colour is ignored during this influence calculations
+     * @return the influence of this player
+     */
     public int influence(Player player, Colour colour) {
 
         // set starting influence at 0
@@ -228,6 +232,20 @@ public class Island implements Tile, Serializable {
         return player_influence;
     }
 
+    public TowerColour getColour(){
+        return tower;
+    }
+
+    @Override
+    public void putStudent(Student student) {
+        if(student != null)
+            students.add(student);
+    }
+
+    @Override
+    public void removeStudent(Student student) throws Exception {
+        throw new Exception("Students can't be removed from islands");
+    }
 
     public int getIsland_size() {
         return island_size;
@@ -253,12 +271,12 @@ public class Island implements Tile, Serializable {
         this.no_entry = no_entry;
     }
 
-    public List<Student> getStudents() {
-        return students;
-    }
-
     public TowerColour getTower() {
         return tower;
+    }
+
+    public List<Student> getStudents() {
+        return students;
     }
 
     public void setTower(TowerColour tower) {

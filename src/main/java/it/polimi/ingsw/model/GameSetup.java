@@ -15,7 +15,11 @@ public class GameSetup {
     private static final int numberOfCharacters = 3;
     private static final int totalNumberOfCharacters = 12;
 
-    //Function to set up the players, depending on how many are them
+    /**Function to set up the players, depending on how many are them
+     * @requires numberOfPlayers >= 2 && numberOfPlayers <= 4
+     * @param numberOfPlayers int that indicates how many players are taking part in this game
+     * @return list of player with a correct entrance size, team and towers
+     */
     public LinkedList<Player> playerSetup(int numberOfPlayers){
         LinkedList<Player> players = new LinkedList<>();
         switch (numberOfPlayers) {
@@ -42,13 +46,18 @@ public class GameSetup {
         return players;
     }
 
-    //Function to set up coins
+    /**Function to set up coins
+     * @param numberOfPlayers int that indicates how many players are taking part in this game
+     * @return number of coins available
+     */
     public int coinSetup(int numberOfPlayers){
         // available coins is set to 20 minus one coin for each player
         return initialNumberOfCoins - numberOfPlayers;
     }
 
-    //Function to srt up the archipelago
+    /**Function to set up the archipelago
+     * @return list of islands with the correct number of students on each one
+     */
     public List<Island> archipelagoSetup(){
         createIslands();
         // as per Eriantys' rule pick 2 students of each color to set up the islands
@@ -61,6 +70,7 @@ public class GameSetup {
         return archipelago;
     }
 
+    //Creates all the islands
     private void createIslands(){
         // initialize archipelago
         archipelago = new ArrayList<>();
@@ -69,8 +79,7 @@ public class GameSetup {
         }
     }
 
-    /**
-     * fills the bag an even number of student for each color, then shuffles the bag
+    /**Fills the bag an even number of student for each color, then shuffles the bag
      * @param numberOfStudents total number of students to put in the bag
      */
     public LinkedList<Student> bagSetup(int numberOfStudents){
@@ -85,6 +94,7 @@ public class GameSetup {
         return bag;
     }
 
+    //Places students on every island except island 0 and island 6, it also places mother nature on island 0
     private void placeStudents(){
         // place a student on each island from the 10 just created
         for(int i=0; i<numberOfIslands; i++){
@@ -94,7 +104,9 @@ public class GameSetup {
         archipelago.get(0).setMother_nature(true);
     }
 
-    //Function to set up professors
+    /**Function to set up professors
+     * @return list of professors, one for each colour
+     */
     public List<Professor> professorSetup(){
         List<Professor> professors = new LinkedList<>();
         for(Colour colour: Colour.values()){
@@ -103,6 +115,9 @@ public class GameSetup {
         return professors;
     }
 
+    /**Sets up the entrances for each player
+     * @param game current situations of the game
+     */
     public void placeStudentEntranceSetUp(Game game) {
 
             for (Player p : game.getPlayers()) {
@@ -129,11 +144,12 @@ public class GameSetup {
             }
     }
 
-    //Function to set up characters
+    /**Function to set up characters
+     * @return list of characters that are going to be available to play during this game
+     */
     public LinkedList<Character> characterSetup() {
         LinkedList<Character> characters = new LinkedList<>();
         LinkedList<Character> selectedCharacters = new LinkedList<>();
-        CharacterFunctions characterFunctions = new CharacterFunctions();
         for(int characterNumber = 0; characterNumber < totalNumberOfCharacters; characterNumber++){
             characters.add(new Character(characterNumber));
         }
@@ -144,6 +160,9 @@ public class GameSetup {
         return selectedCharacters;
     }
 
+    /**Function that generates all 12 characters
+     * @return list containing all characters
+     */
     public List<Character> setAllCharacters() {
         LinkedList<Character> characters = new LinkedList<>();
         for (int i=0; i<totalNumberOfCharacters; i++){

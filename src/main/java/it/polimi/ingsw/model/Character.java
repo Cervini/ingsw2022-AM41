@@ -151,7 +151,7 @@ public class Character implements Serializable {
     public Game effect(Game game, Player player, LinkedList<Student> studentList1, LinkedList<Student> studentList2, Island island, Colour colour) throws Exception{
         Game modifiedGame = null;
 
-        if(increasedCost == false){
+        if(!increasedCost){
             cost = cost + 1;
             increasedCost = true;
         }

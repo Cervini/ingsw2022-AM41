@@ -1,11 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.io.*;
-import java.util.ArrayList;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Player implements Comparable{
     private String player_id = "new player"; // player's unique ID
@@ -65,11 +61,7 @@ public class Player implements Comparable{
         }
     }
 
-
-    // TODO implement a way to check available coins from game (maybe this event should be managed by Game)
-
-    /**
-     * method called after moving a student from entrance to dining room,
+    /**Method called after moving a student from entrance to dining room,
      * checks if the player in entitled to gain a coin
      */
     public void coin_check(){
@@ -82,12 +74,90 @@ public class Player implements Comparable{
         this.dining_coins = entitled;
     }
 
+    /**Uses the coins of this player, if there are enough
+     * @param price coins to deduct
+     * @throws Exception when there are not enough coins
+     */
     public void spend(int price) throws Exception {
         if(this.getCoins()>=price)
             setCoins(getCoins()-price);
         else {
             throw new Exception("Not enough coins!");
         }
+    }
+
+    /**
+     * @param o player to compare to
+     * @return { if the players' played assistants have the same value return 0;
+     *     if this player's assistant has a lower value return -1;
+     *     else return 1;
+     * }
+     */
+    @Override
+    public int compareTo(Object o) {
+        Player p = (Player) o;
+        return Integer.compare(school.getFace_up_assistant().getValue(), p.getSchool().getFace_up_assistant().getValue());
+    }
+
+    /**Plays an assistant
+     * @param assistant assistant to play
+     * @throws Exception the selected assistant has already been played or doesn't exist
+     */
+    public void playAssistant(Assistant assistant) throws Exception {
+        if(assistants.contains(assistant)){
+            setFace_up_assistant(assistant);
+            //assistants.remove(assistant);
+            assistants.set(assistants.indexOf(assistant),null);
+        }
+        else {
+            throw new Exception("Can't play this assistant");
+        }
+    }
+
+    /**Plays an assistant
+     * @param index index of the assistant to play
+     * @throws Exception the selected assistant has already been played or doesn't exist
+     */
+    public void playAssistant(int index) throws Exception {
+        if((assistants.size()>index)&&(index>=0)) {
+
+            setFace_up_assistant(assistants.get(index));
+            assistants.remove(index);
+
+        } else {
+            throw new Exception("This assistant doesn't exist");
+        }
+    }
+
+    /**Returns true if this player has a professor with a specific colour, otherwise returns false
+     * @param colour colour of the professor to check
+     * @return true if this player owns the professor of that colour
+     */
+    public boolean hasProfessor(Colour colour){
+        for(Professor professorToCheck: school.getOwned_professor()){
+            if(professorToCheck.getColour().equals(colour)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addProfessor(Professor professor){
+        school.getOwned_professor().add(professor);
+    }
+
+    public void giveCoins(int numberOfCoins) { this.school.setCoins(getCoins() + numberOfCoins); }
+
+    public void setPlayedCharacterNumber(int playedCharacterNumber){
+        this.playedCharacterNumber = playedCharacterNumber;
+    }
+
+    public int getPlayedCharacterNumber(){
+        return playedCharacterNumber;
+    }
+
+    public void setCoins(int coins){
+        this.school.setCoins(coins);
     }
 
     public String getPlayer_id() {
@@ -133,81 +203,5 @@ public class Player implements Comparable{
     public void setPlayer_id(String player_id) {
         this.school.setOwner(player_id);
         this.player_id = player_id;
-    }
-
-    /**
-     * @param o player to compare to
-     * @return { if the players' played assistants have the same value return 0;
-     *     if this player's assistant has a lower value return -1;
-     *     else return 1;
-     * }
-     */
-    @Override
-    public int compareTo(Object o) {
-        Player p = (Player) o;
-        return Integer.compare(school.getFace_up_assistant().getValue(), p.getSchool().getFace_up_assistant().getValue());
-    }
-
-    public void playAssistant(Assistant assistant) throws Exception {
-        if(assistants.contains(assistant)){
-            setFace_up_assistant(assistant);
-            //assistants.remove(assistant);
-            assistants.set(assistants.indexOf(assistant),null);
-        }
-        else {
-            throw new Exception("Can't play this assistant");
-        }
-    }
-
-    public void playAssistant(int index) throws Exception {
-        if((assistants.size()>index)&&(index>=0)) {
-
-            setFace_up_assistant(assistants.get(index));
-            assistants.remove(index);
-
-        } else {
-            throw new Exception("This assistant doesn't exist");
-        }
-    }
-
-    //Returns true if this player has a professor with a specific colour, otherwise returns false
-    public boolean hasProfessor(Colour colour){
-        for(Professor professorToCheck: school.getOwned_professor()){
-            if(professorToCheck.getColour().equals(colour)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Professor removeProfessor(Colour colour){
-        Professor professorRemoved = null;
-        for(Professor professorToCheck: school.getOwned_professor()){
-            if(professorToCheck.getColour().equals(colour)){
-                school.getOwned_professor().remove(professorToCheck);
-                professorRemoved = professorToCheck;
-            }
-        }
-        return professorRemoved;
-    }
-
-
-
-    public void addProfessor(Professor professor){
-        school.getOwned_professor().add(professor);
-    }
-
-    public void giveCoins(int numberOfCoins) { this.school.setCoins(getCoins() + numberOfCoins); }
-
-    public void setPlayedCharacterNumber(int playedCharacterNumber){
-        this.playedCharacterNumber = playedCharacterNumber;
-    }
-
-    public int getPlayedCharacterNumber(){
-        return playedCharacterNumber;
-    }
-
-    public void setCoins(int coins){
-        this.school.setCoins(coins);
     }
 }

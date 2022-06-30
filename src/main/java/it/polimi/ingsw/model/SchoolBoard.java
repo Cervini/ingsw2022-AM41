@@ -55,26 +55,15 @@ public class SchoolBoard implements Tile, Serializable {
         this.entrance_max = entrance_max;
     }
 
-    public int getEntranceSize(){
-        return entrance.size();
-    }
-
-    public int getTowers() {
-        return towers;
-    }
-
-    /**
-     * removes towers from school board
+    /**Removes towers from school board
      * @param towers number of towers to be removed
-     * @throws Exception thrown when tha players has fewer towers than 'towers' param
      */
     public void takeTowers(int towers)  {
         if(this.towers >= towers)
             this.towers -= towers;
     }
 
-    /**
-     * adds tower to the school board
+    /**Adds tower to the school board
      * @param towers number of towers to be added
      */
     public void giveTowers(int towers){
@@ -110,6 +99,36 @@ public class SchoolBoard implements Tile, Serializable {
         }
     }
 
+    /**Removes some students from the entrance
+     * @param studentsToRemove list of students to be removed from the entrance
+     */
+    public void removeStudents(LinkedList<Student> studentsToRemove) {
+        for(Student studentToRemove: studentsToRemove){
+            entrance.remove(studentToRemove);
+        }
+    }
+
+    /**Places some students in the entrance
+     * @param studentsToAdd list of students to be added in the entrance
+     */
+    public void putStudents(LinkedList<Student> studentsToAdd) {
+        entrance.addAll(studentsToAdd);
+    }
+
+    /**Removes one professor from this school board
+     * @param colour colour of the professor to remove
+     * @return the removed professor
+     */
+    public Professor takeProfessor(Colour colour) {
+        for(Professor professorToCheck: owned_professor){
+            if(professorToCheck.getColour().equals(colour)){
+                owned_professor.remove(professorToCheck);
+                return professorToCheck;
+            }
+        }
+        return null;
+    }
+
     /**
      * add a student to entrance
      */
@@ -124,8 +143,6 @@ public class SchoolBoard implements Tile, Serializable {
     public void removeStudent (Student student) {
         entrance.remove(student);
     }
-
-    public void resetTowers(int newTowerNumber) {towers = newTowerNumber;}
 
     public LinkedList<Student> getEntrance() {
         return entrance;
@@ -151,32 +168,12 @@ public class SchoolBoard implements Tile, Serializable {
         this.owner = owner;
     }
 
-    public void removeStudents(LinkedList<Student> studentsToRemove) {
-        for(Student studentToRemove: studentsToRemove){
-            entrance.remove(studentToRemove);
-        }
-    }
-
-    public void putStudents(LinkedList<Student> studentsToAdd) {
-        entrance.addAll(studentsToAdd);
+    public void setOwned_professor(List<Professor> owned_professor) {
+        this.owned_professor = owned_professor;
     }
 
     public List<Professor> getOwned_professor() {
         return owned_professor;
-    }
-
-    public Professor takeProfessor(Colour colour) {
-        for(Professor professorToCheck: owned_professor){
-            if(professorToCheck.getColour().equals(colour)){
-                owned_professor.remove(professorToCheck);
-                return professorToCheck;
-            }
-        }
-        return null;
-    }
-
-    public void setOwned_professor(List<Professor> owned_professor) {
-        this.owned_professor = owned_professor;
     }
 
     public void putProfessor(Professor professor){ this.owned_professor.add(professor); }
@@ -187,5 +184,13 @@ public class SchoolBoard implements Tile, Serializable {
 
     public void setCoins(int coins) {
         this.coins = coins;
+    }
+
+    public int getEntranceSize(){
+        return entrance.size();
+    }
+
+    public int getTowers() {
+        return towers;
     }
 }

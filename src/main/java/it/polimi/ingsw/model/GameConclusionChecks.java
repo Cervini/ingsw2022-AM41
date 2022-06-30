@@ -8,6 +8,12 @@ public class GameConclusionChecks {
     public GameConclusionChecks() {
     }
 
+    /**Checks if the game has to end because the size of the archipelago is too small
+     * @param minSize minimum size of the archipelago
+     * @param archipelago current list of islands in this game
+     * @param players list of players participating this game
+     * @return tower colour of the winner or null if the conditions to end the game are not met
+     */
     public TowerColour endBecauseOfArchipelagoSize(int minSize, List<Island> archipelago, List<Player> players){
         Player winner;
         if(archipelago.size()<=minSize){
@@ -17,6 +23,13 @@ public class GameConclusionChecks {
         return null;
     }
 
+    /**Checks if the game has to end because there are no more students available
+     * @param bag list of students available
+     * @param archipelago current list of islands in this game
+     * @param players list of players participating this game
+     * @param winner tower colour of a player that already won in another way, null if it doesn't exist
+     * @return tower colour of the winner or null if the conditions to end the game are not met
+     */
     public TowerColour endBecauseAvailableStudentsFinished(LinkedList<Student> bag, List<Island> archipelago, List<Player> players, TowerColour winner){
         Player winnerPlayer;
         if(winner == null) {
@@ -28,6 +41,12 @@ public class GameConclusionChecks {
         return winner;
     }
 
+    /**Checks if the game has to end because there are no more assistants available
+     * @param archipelago current list of islands in this game
+     * @param players list of players participating this game
+     * @param winner winner tower colour of a player that already won in another way, null if it doesn't exist
+     * @return tower colour of the winner or null if the conditions to end the game are not met
+     */
     public TowerColour endBecauseAvailableAssistantsFinished(List<Island> archipelago, List<Player> players, TowerColour winner){
         if(winner == null) {
             Player winnerPlayer;
@@ -41,6 +60,11 @@ public class GameConclusionChecks {
         return winner;
     }
 
+    /**Checks if the game has to end because there are no more towers available
+     * @param players list of players participating this game
+     * @param winner winner tower colour of a player that already won in another way, null if it doesn't exist
+     * @return tower colour of the winner or null if the conditions to end the game are not met
+     */
     public TowerColour endBecauseAvailableTowersFinished(List<Player> players, TowerColour winner){
         if(winner == null) {
             for (Player playerToCheck : players) {
@@ -52,8 +76,7 @@ public class GameConclusionChecks {
         return winner;
     }
 
-    /**
-     * method used in endGame
+    /**Method used in endGame to check which player wins
      * @return the player who meets the winning conditions
      */
     public Player checkWinner(List<Player> players, List<Island> archipelago){

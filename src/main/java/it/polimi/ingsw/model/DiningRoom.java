@@ -51,6 +51,10 @@ public class DiningRoom implements Tile, Comparable, Serializable {
         }
     }
 
+    /**Removes the student from this dining room
+     * @param student student to remove
+     * @throws Exception if the student to remove is the wrong colour or there are no students in this dining room
+     */
     @Override
     public void removeStudent(Student student) throws Exception {
         if((student.getColour()==this.colour)&&(students>0)){
