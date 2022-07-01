@@ -415,6 +415,11 @@ public class Game{
                 }
             }
         }
+        if(archipelago.get(0).getColour() != null && archipelago.get(archipelago.size()-1).getColour() != null) {
+            if (archipelago.get(0).getColour().equals(archipelago.get(archipelago.size() - 1).getColour())) {
+                merge(archipelago.get(0), archipelago.get(archipelago.size() - 1));
+            }
+        }
     }
 
     public LinkedList<Player> getPlayers() {

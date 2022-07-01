@@ -1310,4 +1310,17 @@ class GameTest {
 
         assertTrue(initialNumberOfCoins < game.getPlayers().getFirst().getCoins());
     }
+
+    @Test
+    void mergeTest() throws Exception{
+        Game game = new Game(4);
+        int initialNumberOfIslands = game.getArchipelago().size();
+
+        game.getPlayers().getFirst().playAssistant(0);
+        game.getArchipelago().get(0).setTower(TowerColour.BLACK);
+        game.getArchipelago().get(11).setTower(TowerColour.BLACK);
+        game.moveMotherNature(0, game.getPlayers().getFirst());
+
+        assertEquals(initialNumberOfIslands - 1, game.getArchipelago().size());
+    }
 }
