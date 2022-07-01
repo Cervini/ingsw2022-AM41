@@ -17,18 +17,16 @@
 | 12 Characters  | 🟢 |
 | 4 Players game | 🟢 |
 
-🔴
-🟢
-🟡
+## Test Coverage:
 
-Test Coverage:
+| Element       | Class % | Method % | Line % |
+|:--------------|:-------:|:---------|:------:|
+| Client        |   0%    | 0%       |   0%   |
+| Communication |   88%   | 80%      |  67%   |
+| Model         |   94%   | 92%      |  92%   |
+| Server        |   0%    | 0%       |   0%   |
 
- Element        Class%      Method%     Line%
- client           0%         0%        0%
- communication   88%        80%       67%
- model           94%        92%       92%
- server           0%         0%        0%
-
+## Instructions:
 
 * To start the server, choose a port (e.g. 1234) and use the command:
 
