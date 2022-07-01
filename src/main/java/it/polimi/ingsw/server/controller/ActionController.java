@@ -79,7 +79,7 @@ public class ActionController  {
             clientHandler.setAlreadyUpdated(true);
 
             Player relevantPlayer =  clientHandler.getGame().getPlayer(clientHandler.getUsername());
-            if( clientHandler.getGame().getBag().size() > 0 && relevantPlayer.getAssistants().size()!=0){ //game ends at this point only if player places its last tower or only three groups of islands are left
+            if( clientHandler.getGame().getBag().size() > 0 && relevantPlayer.getAssistants().size() != 0){ //game ends at this point only if player places its last tower or only three groups of islands are left
             TowerColour winner = clientHandler.getGame().endGame();
             if (winner != null ){
                 Player winnerPlayer = clientHandler.getGame().getPlayers().stream().filter(p->p.getTeam().equals(winner)).findFirst().get(); //find winner colour team
@@ -344,6 +344,15 @@ public class ActionController  {
         List<String> turnOrder = currentGamePhase.getCurrentPlayers().stream().map(ClientHandler::getUsername).toList();
         //converts list of strings to a string
         String turns = turnOrder.stream().map(Object::toString).collect(Collectors.joining(","));
+        GamePhase planningPhase = new PlanningPhase(clientHandler.getGame(), currentGamePhase.getCurrentPlayers()); // new game phase
+        setGamePhaseForAllPlayers(currentGamePhase.getCurrentPlayers(), planningPhase);//sets same game phase for all players
+        planningPhase.getCurrentPlayers()
+                .forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null)); //sets face up assistants to default
+        clientHandler.getGame().startTurn(); //clouds are re-filled
+        setCharacters(clientHandler.getGame().getPlayers()); //characters set to default
+        clientHandler.sameMatchPlayers()
+                .forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder)); //sets for all players same turns order
+
         clientHandler.updateStatus();
         List<ClientHandler> players = clientHandler.sameMatchPlayers();
         players.remove(clientHandler);
@@ -358,16 +367,6 @@ public class ActionController  {
         oldFirstPlayer.setPlayerFirstMove(false); //sets old first player's first move false
         ClientHandler firstPlayer = currentGamePhase.getCurrentPlayers().get(0); //picks new first player
         firstPlayer.isPlayerFirstMove = true; //sets isPlayerFirstMove true
-
-        GamePhase planningPhase = new PlanningPhase(clientHandler.getGame(), currentGamePhase.getCurrentPlayers()); // new game phase
-        setGamePhaseForAllPlayers(currentGamePhase.getCurrentPlayers(), planningPhase);//sets same game phase for all players
-        planningPhase.getCurrentPlayers()
-                .forEach(player -> player.getGame().getPlayer(player.getUsername()).setFace_up_assistant(null)); //sets face up assistants to default
-        firstPlayer.getGame().startTurn(); //clouds are re-filled
-        setCharacters(clientHandler.getGame().getPlayers()); //characters set to default
-
-        clientHandler.sameMatchPlayers()
-                .forEach(p->p.getCurrentGamePhase().setTurnOrder(turnOrder)); //sets for all players same turns order
         return output;
     }
 
