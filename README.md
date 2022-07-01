@@ -21,13 +21,13 @@
 🟢
 🟡
 
-- Test Coverage:
+Test Coverage:
 
  Element        Class%      Method%     Line%
-* client           0%         0%        0%
-* communication   88%        80%       67%
-* model           94%        92%       92%
-* server           0%         0%        0%
+ client           0%         0%        0%
+ communication   88%        80%       67%
+ model           94%        92%       92%
+ server           0%         0%        0%
 
 
 * To start the server, choose a port (e.g. 1234) and use the command:
